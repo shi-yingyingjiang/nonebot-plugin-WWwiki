@@ -13,11 +13,9 @@ def get_basic_information(data):
 
     info = [item["text"] for item in info_data[:6]]
     role_gender = info[0]
-    role_birthday = info[1]
-    attribute = info[2]
-    weapon = info[3]
-    affiliation = info[4]
-    birthplace = info[5]
+    birthplace = info[1]
+    weapon = info[2]
+    attribute = info[3]
     role_en_name = data.get('data').get('content').get('modules')[0].get('components')[0].get('role').get('subtitle')
     campIcon = data.get('data').get('content').get('modules')[0].get('components')[0].get('role').get('campIcon')
 
@@ -30,10 +28,8 @@ def get_basic_information(data):
         'role_description': role_description,
         'role_description_title': role_description_title,
         'role_gender': role_gender,
-        'role_birthday': role_birthday,
         'attribute': attribute,
         'weapon': weapon,
-        'affiliation': affiliation,
         'birthplace': birthplace,
         'campIcon' : campIcon
     }

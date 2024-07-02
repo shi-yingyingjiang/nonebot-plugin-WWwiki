@@ -34,7 +34,7 @@ headers = {
 
 
 html_fpath = os.path.dirname(os.path.abspath(__file__))
-html_spath = os.path.join(html_fpath, 'html_template', 'rolecard', 'rolecard.html')
+html_spath = os.path.join(html_fpath, 'html_template', 'rolecard', 'template.html')
 out_html_path = os.path.join(html_fpath, 'html_template', 'rolecard', 'out_page.html')
 character_cards = on_command('鸣潮角色查询')
 
@@ -67,12 +67,13 @@ async def role_data(args: Message = CommandArg()):
 
             otherinfo_dict = {
                 'identity': get_value_from_dict(my_dict, '身份'),
+                'affiliation' : get_value_from_dict(my_dict, '所属'),
                 'specialcuisine': get_value_from_dict(my_dict, '特殊料理'),
                 'zhcv': get_value_from_dict(my_dict, '中文CV'),
                 'jpcv': get_value_from_dict(my_dict, '日文CV'),
                 'encv': get_value_from_dict(my_dict, '英文CV'),
                 'kocv': get_value_from_dict(my_dict, '韩文CV'),
-                'tag': get_value_from_dict(my_dict, 'TAG')
+                'version': get_value_from_dict(my_dict, '实装版本')
             }
 
             Data = {
@@ -82,19 +83,18 @@ async def role_data(args: Message = CommandArg()):
                 'roleDescriptiontitle' : besicinfo.get('role_description_title'),
                 'campIcon': besicinfo.get('campIcon'),
                 'title': besicinfo.get('role_name'),
-                'affiliation' : besicinfo.get('affiliation'),
-                'birthplace' : besicinfo.get('birthplace'),
                 'attribute' : besicinfo.get('attribute'),
+                'birthplace' : besicinfo.get('birthplace'),
                 'weapon' : besicinfo.get('weapon'),
                 'gender' : besicinfo.get('role_gender'),
-                'birthday' : besicinfo.get('role_birthday'),
                 'identity' : otherinfo_dict.get('identity'),
+                'affiliation' : otherinfo_dict.get('affiliation'),
                 'specialcuisine' : otherinfo_dict.get('specialcuisine'),
                 'zhcv' : otherinfo_dict.get('zhcv'),
                 'jpcv' : otherinfo_dict.get('jpcv'),
                 'encv' : otherinfo_dict.get('encv'),
                 'kocv' : otherinfo_dict.get('kocv'),
-                'tag' : otherinfo_dict.get('tag'),
+                'version' : otherinfo_dict.get('version'),
                 'baselife' : character_statistics[0][1][1],
                 'basicattack' : character_statistics[0][1][2],
                 'basicdefense' : character_statistics[0][1][3],
