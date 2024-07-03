@@ -8,7 +8,7 @@
 
 # nonebot-plugin-WWwiki
 
-_✨ NoneBot 插件简单描述 ✨_
+_✨ 鸣潮wiki ✨_
 
 
 <a href="./LICENSE">
