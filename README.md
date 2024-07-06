@@ -73,7 +73,7 @@ _✨ 鸣潮wiki ✨_
 <summary>使用 nb-cli 安装</summary>
 在 nonebot2 项目的根目录下打开命令行, 输入以下指令即可安装
 
-    nb plugin install nonebot-plugin-template
+    nb plugin install nonebot-plugin-WWwiki
 
 </details>
 
@@ -84,38 +84,15 @@ _✨ 鸣潮wiki ✨_
 <details>
 <summary>pip</summary>
 
-    pip install nonebot-plugin-template
+    pip install nonebot-plugin-WWwiki
 </details>
-<details>
-<summary>pdm</summary>
 
-    pdm add nonebot-plugin-template
-</details>
-<details>
-<summary>poetry</summary>
-
-    poetry add nonebot-plugin-template
-</details>
-<details>
-<summary>conda</summary>
-
-    conda install nonebot-plugin-template
-</details>
 
 打开 nonebot2 项目根目录下的 `pyproject.toml` 文件, 在 `[tool.nonebot]` 部分追加写入
 
-    plugins = ["nonebot_plugin_template"]
+    plugins = ["nonebot_plugin_WWwiki"]
 
 </details>
-
-## ⚙️ 配置
-
-在 nonebot2 项目的`.env`文件中添加下表中的必填配置
-
-| 配置项 | 必填 | 默认值 | 说明 |
-|:-----:|:----:|:----:|:----:|
-| 配置项1 | 是 | 无 | 配置说明 |
-| 配置项2 | 否 | 无 | 配置说明 |
 
 ## 🎉 使用
 ### 指令表
@@ -123,5 +100,13 @@ _✨ 鸣潮wiki ✨_
 |:-----:|:----:|:----:|:----:|:----:|
 | 指令1 | 主人 | 否 | 私聊 | 指令说明 |
 | 指令2 | 群员 | 是 | 群聊 | 指令说明 |
-### 效果图
-如果有效果图的话
+| 指令2 | 群员 | 是 | 群聊 | 指令说明 |
+| 指令2 | 群员 | 是 | 群聊 | 指令说明 |
+| 指令2 | 群员 | 是 | 群聊 | 指令说明 |
+| 指令2 | 群员 | 是 | 群聊 | 指令说明 |
+| 指令2 | 群员 | 是 | 群聊 | 指令说明 |
+| 指令2 | 群员 | 是 | 群聊 | 指令说明 |
+
+PS：本人不精通html等的内容的设计，所以成品图效果比较丑，欢迎issue或者pr。
+
+## 注意！ 本项目未在gitcode发布，请注意分别！
