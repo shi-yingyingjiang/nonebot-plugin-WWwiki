@@ -1,0 +1,153 @@
+<style>
+/*--预设--*/ 
+body { padding:0px;margin: 0px; }
+@font-face {
+  font-family: 'STXingkai'; /* 定义字体名称 */
+  src: url('../fonts/STXingkai.ttf'); /* 指定字体文件路径和格式 */
+}
+@font-face {
+  font-family: 'FZShuTi';
+  src: url('../fonts/FZShuTi.ttf');
+} 
+#lyrow, #lyrow input, #lyrow textarea { font-size:12px;font-family: 'Microsoft YaHei', '微软雅黑', MicrosoftJhengHei, '华文细黑', STHeiti, MingLiu; } 
+#lyrow { height:100vh;width: 100vw; } 
+#lyrow div { min-height: 18px;  } 
+#lyrow input, #lyrow textarea { border:rgb(235, 235, 235) 1px solid;border-radius: 3px;padding: 5px 8px;outline: 0; } 
+#lyrow input:hover, #lyrow textarea:hover { border: 1px solid #6bc1f2; } 
+/*--编辑--*/ 
+#lyrow .o { padding:65px 65px 65px 65px;width:1157px !important;background:linear-gradient(180deg,rgba(173, 178, 120, 1) 1%, rgba(255, 255, 255, 1) 100%); } 
+#lyrow .oo { width:100%; } 
+#lyrow .otw { margin:50px 0 0 0;width:1157px !important; } 
+#lyrow .roleimg { width:653px !important;height:648px !important; } 
+#lyrow .logo { width:504px !important;height:174px !important;position:absolute; } 
+#lyrow .roelname { width:504px !important;font-weight:bold;font-size:55px;position:absolute;top:300px;left:703px; } 
+#lyrow .roledescriptiontitle { width:504px !important;position:absolute;left:703px;top:380px;font-size:45px;font-family:STXingkai; } 
+#lyrow .roledescription { font-size:25px;width:504px !important;left:703px;position:absolute;top:475px;font-family:FZShuTi; } 
+#lyrow .title { font-size:30px;background-color:rgba(178, 158, 94, 1);border:rgba(162, 131, 92, 1) solid 1px;position:relative;padding:5px 15px 5px 15px;border-radius:15px 0 15px 0;max-width:240px;margin:20px 0 20px 0; } 
+#lyrow .content { border:rgba(0, 0, 0, 1) dotted 1px;padding:0 0 20px 0;border-radius:20px 20px 20px 20px; } 
+#lyrow .oimg { width:128px !important;height:128px !important; } 
+#lyrow .cname { position:relative;font-size:30px;padding:0 0 0 5px;bottom:15px; } 
+#lyrow .co { width:256px !important;border-radius:5px 5px 5px 5px;border:rgba(96, 40, 30, 1) solid 1px;display:inline-block !important;margin:20px 0 0 22px;background-color:rgba(255, 251, 240, 1);height:256px !important; } 
+#lyrow .cimg { width:256px !important;height:256px !important;position:absolute; } 
+#lyrow .nomb { position:relative;text-align:right;font-size:30px;top:125px;padding:0 5px 0 0;text-shadow:0 0 6px rgba(0, 0, 0, 1); } 
+
+</style>
+<!--下载font-awesome.css图标包-->
+<!--https://www.58html.com/html/template/font-awesome.zip-->
+<link rel="stylesheet" href="https://www.58html.com/gui/css/font-awesome/css/font-awesome.css">
+<div id="lyrow">
+<div class="o">
+<div class="oo">
+    <img src="{{roleimg}}" class="roleimg">
+    <img src="../img/logo.png" class="logo">
+    <h1 class="roelname">{{rolename}}</h1>
+    <h1 class="roledescriptiontitle">{{roledescriptiontitle}}</h1>
+    <h1 class="roledescription">{{roledescription}}</h1></div>
+<div class="otw">
+    <h1 class="title">角色突破材料一览</h1>
+<div class="content">
+<div class="co">
+    <img src="{{elementaryimg}}" class="cimg">
+    <h1 class="cname">{{elementarytitle}}</h1>
+    <h1 class="nomb">x4</h1></div>
+<div class="co">
+    <img src="{{intermediateimg}}" class="cimg">
+    <h1 class="cname">{{intermediatetitle}}</h1>
+    <h1 class="nomb">x12</h1></div>
+<div class="co">
+    <img src="{{seniorimg}}" class="cimg">
+    <h1 class="cname">{{seniortitle}}</h1>
+    <h1 class="nomb">x12</h1></div>
+<div class="co">
+    <img src="{{ultimateimg}}" class="cimg">
+    <h1 class="cname">{{ultimatetitle}}</h1>
+    <h1 class="nomb">x4</h1></div>
+<div class="co">
+    <img src="{{footageimg}}" class="cimg">
+    <h1 class="cname">{{footagetitle}}</h1>
+    <h1 class="nomb">x60</h1></div>
+<div class="co">
+    <img src="{{universalimg}}" class="cimg">
+    <h1 class="cname">{{universaltitle}}</h1>
+    <h1 class="nomb">x46</h1></div>
+<div class="co">
+    <img src="img/贝币.png" class="cimg">
+    <h1 class="cname">贝币</h1>
+    <h1 class="nomb">x170000</h1></div> </div>
+    <h1 class="title">技能升级材料一览</h1>
+<div class="content">
+<div class="co">
+    <img src="{{elementaryimg}}" class="cimg">
+    <h1 class="cname">{{elementarytitle}}</h1>
+    <h1 class="nomb">5 x5</h1></div>
+<div class="co">
+    <img src="{{intermediateimg}}" class="cimg">
+    <h1 class="cname">{{intermediatetitle}}</h1>
+    <h1 class="nomb">5 x5</h1></div>
+<div class="co">
+    <img src="{{seniorimg}}" class="cimg">
+    <h1 class="cname">{{seniortitle}}</h1>
+    <h1 class="nomb">5 x5</h1></div>
+<div class="co">
+    <img src="{{ultimateimg}}" class="cimg">
+    <h1 class="cname">{{ultimatetitle}}</h1>
+    <h1 class="nomb">7 x5</h1></div>
+<div class="co">
+    <img src="{{elementarymaterialimg}}" class="cimg">
+    <h1 class="cname">{{elementarymaterialtitle}}</h1>
+    <h1 class="nomb">5 x5</h1></div>
+<div class="co">
+    <img src="{{intermediatematerialimg}}" class="cimg">
+    <h1 class="cname">{{intermediatematerialtitle}}</h1>
+    <h1 class="nomb">5 x5</h1></div>
+<div class="co">
+    <img src="{{seniormaterialimg}}" class="cimg">
+    <h1 class="cname">{{seniormaterialtitle}}</h1>
+    <h1 class="nomb">8 x5</h1></div>
+<div class="co">
+    <img src="{{ultimatematerialimg}}" class="cimg">
+    <h1 class="cname">{{ultimatematerialtitle}}</h1>
+    <h1 class="nomb">11 x5</h1></div>
+<div class="co">
+    <img src="{{extraimg}}" class="cimg">
+    <h1 class="cname">{{extratitle}}</h1>
+    <h1 class="nomb">7/8/9/10(1x5)</h1></div>
+<div class="co">
+    <img class="cimg" src="img/贝币.png">
+    <h1 class="cname">贝币</h1>
+    <h1 class="nomb">280000x5</h1></div> </div>
+    <h1 class="title">技能突破材料一览</h1>
+<div class="content">
+<div class="co">
+    <img src="{{intermediateimg}}" class="cimg">
+    <h1 class="cname">{{intermediatetitle}}</h1>
+    <h1 class="nomb">x3</h1></div>
+<div class="co">
+    <img src="{{intermediatematerialimg}}" class="cimg">
+    <h1 class="cname">{{intermediatematerialtitle}}</h1>
+    <h1 class="nomb">x3</h1></div>
+<div class="co">
+    <img src="{{seniorimg}}" class="cimg">
+    <h1 class="cname">{{seniortitle}}</h1>
+    <h1 class="nomb">x15</h1></div>
+<div class="co">
+    <img src="{{seniormaterialimg}}" class="cimg">
+    <h1 class="cname">{{seniormaterialtitle}}</h1>
+    <h1 class="nomb">x15</h1></div>
+<div class="co">
+    <img src="{{ultimateimg}}" class="cimg">
+    <h1 class="cname">{{ultimatetitle}}</h1>
+    <h1 class="nomb">x12</h1></div>
+<div class="co">
+    <img src="{{ultimatematerialimg}}" class="cimg">
+    <h1 class="cname">{{ultimatematerialtitle}}</h1>
+    <h1 class="nomb">x12</h1></div>
+<div class="co">
+    <img src="{{extraimg}}" class="cimg">
+    <h1 class="cname">{{extratitle}}</h1>
+    <h1 class="nomb">x6</h1></div>
+<div class="co">
+    <img src="img/贝币.png" class="cimg">
+    <h1 class="cname">贝币</h1>
+    <h1 class="nomb">x630000</h1></div> </div> </div></div>
+</div>

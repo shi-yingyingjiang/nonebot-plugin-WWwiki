@@ -1,0 +1,140 @@
+<style>
+/*--预设--*/ 
+body { padding:0px;margin: 0px; }
+@font-face {
+  font-family: 'STXingkai'; /* 定义字体名称 */
+  src: url('../fonts/STXingkai.ttf') format('truetype'); /* 指定字体文件路径和格式 */
+}
+@font-face {
+  font-family: 'FZShuTi';
+  src: url('../fonts/FZShuTi.ttf') format('truetype');
+} 
+#lyrow, #lyrow input, #lyrow textarea { font-size:12px;font-family: 'Microsoft YaHei', '微软雅黑', MicrosoftJhengHei, '华文细黑', STHeiti, MingLiu; } 
+#lyrow { height:100vh;width: 100vw; } 
+#lyrow div { min-height: 18px;  } 
+#lyrow input, #lyrow textarea { border:rgb(235, 235, 235) 1px solid;border-radius: 3px;padding: 5px 8px;outline: 0; } 
+#lyrow input:hover, #lyrow textarea:hover { border: 1px solid #6bc1f2; } 
+/*--编辑--*/ 
+#lyrow .logo { width:504px !important;height:174px !important;position:absolute; } 
+#lyrow .roleimg { width:648px !important;height:695px !important;position:relative; } 
+#lyrow .ehcologo { position:absolute;top:180px; } 
+#lyrow .ehcotitlt { max-width:200px;position:absolute;top:200px;color:rgba(217, 214, 209, 1);font-size:40px;font-weight:bold;left:750px; }
+#lyrow.roledescriptiontitle {position:absolute;left:648px;top:350px;font-size:30px;font-weight:bold; }
+#lyrow.roledescription {position:absolute;eft:648px;top:450px;font-size:25px;font-weight:bold; } 
+#lyrow .enname { position:absolute;top:260px;left:750px;max-width:200px;color:rgba(192, 166, 106, 1);font-size:25px; } 
+#lyrow .table { width:100%;color:rgba(217, 214, 209, 1);font-size:25px;border-radius:20px 20px 20px 20px;font-weight:bold; } 
+#lyrow .tr { height:50px !important; } 
+#lyrow .td {  } 
+#lyrow .tdt { border-radius:20px 20px 20px 20px;background-color:rgba(240, 240, 244, 1);width:50%;padding:0 0 0 20px; } 
+#lyrow .tdo { border-radius:20px 20px 20px 20px;background-color:rgba(240, 240, 244, 1);width:50%;padding:0 0 0 20px; } 
+#lyrow .one { background:linear-gradient(180deg,rgba(173, 178, 120, 1) 1%, rgba(255, 255, 255, 1) 100%); } 
+#lyrow .title { background:linear-gradient(92deg,rgba(247, 248, 248, 1) 1%, rgba(173, 187, 120, 1) 100%);height:50px !important;text-align:left;font-weight:bold;font-size:30px;padding:11px 0 0 50px; } 
+#lyrow .trt { height:50px !important; } 
+#lyrow .trttd {  } 
+#lyrow .trttdt { border-radius:20px 20px 20px 20px;padding:0 0 0 20px;color:rgba(51, 51, 51, 1);background-color:rgba(255, 255, 255, 1); } 
+#lyrow .trttdo { width:50%;border-radius:20px 20px 20px 20px;padding:0 0 0 20px;background-color:rgba(247, 247, 247, 1);color:rgba(91, 84, 74, 1);font-weight:bold;text-align:center; } 
+#lyrow .tablet { width:100%;font-size:25px;font-weight:bold;border:rgba(0, 0, 0, 1) solid 1px;border-top:rgba(0, 0, 0, 1) solid 1px !important;border-left:rgba(0, 0, 0, 1) solid 1px !important;border-bottom:rgba(0, 0, 0, 1) solid 1px !important;border-right:rgba(0, 0, 0, 1) solid 1px !important; } 
+#lyrow .tdto { width:30%;background-color:rgba(247, 247, 247, 1);border-right:rgba(0, 0, 0, 1) solid 1px !important; } 
+#lyrow .tdtt { width:25%;border-right:rgba(0, 0, 0, 1) solid 1px !important; } 
+#lyrow .tdttt { width:20%;background-color:rgba(247, 247, 247, 1);border-right:rgba(0, 0, 0, 1) solid 1px !important; } 
+#lyrow .tdtf { width:25%; } 
+#lyrow .trtt { height:75px !important;font-size:25px;text-align:center;vertical-align:middle;border-bottom:rgba(0, 0, 0, 1) solid 1px !important; }
+#lyrow .roledescriptiontitle {position: absolute;left: 648px;top: 325px;font-family:FZShuTi; }
+#lyrow .roledescription {position: absolute;left: 648px;top: 375px;font-family:STXingkai; }   
+
+</style>
+<!--下载font-awesome.css图标包-->
+<!--https://www.58html.com/html/template/font-awesome.zip-->
+<link rel="stylesheet" href="https://www.58html.com/gui/css/font-awesome/css/font-awesome.css">
+<div id="lyrow">
+<div class="one">
+<div >
+    <img class="roleimg" src="https://prod-alicdn-community.kurobbs.com/forum/e93296bb45e74a0e9e523120e317794620240521.png">
+    <img src="../img/logo.png" class="logo">
+    <img class="ehcologo" src="https://prod-alicdn-community.kurobbs.com/forum/e66a687dab0841ba8819cc21c8ebc96d20240514.png">
+    <h1 class="ehcotitlt">安可</h1>
+    <h1 class="enname">ENCORE</h1>
+    <h1 class="roledescriptiontitle">共鸣能力：数羊游戏</h1>
+    <h1 class="roledescription">与黑白羊咩玩偶为伴的小女孩，黑海岸客卿安可，渴望用糖果、童话和幻想创造有着幸福结局的故事。</h1></div>
+<div >
+<table class="table"><tbody>
+<tr class="tr">
+    <td class="tdo">出生：新联邦</td>
+    <td class="tdt">武器：音感仪</td>
+</tr>
+<tr class="tr">
+    <td class="tdo">性别：女</td>
+    <td class="tdt">属性：热熔</td>
+</tr></tbody>
+</table></div>
+<div >
+    <h1 class="title">其他信息</h1>
+<table class="table"><tbody>
+<tr class="trt">
+    <td class="trttdo">身份</td>
+    <td class="trttdt">黑海岸客卿</td>
+</tr>
+<tr class="trt">
+    <td class="trttdo">所属</td>
+    <td class="trttdt">黑海岸</td>
+</tr>
+<tr class="trt">
+    <td class="trttdo">特殊料理</td>
+    <td class="trttdt">咩咩酥</td>
+</tr>
+<tr class="trt">
+    <td class="trttdo">中文CV</td>
+    <td class="trttdt">皛四白</td>
+</tr>
+<tr class="trt">
+    <td class="trttdo">日文CV</td>
+    <td class="trttdt">伊吹誓乃</td>
+</tr>
+<tr class="trt">
+    <td class="trttdo">英文CV</td>
+    <td class="trttdt">Carina Reeves</td>
+</tr>
+<tr class="trt">
+    <td class="trttdo">韩文CV</td>
+    <td class="trttdt">Lee Serena</td>
+</tr>
+<tr class="trt">
+    <td class="trttdo">实装版本</td>
+    <td class="trttdt">V1.0</td>
+</tr></tbody>
+</table></div>
+<div >
+    <h1 class="title">角色统计       LV90</h1>
+<table class="tablet"><tbody>
+<tr class="trtt">
+    <td class="tdto">满突破<br>      </td>
+    <td class="tdtt">满突破<br>      </td>
+    <td class="tdttt">攻击提升<br>      </td>
+    <td class="tdtf">0%(12%)<br>      </td>
+</tr>
+<tr class="trtt">
+    <td class="tdto">基础生命<br>      </td>
+    <td class="tdtt">10512</td>
+    <td class="tdttt">暴击伤害<br>      </td>
+    <td class="tdtf">150%<br>      </td>
+</tr>
+<tr class="trtt">
+    <td class="tdto">基础攻击<br>      </td>
+    <td class="tdtt">425</td>
+    <td class="tdttt">治疗效果加成<br>      </td>
+    <td class="tdtf">0%<br>      </td>
+</tr>
+<tr class="trtt">
+    <td class="tdto">基础防御<br>      </td>
+    <td class="tdtt">1246</td>
+    <td class="tdttt">最大共鸣能量<br>      </td>
+    <td class="tdtf">125<br>      </td>
+</tr>
+<tr class="trtt">
+    <td class="tdto">暴击率<br>      </td>
+    <td class="tdtt">5%(13%)<br>      </td>
+    <td class="tdttt">气动伤害提升<br>      </td>
+    <td class="tdtf">0%<br>      </td>
+</tr></tbody>
+</table></div></div>
+</div>
