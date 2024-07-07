@@ -5,8 +5,9 @@
 
 </div>
 
-![logo](https://github.com/shi-yingyingjiang/nonebot-plugin-WWwiki/assets/136897416/6625f119-5186-430c-9f57-3bbfb3105334)
-
+<div align="center">
+<img alt="LOGO" src="https://github.com/shi-yingyingjiang/nonebot-plugin-WWwiki/assets/136897416/6625f119-5186-430c-9f57-3bbfb3105334" width="507" height="174"/> 
+</div>
 
 <div align="center">
 
