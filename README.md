@@ -2,7 +2,11 @@
   <a href="https://v2.nonebot.dev/store"><img src="https://github.com/A-kirami/nonebot-plugin-template/blob/resources/nbp_logo.png" width="180" height="180" alt="NoneBotPluginLogo"></a>
   <br>
   <p><img src="https://github.com/A-kirami/nonebot-plugin-template/blob/resources/NoneBotPlugin.svg" width="240" alt="NoneBotPluginText"></p>
+
 </div>
+
+![logo](https://github.com/shi-yingyingjiang/nonebot-plugin-WWwiki/assets/136897416/6625f119-5186-430c-9f57-3bbfb3105334)
+
 
 <div align="center">
 
@@ -24,7 +28,7 @@ _✨ 鸣潮wiki ✨_
 
 ## 📖 介绍
 
-这里是插件的详细介绍部分
+鸣潮WIKI，查询鸣潮相关数据
 
 ## 💿 安装
 
