@@ -11,12 +11,14 @@ from nonebot.plugin import PluginMetadata
 from .weapon import weapon_cards
 from .echo import echos
 from .enemy import enemy_cards
+from .help import help_img
+
 
 
 __plugin_meta__ = PluginMetadata(
     name='nonebot-plugin-WWwiki',
     description='查询鸣潮wiki相关内容',
-    usage=' ',
+    usage='鸣潮wiki帮助',
     type="application",
     homepage="https://github.com/shi-yingyingjiang/nonebot-plugin-WWwiki",
     supported_adapters = {"nonebot.adapters.onebot.v11"},
