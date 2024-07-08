@@ -1,6 +1,5 @@
 from bs4 import BeautifulSoup
 import re
-import json
 
 def get_content(text):
     return re.sub(r'x.*',r' ',text)

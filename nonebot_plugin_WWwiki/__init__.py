@@ -102,7 +102,7 @@ __plugin_meta__ = PluginMetadata(
                 'detail_des' : '无'
             }
         ],
-    }
+    },
 )
 
 

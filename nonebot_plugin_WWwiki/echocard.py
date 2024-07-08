@@ -5,7 +5,6 @@ from .judgmentrolename import judgment_role_name
 from .itemlink import Get_link
 import os
 from io import BytesIO
-import re
 import httpx
 from playwright.async_api import async_playwright
 from nonebot.adapters.onebot.v11 import Message,MessageSegment

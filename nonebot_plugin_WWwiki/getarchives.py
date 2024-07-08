@@ -1,6 +1,4 @@
-from jinja2 import Template
-import json
-from bs4 import BeautifulSoup, NavigableString,Tag
+from bs4 import BeautifulSoup
 
 
 
