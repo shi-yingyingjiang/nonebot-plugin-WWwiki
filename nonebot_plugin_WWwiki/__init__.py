@@ -8,11 +8,11 @@ from .recommendation import recommendation_cards
 from .role_list import role_list
 from .rolearchives import archive_cards
 from .rolecard import character_cards
-# from .rolegift import gift_cards
-# from .rolematerial import material_cards
-# from .roleskll import skll_cards
-# from .roletale import tale_cards
-# from .weapon import weapon_cards
+from .rolegift import gift_cards
+from .rolematerial import material_cards
+from .roleskll import skll_cards
+from .roletale import tale_cards
+from .weapon import weapon_cards
 
 __plugin_meta__ = PluginMetadata(
     name='鸣潮wiki',
