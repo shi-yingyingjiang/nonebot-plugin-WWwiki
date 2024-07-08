@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "nonebot-plugin-WWwiki"
-version = "0.0.1"
+version = "0.0.3"
 description = "发送kurobbs的数据"
 authors = ["shiyingyingjiang <2798134864@qq.com>"]
 license = "MIT"
@@ -20,6 +20,8 @@ pandas = ">=2.0.3"
 pydantic = ">=1.10.11"
 playwright = ">=1.33.0"
 Pillow = ">=9.4.0"
+bs4 = ">=4.12.3"
+
 
 
 
