@@ -19,7 +19,7 @@ httpx = ">=0.27.0"
 pandas = ">=2.0.3"
 pydantic = ">=1.10.11"
 playwright = ">=1.33.0"
-Pilow = ">=9.4.0"
+Pillow = ">=9.4.0"
 
 
 
