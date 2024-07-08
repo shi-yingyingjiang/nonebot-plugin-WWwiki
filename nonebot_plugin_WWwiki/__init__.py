@@ -16,7 +16,7 @@ from .help import help_img
 
 
 __plugin_meta__ = PluginMetadata(
-    name='nonebot-plugin-WWwiki',
+    name='鸣潮wiki',
     description='查询鸣潮wiki相关内容',
     usage='鸣潮wiki帮助',
     type="application",
