@@ -30,7 +30,7 @@ def is_value_in_dicts_list(dict_list, key, value):
 # 示例用法
 
 
-async def Get_link(name, listdata):
+async def get_link(name, listdata):
     async with httpx.AsyncClient() as client:
 
         res = await client.post(rolelisturl, data=listdata, headers=headers)

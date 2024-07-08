@@ -1,21 +1,18 @@
 from typing import Literal
 
 
+class Drifter:
+    def __init__(self, gender: Literal['男', '女'], attribute: str) -> None:
+        self.gender = gender
+        self.attribute = attribute
 
+    @property
+    def parameter(self) -> str:
+        return f'漂泊者-{self.gender}-{self.attribute}'
 
 
 def judgment_role_name(name: str):
     if '漂泊者' in name:
-        class Drifter:
-            def __init__(self, gender: Literal['男', '女'], attribute: str) -> None:
-                self.gender = gender
-                self.attribute = attribute
-
-            @property
-            def parameter(self) -> str:
-                return f'漂泊者-{self.gender}-{self.attribute}'
-
-
         enter = name
         attributes = ['衍射', '湮灭']
 
@@ -30,10 +27,12 @@ def judgment_role_name(name: str):
             else:
                 role_name = f"没有找到匹配的属性。"
         else:
-            role_name =f"没有找到漂泊者的性别。"
+            role_name = f"没有找到漂泊者的性别。"
     else:
         role_name = name
 
     return role_name
 
-print(judgment_role_name('安可'))
+
+if __name__ == '__main__':
+    print(judgment_role_name('安可'))

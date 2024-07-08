@@ -2,7 +2,7 @@ import json
 from jinja2 import Template
 from .basicinformation import get_basic_information
 from .judgmentrolename import judgment_role_name
-from .itemlink import Get_link
+from .itemlink import get_link
 import os
 import httpx
 from playwright.async_api import async_playwright
@@ -42,7 +42,7 @@ tale_cards = on_command('鸣潮角色故事')
 @tale_cards.handle()
 async def _(args: Message = CommandArg()):
     role_name = judgment_role_name(args.extract_plain_text())
-    role_id = await Get_link(role_name,listdata)
+    role_id = await get_link(role_name, listdata)
     if role_id ==None:
         await tale_cards.finish(f'没有找到角色,错误参数：' +  role_name)
     else:

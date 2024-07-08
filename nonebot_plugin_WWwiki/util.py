@@ -1,5 +1,6 @@
 from pathlib import Path
 
+from jinja2 import Template
 from nonebot import require
 
 require("nonebot_plugin_alconna")
@@ -14,4 +15,14 @@ __dir = Path(__file__).parent.resolve().absolute()
 html_templates = __dir / "html_template"
 
 
-__all__ = ["UniMessage", "html_to_pic", "get_new_page", "html_templates", "template_to_pic"]
+def get_template(name: str):
+    return html_templates / name / "template.html"
+
+
+async def get_html(content: str):
+    template = Template("{{ content }}", enable_async=True)
+    rendered = await template.render_async(content=content)
+    return rendered
+
+
+__all__ = ["UniMessage", "get_html", "html_to_pic", "get_new_page", "get_template", "template_to_pic"]

@@ -1,3 +1,4 @@
+from typing import Optional
 from pydantic import BaseModel, Field
 
 
@@ -39,8 +40,8 @@ class Figure(BaseModel):
     url: str
     name: str
     real_file_name: str = Field(..., alias='realFileName')
-    vertical_figure_url: str | None = Field(None, alias='verticalFigureUrl')
-    vertical_figure_real_file_name: str | None = Field(None, alias='verticalFigureRealFileName')
+    vertical_figure_url: Optional[str] = Field(None, alias='verticalFigureUrl')
+    vertical_figure_real_file_name: Optional[str] = Field(None, alias='verticalFigureRealFileName')
 
 
 class Role(BaseModel):
@@ -76,17 +77,17 @@ class Tab(BaseModel):
 
 
 class Component(BaseModel):
-    role: Role | None = None
+    role: Optional[Role] = None
     size: str
     type: str
     title: str
     content: str
     collapse: bool
     title_style: TitleStyle = Field(..., alias='titleStyle')
-    main_style: MainStyle | None = Field(None, alias='mainStyle')
-    tabs: list[Tab] | None = None
-    float: str | None = None
-    tabs_type: str | None = Field(None, alias='tabsType')
+    main_style: Optional[MainStyle] = Field(None, alias='mainStyle')
+    tabs: Optional[list[Tab]] = None
+    float: Optional[str] = None
+    tabs_type: Optional[str] = Field(None, alias='tabsType')
 
 
 class Module(BaseModel):
@@ -136,6 +137,3 @@ class Model(BaseModel):
     code: int
     msg: str
     data: Data
-
-
-

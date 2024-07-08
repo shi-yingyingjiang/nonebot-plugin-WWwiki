@@ -1,7 +1,7 @@
 import httpx
 import json
 import os
-from .itemlink import Get_link
+from .itemlink import get_link
 from nonebot.params import CommandArg
 from nonebot.adapters.onebot.v11 import Message,MessageSegment
 from nonebot import on_command
@@ -39,7 +39,7 @@ out_html_path = os.path.join(html_fpath, 'html_template', 'weapon', 'out_page.ht
 @weapon_cards.handle()
 async def get_weapon_data(args: Message = CommandArg()):
     name = args.extract_plain_text()
-    weapon_id = await Get_link(name,listdata)
+    weapon_id = await get_link(name, listdata)
     if weapon_id == None:
         await weapon_cards.finish('没有找到武器,错误参数：' + name)
     else:

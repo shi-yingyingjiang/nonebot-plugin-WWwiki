@@ -5,7 +5,7 @@ from nonebot import on_command
 from .getmaterial import getelementarymaterials,getintermediatematerials,getseniormaterials,getultimatematerials,getskillmaterials
 from .basicinformation import get_basic_information
 from .judgmentrolename import judgment_role_name
-from .itemlink import Get_link
+from .itemlink import get_link
 import httpx
 from io import BytesIO
 import os
@@ -44,7 +44,7 @@ listdata = {
 @material_cards.handle()
 async def _(args: Message = CommandArg()):
     role_name = judgment_role_name(args.extract_plain_text())
-    role_id = await Get_link(role_name,listdata)
+    role_id = await get_link(role_name, listdata)
     if role_id ==None:
         await material_cards.finish(f'没有找到角色,错误参数：' +  role_name)
     else:

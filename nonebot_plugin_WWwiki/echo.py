@@ -6,8 +6,8 @@ from nonebot.adapters import Message
 from nonebot import on_command
 from bs4 import BeautifulSoup
 
-from .itemlink import Get_link
-from .util import UniMessage, html_templates, template_to_pic
+from .itemlink import get_link
+from .util import UniMessage, get_template, template_to_pic
 
 echos = on_command('鸣潮声骸查询', aliases={'声骸查询'})
 
@@ -30,13 +30,13 @@ listdata = {
     'limit': '1000'
 }
 
-html_spath = html_templates / "echo" / "template.html"
+html_spath = get_template("echo")
 
 
 @echos.handle()
 async def _(args: Message = CommandArg()):
     name = args.extract_plain_text()
-    echo_id = await Get_link(name, listdata)
+    echo_id = await get_link(name, listdata)
     if echo_id is None:
         await echos.finish('没有找到该声骸')
     else:
@@ -67,4 +67,4 @@ async def _(args: Message = CommandArg()):
                 quality=100
             )
 
-    await UniMessage.image(raw=echo_card).finish()
+        await UniMessage.image(raw=echo_card).finish()

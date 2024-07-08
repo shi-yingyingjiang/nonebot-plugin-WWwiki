@@ -2,7 +2,6 @@ from jinja2 import Template
 from bs4 import BeautifulSoup, NavigableString
 
 
-
 def extract_between_second_p_and_hr(html):
     skll_data = {}
     soup = BeautifulSoup(html, 'html.parser')
@@ -28,9 +27,10 @@ def extract_between_second_p_and_hr(html):
                 current = current.next_sibling
             template = Template("{{ content }}")
             skll_content = template.render(content=content)
-            skll_data['content'] =  skll_content
+            skll_data['content'] = skll_content
 
     return skll_data
+
 
 def extract_after_first_p(html):
     soup = BeautifulSoup(html, 'html.parser')
@@ -60,7 +60,3 @@ def get_recommendation(html):
     table = str(soup.find('table'))
 
     return table
-
-
-
-
