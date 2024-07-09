@@ -1,7 +1,3 @@
-
-
-
-
 def get_basic_information(data):
     role_name = data.get('data').get('content').get('modules')[0].get('components')[0].get('role').get('title')
     role_img = data.get('data').get('content').get('modules')[0].get('components')[0].get('role').get('figures')[0].get('url')
@@ -19,9 +15,7 @@ def get_basic_information(data):
     role_en_name = data.get('data').get('content').get('modules')[0].get('components')[0].get('role').get('subtitle')
     campIcon = data.get('data').get('content').get('modules')[0].get('components')[0].get('role').get('campIcon')
 
-
-
-    return{
+    return {
         'role_name': role_name,
         'role_img': role_img,
         'role_en_name' : role_en_name,
@@ -33,5 +27,3 @@ def get_basic_information(data):
         'birthplace': birthplace,
         'campIcon' : campIcon
     }
-
-

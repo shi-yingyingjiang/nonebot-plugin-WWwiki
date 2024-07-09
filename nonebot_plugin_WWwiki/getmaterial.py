@@ -1,8 +1,10 @@
 from bs4 import BeautifulSoup
 import re
 
+
 def get_content(text):
-    return re.sub(r'x.*',r' ',text)
+    return re.sub(r'x.*', r' ', text)
+
 
 def getelementarymaterials(html):
     elementary_materials = {}
@@ -17,9 +19,9 @@ def getelementarymaterials(html):
 
     return elementary_materials
 
+
 # print(getelementarymaterials(html_fragment_1))
 def getintermediatematerials(html):
-
     intermediate_materials = {}
     soup = BeautifulSoup(html, 'html.parser')
     table = soup.find_all('table')[1]
@@ -30,6 +32,7 @@ def getintermediatematerials(html):
     intermediate_materials['title'] = text
 
     return intermediate_materials
+
 
 def getseniormaterials(html):
     senior_materials = {}
@@ -42,6 +45,7 @@ def getseniormaterials(html):
     senior_materials['title'] = text
 
     return senior_materials
+
 
 def getultimatematerials(html):
     ultimate_materials = {}
@@ -65,7 +69,6 @@ def getultimatematerials(html):
     universaltext = get_content(td3.get_text(strip=True))
     ultimate_materials['universalimg'] = universalimg
     ultimate_materials['universaltitle'] = universaltext
-
 
     return ultimate_materials
 
@@ -107,8 +110,6 @@ def getskillmaterials(html):
     skill_materials['extratitle'] = extratext
 
     return skill_materials
-
-
 
 # with open('1249040336606580736.json', 'r', encoding='utf-8') as f:
 #     data = json.load(f)

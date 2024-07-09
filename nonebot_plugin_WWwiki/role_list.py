@@ -1,43 +1,39 @@
 import json
-import httpx
-from nonebot import on_command
-from nonebot.adapters.onebot.v11 import MessageSegment
 from io import BytesIO
 
+import httpx
+from nonebot import on_command
+from PIL import Image, ImageDraw, ImageFont
 
-
-
+from .util import UniMessage
 
 url = 'https://api.kurobbs.com/wiki/core/catalogue/item/getPage'
 headers = {
-'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/125.0.0.0 Safari/537.36 Edg/125.0.0.0',
+    'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/125.0.0.0 Safari/537.36 Edg/125.0.0.0',
     'Referer': 'https://wiki.kurobbs.com/',
-    'Upgrade-Insecure-Requests' : '1',
-    'Sec-Ch-Ua-Platform' : '"Windows"',
-    'Sec-Ch-Ua' : '"Microsoft Edge";v="125", "Chromium";v="125", "Not=A?Brand";v="24"',
-    'Sec-Ch-Ua-Mobile' : '?0',
-    'Wiki_type' : '9'
+    'Upgrade-Insecure-Requests': '1',
+    'Sec-Ch-Ua-Platform': '"Windows"',
+    'Sec-Ch-Ua': '"Microsoft Edge";v="125", "Chromium";v="125", "Not=A?Brand";v="24"',
+    'Sec-Ch-Ua-Mobile': '?0',
+    'Wiki_type': '9'
 
 }
 listdata = {
     'catalogueId': '1105',
     'page': '1',
     'limit': '1000'
-    }
+}
 role_list = on_command("鸣潮角色列表")
+
+
 @role_list.handle()
 async def rolelistimg():
     async with httpx.AsyncClient() as client:
-        role_list_r = await client.post(url,headers=headers,data=listdata)
+        role_list_r = await client.post(url, headers=headers, data=listdata)
         data = json.loads(role_list_r.text)
         records = data.get('data').get('results').get('records')
         matching_name = [item['name'] for item in records]
         # print(matching_entryIds)
-
-
-        from PIL import Image, ImageDraw, ImageFont
-
-        # 列表中的名字
 
         # 设置图片参数
         image_width = 800
@@ -74,7 +70,4 @@ async def rolelistimg():
         img.save(img_byte, format='PNG')
         # img_byte.seek(0)
 
-
-        await role_list.finish(MessageSegment.image(img_byte.getvalue()))
-
-
+        await UniMessage.image(raw=img_byte).finish()
