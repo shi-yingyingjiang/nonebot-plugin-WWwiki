@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "nonebot-plugin-WWwiki"
-version = "0.0.6"
+version = "0.0.7"
 description = "发送kurobbs的数据"
 authors = ["shiyingyingjiang <2798134864@qq.com>"]
 license = "MIT"
@@ -21,7 +21,7 @@ Pillow = ">=9.4.0"
 beautifulsoup4 = ">=4.12.3"
 nonebot-plugin-alconna = ">=0.49.0"
 nonebot-plugin-htmlrender = ">=0.3.2"
-xlml = ">=5.2.2"
+lxml = ">=5.2.2"
 
 [tool.poetry.dev-dependencies]
 nonebot2 = { version = ">=2.3.2", extras = ["fastapi", "uvicorn"] }
@@ -61,7 +61,7 @@ dependencies = [
     "nonebot2[httpx]>=2.3.0",
     "nonebot-plugin-alconna>=0.49.0",
     "nonebot-plugin-htmlrender>=0.3.2",
-    "xlml>=5.2.2",
+    "lxml>=5.2.2",
 ]
 requires-python = ">=3.9"
 readme = "README.md"
