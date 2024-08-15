@@ -1,0 +1,48 @@
+<style>
+/*--预设--*/ 
+body { padding:0px;margin: 0px; } 
+#lyrow, #lyrow input, #lyrow textarea { font-size:12px;font-family: 'Microsoft YaHei', '微软雅黑', MicrosoftJhengHei, '华文细黑', STHeiti, MingLiu; } 
+#lyrow { height:100vh;width: 100vw; } 
+#lyrow div { min-height: 18px;  } 
+#lyrow input, #lyrow textarea { border:rgb(235, 235, 235) 1px solid;border-radius: 3px;padding: 5px 8px;outline: 0; } 
+#lyrow input:hover, #lyrow textarea:hover { border: 1px solid #6bc1f2; } 
+/*--编辑--*/ 
+#lyrow .o { width:354px !important;padding:50px 73px 50px 73px;background:linear-gradient(0deg,rgba(255, 255, 255, 1) 1%, rgba(173, 179, 120, 1) 100%); } 
+#lyrow .oo { justify-content:center;display:flex !important;width:352px !important;height:324px !important;align-items:center;margin:0 0 20px 0;border:rgba(204, 181, 107, 1) solid 2px;border-radius:10px 10px 10px 10px; } 
+#lyrow .ot { width:342px !important;justify-content:space-around;display:flex !important;border:rgba(204, 181, 107, 1) solid 2px;border-radius:10px 10px 10px 10px;padding:5px 5px 5px 5px; } 
+#lyrow .fs { width:208px !important;height:284px !important; } 
+#lyrow .fso { width:92px !important;height:92px !important;margin:2px 0 2px 0; } 
+#lyrow .fsio { width:228px !important;height:284px !important; } 
+#lyrow .fsit { width:92px !important; } 
+#lyrow .wi { width:70px !important;height:70px !important; } 
+#lyrow .oth { margin:0 0 20px 0;width:352px !important; } 
+#lyrow .title { color:rgba(51, 51, 51, 1);font-weight:bold;font-size:25px;margin:0 0 5px 0; } 
+#lyrow .time { margin:0 0 5px 0; } 
+#lyrow .tp {  } 
+#lyrow .name { margin:0 0 20px 0;color:rgba(125, 111, 82, 1); } 
+
+</style>
+<!--下载font-awesome.css图标包-->
+<!--https://www.58html.com/html/template/font-awesome.zip-->
+<link rel="stylesheet" href="https://www.58html.com/gui/css/font-awesome/css/font-awesome.css">
+<div id="lyrow">
+<div class="o">
+<div class="oth">
+    <h1 class="title">唤取活动</h1>
+    <h1 class="time">活动时间：{{time1}}-{{time2}}</h1>
+    <h1 class="tp">{{timeperiod}}</h1> </div>
+    <h1 class="name">{{rolename}}</h1>
+<div class="oo">
+<div class="fsio">
+    <img src="{{fivestarsimg}}" class="fs"></div>
+<div class="fsit">
+    <img src="{{fourstarsimg1}}" class="fso">
+    <img src="{{fourstarsimg2}}" class="fso">
+    <img src="{{fourstarsimg3}}" class="fso"></div> </div>
+    <h1 class="name">{{weaponname}}</h1>
+<div class="ot">
+    <img src="{{fiveswi}}" class="wi">
+    <img class="wi" src="{{fourswi1}}">
+    <img class="wi" src="{{fourswi2}}">
+    <img src="{{fourswi3}}" class="wi"> </div></div>
+</div>

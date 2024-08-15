@@ -13,6 +13,8 @@ from .rolematerial import material_cards
 from .roleskll import skll_cards
 from .roletale import tale_cards
 from .weapon import weapon_cards
+from .activities import *
+
 
 __plugin_meta__ = PluginMetadata(
     name='鸣潮wiki',
@@ -98,6 +100,34 @@ __plugin_meta__ = PluginMetadata(
                 'trigger_method': '鸣潮敌人查询',
                 'trigger_condition': ' ',
                 'brief_des': '鸣潮敌人查询 角',
+                'detail_des': '无'
+            },
+            {
+                'func': '查看卡池',
+                'trigger_method': '鸣潮卡池列表',
+                'trigger_condition': ' ',
+                'brief_des': '无',
+                'detail_des': '无'
+            },
+            {
+                'func': '查看活动',
+                'trigger_method': '鸣潮活动列表',
+                'trigger_condition': ' ',
+                'brief_des': '无',
+                'detail_des': '无'
+            },
+            {
+                'func': '更新活动信息',
+                'trigger_method': '鸣潮更新活动',
+                'trigger_condition': ' ',
+                'brief_des': '无',
+                'detail_des': '卡池、活动无数据或报错时尝试使用'
+            },
+            {
+                'func': '自动推送即将开始或结束的活动',
+                'trigger_method': '鸣潮活动提醒 --(开启|关闭)',
+                'trigger_condition': ' ',
+                'brief_des': '无',
                 'detail_des': '无'
             }
         ],
