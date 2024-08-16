@@ -5,9 +5,9 @@ import json
 from nonebot import on_command
 from nonebot.permission import SUPERUSER
 from .util import UniMessage, get_template, template_to_pic,get_activities,scheduler
-from nonebot_plugin_alconna import on_alconna,Target
+from nonebot_plugin_alconna import on_alconna,Target,Match
 from nonebot_plugin_alconna.uniseg import MsgTarget
-from arclet.alconna import Alconna, Option
+from arclet.alconna import Alconna, Option,Args
 from aiofiles import open as aio_open
 from .config import group_data
 
@@ -232,11 +232,30 @@ def calculate_time_difference(end_time):
     
     return f"剩余：{days}天 {hours}小时 {minutes}分钟"
 
+def compare_time_ranges(time_ranges):
+    # 获取当前时间
+    current_time = datetime.now()
+    current_time_date = current_time.date()
+    
+    # 解析输入的时间范围
+    start_time = datetime.strptime(time_ranges[0], "%Y-%m-%d %H:%M")
+    start_time_date = start_time.date()
+    end_time = datetime.strptime(time_ranges[1], "%Y-%m-%d %H:%M")
+    end_time_date = end_time.date()
 
-
+    # 比较并输出结果
+    if current_time_date < start_time_date:
+        return "未开始"
+    elif current_time_date > end_time_date:
+        return "已结束"
+    else:
+        # 计算与结束时间的差
+        delta = end_time - current_time
+        days = delta.days
+        hours = delta.seconds // 3600
+        minutes = (delta.seconds // 60) % 60
         
-
-
+        return f"{days}天 {hours}小时 {minutes}分钟"
 
 
 #卡池
@@ -244,12 +263,12 @@ def role_data(data):
     role = data['ac'][0]['activities'][0]
     weapon = data['ac'][0]['activities'][1]
     time = data['ac'][0]['dateRange']
-    end_time = datetime.strptime(time[1], "%Y-%m-%d %H:%M")
+    # end_time = datetime.strptime(time[1], "%Y-%m-%d %H:%M")
 
     Data = {
         "time1" : time[0],
         "time2" : time[1],
-        "timeperiod" : calculate_time_difference(end_time),
+        "timeperiod" : compare_time_ranges(time),
         "rolename" : role['title'],
         "fivestarsimg" : role['contentUrl'][0],
         "fourstarsimg1" : role['contentUrl'][1],
@@ -301,7 +320,7 @@ def ac(data):
         
         
         # 计算时间差
-        time_diff = calculate_time_difference(end_time)
+        time_diff = compare_time_ranges(date_range)
         
         for activity in activities:
             if isinstance(activity["contentUrl"], list):
@@ -362,7 +381,7 @@ def get_end(data):
 
     return output_html
 
-card_pools = on_command('鸣潮卡池列表')
+card_pools = on_command('鸣潮卡池')
 
 card_pool_spath = get_template("card_pool")
 activity_spath = get_template("activity")
