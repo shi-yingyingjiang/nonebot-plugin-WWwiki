@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "nonebot-plugin-WWwiki"
-version = "0.0.9"
+version = "0.1.0"
 description = "发送kurobbs的数据"
 authors = ["shiyingyingjiang <2798134864@qq.com>"]
 license = "MIT"
@@ -47,7 +47,7 @@ build-backend = "pdm.backend"
 
 [project]
 name = "nonebot-plugin-WWwiki"
-version = "0.0.9"
+version = "0.1.0"
 description = "发送kurobbs的数据"
 authors = [
     {name = "rf_tar_railt", email = "3165388245@qq.com"},
