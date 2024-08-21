@@ -1,21 +1,29 @@
-from typing import Optional
+from typing import Dict, List
 import httpx
 from datetime import datetime, timedelta
 import json
 from nonebot import on_command
-from nonebot.params import Arg
 from nonebot.permission import SUPERUSER
 from .util import UniMessage, get_template, template_to_pic,get_activities,scheduler
-from nonebot_plugin_alconna import on_alconna,Target,Match
+from nonebot_plugin_alconna import on_alconna,Target
 from nonebot_plugin_alconna.uniseg import MsgTarget
-from arclet.alconna import Alconna, Option,Args,Arparma,Subcommand
+from arclet.alconna import Alconna, Option
 from aiofiles import open as aio_open
 from .config import group_data
+import asyncio
+lock = asyncio.Lock()
 
 
 
 
 
+if group_data.exists():
+    with open(group_data, "r", encoding="utf8") as f:
+        CONFIG: Dict[str, List] = json.load(f)
+else:
+    CONFIG: Dict[str, List] = {"opened_groups": []}
+    with open(group_data, "w", encoding="utf8") as f:
+        json.dump(CONFIG, f, ensure_ascii=False, indent=4)
 
  
 url = 'https://api.kurobbs.com/wiki/core/homepage/getPage'
@@ -371,7 +379,7 @@ def get_end(data):
     <div class="oo">
         <h1 class="title">以下活动将于明天结束</h1></div>
     """
-    output_html = ""
+    
 
     for item in data['after']:
         if isinstance(item["contentUrl"], list):
@@ -380,9 +388,9 @@ def get_end(data):
             img_url = item["contentUrl"]
         after_htmls += after_template.format(img=img_url, title=item['title'])
 
-        output_html = after_htmls + before_htmls
+        
 
-    return output_html
+    return after_htmls + before_htmls
 
 card_pools = on_command('鸣潮卡池')
 
@@ -442,7 +450,7 @@ async def activity():
 timing_activity = get_template("timing")
 
 
-@scheduler.scheduled_job('cron',hour='10', jitter=600)
+@scheduler.scheduled_job('cron',hour='10')
 async def scheduled_tasks():
     async with aio_open(data_spath, 'r', encoding='utf-8') as f:
         olddata = await f.read()
@@ -463,23 +471,6 @@ async def scheduled_tasks():
             ac_dict_data = get_activities_before_and_after_today(old_data['ac'])
             ac_dica = get_end(ac_dict_data)
 
-            async with aio_open(group_data, 'r', encoding='utf-8') as f:
-                groupid = await f.read()
-            default_config = {"opened_groups": []}
-
-            if not groupid.strip():  # 检查文件内容是否为空或只包含空白字符
-                CONFIG = default_config  # 使用默认配置
-            else:
-                try:
-                    loaded_config = json.loads(groupid)
-                    CONFIG = {**default_config, **loaded_config}  # 合并默认配置和文件中的配置
-                except json.JSONDecodeError as e:
-                    # 处理 JSON 解析错误
-                    CONFIG = default_config
-
-            
-
-
             Data = {
                 "div" : ac_dica
             }
@@ -491,8 +482,9 @@ async def scheduled_tasks():
                 
             )
 
-            for group_id in CONFIG['opened_groups']:
+            
 
+            for group_id in CONFIG['opened_groups']:
                 target = Target(group_id)
                 await UniMessage.image(raw=img,).send(target=target)
 
@@ -525,62 +517,30 @@ alc = Alconna("鸣潮活动提醒", Option("-o|--开启"), Option("-c|--关闭")
 reminder = on_alconna(alc,permission=SUPERUSER)
 @reminder.assign("开启")
 async def open(target: MsgTarget):
-    async with aio_open(group_data, 'r', encoding='utf-8') as f:
-        groupid = await f.read()
-    
-    default_config = {"opened_groups": []}
-
-    if not groupid.strip():  # 检查文件内容是否为空或只包含空白字符
-        CONFIG = default_config  # 使用默认配置
-    else:
-        try:
-            loaded_config = json.loads(groupid)
-            CONFIG = {**default_config, **loaded_config}  # 合并默认配置和文件中的配置
-        except json.JSONDecodeError as e:
-            # 处理 JSON 解析错误
-            CONFIG = default_config
-            
-
     if not target.private:
         groupid = target.id
         if groupid in CONFIG["opened_groups"]:
             await reminder.finish("该群已开启活动提醒")
         else:
             CONFIG["opened_groups"].append(groupid)
-            async with aio_open(group_data, 'w', encoding='utf-8') as f:
-                await f.write(json.dumps(CONFIG, ensure_ascii=False, indent=4))
-            await reminder.finish("开启成功")
-    else:
-        return
+    async with lock:
+        async with aio_open(group_data, 'w', encoding='utf-8') as f:
+            await f.write(json.dumps(CONFIG, ensure_ascii=False, indent=4))
+    await reminder.finish("开启成功")
 
 
 @reminder.assign("关闭")
-async def close(target: MsgTarget):
-    async with aio_open(group_data, 'r', encoding='utf-8') as f:
-        groupid = await f.read()
-        default_config = {"opened_groups": []}
-
-    if not groupid.strip():  # 检查文件内容是否为空或只包含空白字符
-        CONFIG = default_config  # 使用默认配置
-    else:
-        try:
-            loaded_config = json.loads(groupid)
-            CONFIG = {**default_config, **loaded_config}  # 合并默认配置和文件中的配置
-        except json.JSONDecodeError as e:
-            # 处理 JSON 解析错误
-            CONFIG = default_config 
+async def close(target: MsgTarget): 
     if not target.private:
         groupid = target.id
         if groupid in CONFIG["opened_groups"]:
             CONFIG["opened_groups"].remove(groupid)
-            async with aio_open(group_data, 'w', encoding='utf-8') as f:
-                await f.write(json.dumps(CONFIG, ensure_ascii=False, indent=4))
+            async with lock:
+                async with aio_open(group_data, 'w', encoding='utf-8') as f:
+                        await f.write(json.dumps(CONFIG, ensure_ascii=False, indent=4))
             await reminder.finish("关闭成功")
-            
         else:
             await reminder.finish("该群未开启活动提醒")
-    else:
-        return
 
 
         
