@@ -1,13 +1,14 @@
-# from typing import Dict, List
+from typing import Optional
 import httpx
 from datetime import datetime, timedelta
 import json
 from nonebot import on_command
+from nonebot.params import Arg
 from nonebot.permission import SUPERUSER
 from .util import UniMessage, get_template, template_to_pic,get_activities,scheduler
 from nonebot_plugin_alconna import on_alconna,Target,Match
 from nonebot_plugin_alconna.uniseg import MsgTarget
-from arclet.alconna import Alconna, Option,Args
+from arclet.alconna import Alconna, Option,Args,Arparma,Subcommand
 from aiofiles import open as aio_open
 from .config import group_data
 
@@ -347,7 +348,7 @@ def get_end(data):
     before_htmls = """
     <div class="oo">
         <h1 class="title">以下活动将于明天开始</h1></div>
-"""
+    """
     for item in data['before']:
         if isinstance(item["contentUrl"], list):
             img_url = item["contentUrl"][0]  # 使用第一个图片URL
@@ -369,7 +370,9 @@ def get_end(data):
     after_htmls = """
     <div class="oo">
         <h1 class="title">以下活动将于明天结束</h1></div>
-"""
+    """
+    output_html = ""
+
     for item in data['after']:
         if isinstance(item["contentUrl"], list):
             img_url = item["contentUrl"][0]  # 使用第一个图片URL
@@ -518,6 +521,7 @@ async def update_activity():
 
 alc = Alconna("鸣潮活动提醒", Option("-o|--开启"), Option("-c|--关闭"))
 
+
 reminder = on_alconna(alc,permission=SUPERUSER)
 @reminder.assign("开启")
 async def open(target: MsgTarget):
@@ -546,6 +550,8 @@ async def open(target: MsgTarget):
             async with aio_open(group_data, 'w', encoding='utf-8') as f:
                 await f.write(json.dumps(CONFIG, ensure_ascii=False, indent=4))
             await reminder.finish("开启成功")
+    else:
+        return
 
 
 @reminder.assign("关闭")
@@ -573,5 +579,8 @@ async def close(target: MsgTarget):
             
         else:
             await reminder.finish("该群未开启活动提醒")
+    else:
+        return
 
-            
+
+        
