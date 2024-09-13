@@ -1,29 +1,22 @@
+import asyncio
 from typing import Dict, List
 import httpx
 from datetime import datetime, timedelta
 import json
-from nonebot import on_command
+from nonebot import on_command,logger
 from nonebot.permission import SUPERUSER
 from .util import UniMessage, get_template, template_to_pic,get_activities,scheduler
-from nonebot_plugin_alconna import on_alconna,Target
+from nonebot_plugin_alconna import on_alconna,Target,Match
 from nonebot_plugin_alconna.uniseg import MsgTarget
-from arclet.alconna import Alconna, Option
+from arclet.alconna import Alconna, Option,Args
 from aiofiles import open as aio_open
 from .config import group_data
-import asyncio
 lock = asyncio.Lock()
 
 
 
 
 
-if group_data.exists():
-    with open(group_data, "r", encoding="utf8") as f:
-        CONFIG: Dict[str, List] = json.load(f)
-else:
-    CONFIG: Dict[str, List] = {"opened_groups": []}
-    with open(group_data, "w", encoding="utf8") as f:
-        json.dump(CONFIG, f, ensure_ascii=False, indent=4)
 
  
 url = 'https://api.kurobbs.com/wiki/core/homepage/getPage'
@@ -46,13 +39,21 @@ headers = {
 
 
 
-
+if group_data.exists():
+    with open(group_data, "r", encoding="utf8") as f:
+        CONFIG: Dict[str, List] = json.load(f)
+else:
+    CONFIG: Dict[str, List] = {"opened_groups": []}
+    with open(group_data, "w", encoding="utf8") as f:
+        json.dump(CONFIG, f, ensure_ascii=False, indent=4)
 
 
 #处理数据
-def get_data(data):
+async def get_data():
+    async with httpx.AsyncClient() as client:
+        resp = await client.post(url, data=data, headers=headers)
 
-    dw = data
+    dw = resp.json()
 
     activities_dict = {}
 
@@ -166,7 +167,7 @@ def check_activities(data):
     is_start_previous_day = False
     is_end_previous_day = False
 
-    current_date = datetime.now().date()
+    current_date = datetime.now.date()
 
     for item in data:
         start_date_str, end_date_str = item["dateRange"]
@@ -192,7 +193,7 @@ def get_activities_before_and_after_today(data):
 
 
     # 当前时间
-    current_date = datetime.now().date()  
+    current_date = datetime.now.date()  
 
     # 分类列表
     start_previous_day = []
@@ -403,9 +404,7 @@ data_spath = get_activities()
 
 @card_pools.handle()
 async def cardpools():
-    async with aio_open(data_spath, 'r', encoding='utf-8') as f:
-        old_d = await f.read()
-        old_data = json.loads(old_d)
+    old_data = await get_data()
 
     Data = role_data(old_data)
 
@@ -426,9 +425,7 @@ activities = on_command('鸣潮活动列表')
 
 @activities.handle()
 async def activity():
-    async with aio_open(data_spath, 'r', encoding='utf-8') as f:
-        old_d = await f.read()
-        old_data = json.loads(old_d)
+    old_data = await get_data()
 
 
     Data = {
@@ -450,23 +447,11 @@ async def activity():
 timing_activity = get_template("timing")
 
 
-@scheduler.scheduled_job('cron',hour='10')
+@scheduler.scheduled_job('cron',hour='18',minute='52' )
 async def scheduled_tasks():
-    async with aio_open(data_spath, 'r', encoding='utf-8') as f:
-        olddata = await f.read()
-        old_data = json.loads(olddata)
+        old_data = await get_data()
 
-    limitation = old_data['ac'][0]['dateRange']
-    if is_current_time_in_range(limitation) is False:
-        async with httpx.AsyncClient() as client:
-            r = await client.post(url, data=data, headers=headers)
-            new_data = get_data(r.json())
-            async with aio_open(data_spath, 'w', encoding='utf-8') as f:
-                await f.write(json.dumps(new_data, ensure_ascii=False, indent=4))
 
-        return
-
-    else:
         if check_activities(old_data['ac']) is True:
             ac_dict_data = get_activities_before_and_after_today(old_data['ac'])
             ac_dica = get_end(ac_dict_data)
@@ -482,10 +467,10 @@ async def scheduled_tasks():
                 
             )
 
-            
-
             for group_id in CONFIG['opened_groups']:
+
                 target = Target(group_id)
+                logger.info(f'成功为群{group_id}推送活动')
                 await UniMessage.image(raw=img,).send(target=target)
 
 
@@ -493,26 +478,8 @@ async def scheduled_tasks():
             return
 
 
-update = on_command('鸣潮更新活动',permission=SUPERUSER)
 
-
-@update.handle()
-async def update_activity():
-    async with httpx.AsyncClient() as client:
-        r = await client.post(url, data=data, headers=headers)
-        new_data = get_data(r.json())
-        async with aio_open(data_spath, 'w', encoding='utf-8') as f:
-            await f.write(json.dumps(new_data, ensure_ascii=False, indent=4))
-        await update.finish("更新成功")
-
-
-
-
-
-
-
-alc = Alconna("鸣潮活动提醒", Option("-o|--开启"), Option("-c|--关闭"))
-
+alc = Alconna("鸣潮活动提醒", Args["group_id?", int], Option("-o|--开启"), Option("-c|--关闭"))
 
 reminder = on_alconna(alc,permission=SUPERUSER)
 @reminder.assign("开启")
@@ -541,6 +508,7 @@ async def close(target: MsgTarget):
             await reminder.finish("关闭成功")
         else:
             await reminder.finish("该群未开启活动提醒")
-
+    
+    
 
         

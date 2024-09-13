@@ -117,19 +117,19 @@ __plugin_meta__ = PluginMetadata(
                 'detail_des': '无'
             },
             {
-                'func': '更新活动信息',
-                'trigger_method': '鸣潮更新活动',
-                'trigger_condition': ' ',
-                'brief_des': '无',
-                'detail_des': '卡池、活动无数据或报错时尝试使用'
-            },
-            {
                 'func': '自动推送即将开始或结束的活动',
                 'trigger_method': '鸣潮活动提醒 --(开启|关闭)',
+                'trigger_condition': '超级用户',
+                'brief_des': '无',
+                'detail_des': '无'
+            },
+            {
+                'func': '查看角色列表',
+                'trigger_method': '鸣潮角色列表',
                 'trigger_condition': ' ',
                 'brief_des': '无',
                 'detail_des': '无'
-            }
+            },
         ],
     },
 )

@@ -31,43 +31,136 @@ async def rolelistimg():
     async with httpx.AsyncClient() as client:
         role_list_r = await client.post(url, headers=headers, data=listdata)
         data = json.loads(role_list_r.text)
-        records = data.get('data').get('results').get('records')
-        matching_name = [item['name'] for item in records]
+        records = data['data']['results']['records']
+        # matching_name = [item['name'] for item in records]
         # print(matching_entryIds)
 
-        # 设置图片参数
-        image_width = 800
-        image_height = 50 * len(matching_name) + 50  # 为标题预留空间
-        title = "角色列表"
-        font_path = 'STKAITI.TTF'
-        font_size_title = 40  # 标题的字体大小
-        font_size_names = 30
-        line_spacing = 20
-        text_color = 'black'
-        bg_color = 'white'
+        # # 设置图片参数
+        # image_width = 800
+        # image_height = 50 * len(matching_name) + 50  # 为标题预留空间
+        # title = "角色列表"
+        # font_path = 'STKAITI.TTF'
+        # font_size_title = 40  # 标题的字体大小
+        # font_size_names = 30
+        # line_spacing = 20
+        # text_color = 'black'
+        # bg_color = 'white'
 
-        # 创建图片
-        img = Image.new('RGB', (image_width, image_height), bg_color)
-        draw = ImageDraw.Draw(img)
+        # # 创建图片
+        # img = Image.new('RGB', (image_width, image_height), bg_color)
+        # draw = ImageDraw.Draw(img)
 
-        # 绘制标题
-        title_bbox = draw.textbbox((0, 0), title, font=ImageFont.truetype(font_path, font_size_title))
-        title_width, title_height = title_bbox[2] - title_bbox[0], title_bbox[3] - title_bbox[1]
-        title_x = (image_width - title_width) // 2
-        title_y = 20  # 留出一定的顶部边距
-        draw.text((title_x, title_y), title, fill=text_color, font=ImageFont.truetype(font_path, font_size_title))
+        # # 绘制标题
+        # title_bbox = draw.textbbox((0, 0), title, font=ImageFont.truetype(font_path, font_size_title))
+        # title_width, title_height = title_bbox[2] - title_bbox[0], title_bbox[3] - title_bbox[1]
+        # title_x = (image_width - title_width) // 2
+        # title_y = 20  # 留出一定的顶部边距
+        # draw.text((title_x, title_y), title, fill=text_color, font=ImageFont.truetype(font_path, font_size_title))
 
-        # 绘制名字
-        y_offset = title_y + title_height + 10  # 标题下方留空隙
-        for name in matching_name:
-            bbox = draw.textbbox((0, 0), name, font=ImageFont.truetype(font_path, font_size_names))
-            text_width, text_height = bbox[2] - bbox[0], bbox[3] - bbox[1]
-            x = (image_width - text_width) // 2
-            y = y_offset + (text_height + line_spacing) // 2
-            draw.text((x, y), name, fill=text_color, font=ImageFont.truetype(font_path, font_size_names))
-            y_offset += text_height + line_spacing
+        # # 绘制名字
+        # y_offset = title_y + title_height + 10  # 标题下方留空隙
+        # for name in matching_name:
+        #     bbox = draw.textbbox((0, 0), name, font=ImageFont.truetype(font_path, font_size_names))
+        #     text_width, text_height = bbox[2] - bbox[0], bbox[3] - bbox[1]
+        #     x = (image_width - text_width) // 2
+        #     y = y_offset + (text_height + line_spacing) // 2
+        #     draw.text((x, y), name, fill=text_color, font=ImageFont.truetype(font_path, font_size_names))
+        #     y_offset += text_height + line_spacing
+        # img_byte = BytesIO()
+        # img.save(img_byte, format='PNG')
+        # # img_byte.seek(0)
+
+
+        processed_titles = []
+
+        for item in records:
+            content = item["content"]
+            title = content["title"]
+            show_teaser_icon_num = content.get("showTeaserIconNum")
+
+            # 根据 showTeaserIconNum 添加角标
+            if show_teaser_icon_num == 2:
+                title += " (预)"
+            elif show_teaser_icon_num == 1:
+                title += " (新)"
+
+            processed_titles.append(title)
+
+        # 输出处理后的标题
+
+        from PIL import Image, ImageDraw, ImageFont
+
+        # 定义一些常量
+        FONT_PATH = 'STKAITI.TTF'
+        FONT_SIZE = 20
+        LINE_SPACING = 5
+        MAX_COLUMNS = 2  # 改为两列 
+        COLUMN_SPACING = 10  # 列之间的间距
+        BORDER = 50  # 上下左右边界距离
+
+        # 加载字体
+        try:
+            font = ImageFont.truetype(FONT_PATH, FONT_SIZE)
+            superscript_font = ImageFont.truetype(FONT_PATH, FONT_SIZE // 2)  # 角标字体大小减半
+        except IOError:
+            print("Error loading font. Using default font.")
+            font = ImageFont.load_default()
+            superscript_font = ImageFont.load_default()
+
+        # 计算每个名字的宽度
+        name_widths = [ImageDraw.Draw(Image.new('RGB', (1, 1))).textlength(name, font=font) for name in processed_titles]
+
+        # 计算每个角标的宽度
+        superscripts = ['(新)' if '(新)' in name else '(预)' if '(预)' in name else '' for name in processed_titles]
+        superscript_widths = [ImageDraw.Draw(Image.new('RGB', (1, 1))).textlength(superscript, font=superscript_font) for superscript in superscripts]
+
+        # 计算每列的名字
+        columns = [processed_titles[i::MAX_COLUMNS] for i in range(MAX_COLUMNS)]
+
+        # 计算每列中最长名字的宽度
+        column_widths = [max([name_widths[i] + superscript_widths[i] for i, name in enumerate(processed_titles) if i % MAX_COLUMNS == j], default=0) for j in range(MAX_COLUMNS)]
+
+        # 计算每列的总高度
+        column_heights = [len(column) * (FONT_SIZE + LINE_SPACING) for column in columns]
+
+        # 动态计算图片的宽度和高度
+        IMAGE_WIDTH = int(sum(column_widths) + (MAX_COLUMNS - 1) * COLUMN_SPACING + 2 * BORDER)
+        IMAGE_HEIGHT = int(max(column_heights) + 2 * BORDER)
+
+        # 创建一个空白图片
+        image = Image.new('RGB', (IMAGE_WIDTH, IMAGE_HEIGHT), color='white')
+        draw = ImageDraw.Draw(image)
+
+        # 计算每列的起始位置
+        x_texts = [int(sum(column_widths[:i]) + i * COLUMN_SPACING + BORDER) for i in range(MAX_COLUMNS)]
+
+        # 计算每列的垂直居中位置
+        vertical_offsets = [(IMAGE_HEIGHT - height - 2 * BORDER) / 2 for height in column_heights]
+
+        # 绘制文本
+        for i, name in enumerate(processed_titles):
+            col_index = i % MAX_COLUMNS
+            row_index = i // MAX_COLUMNS
+            
+            # 计算当前名字的宽度，并根据最长名字的宽度对齐
+            name_width = name_widths[i]
+            x_text = x_texts[col_index] + (column_widths[col_index] - name_width) / 2
+            
+            # 计算垂直居中位置
+            y_text = vertical_offsets[col_index] + row_index * (FONT_SIZE + LINE_SPACING) + BORDER
+            
+            # 绘制名字
+            base_name = name.split('(')[0].strip()
+            draw.text((x_text, y_text), base_name, fill='black', font=font)
+            
+            # 绘制角标
+            superscript = superscripts[i]
+            if superscript:
+                superscript_x = x_text + name_width + 1  # 右侧偏移
+                superscript_y = y_text - 4  # 向上偏移
+                draw.text((superscript_x, superscript_y), superscript, fill='red', font=superscript_font)
         img_byte = BytesIO()
-        img.save(img_byte, format='PNG')
-        # img_byte.seek(0)
+        image.save(img_byte, format='PNG')
+
 
         await UniMessage.image(raw=img_byte).finish()
