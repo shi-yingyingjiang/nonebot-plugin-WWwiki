@@ -13,7 +13,7 @@ __dir = Path(__file__).parent.resolve().absolute()
 
 html_templates = __dir / "html_template"
 data_path = __dir / "data"
-
+font_path = html_templates / "fonts"
 
 
 def get_template(name: str):
@@ -34,4 +34,4 @@ async def get_html(content: str):
     return rendered
 
 
-__all__ = ["UniMessage", "get_html", "html_to_pic", "get_new_page", "get_template", "template_to_pic","get_activities","scheduler"]
+__all__ = ["UniMessage", "get_html", "html_to_pic", "get_new_page", "get_template", "template_to_pic","get_activities","scheduler","font_path"]

@@ -447,7 +447,7 @@ async def activity():
 timing_activity = get_template("timing")
 
 
-@scheduler.scheduled_job('cron',hour='18',minute='52' )
+@scheduler.scheduled_job('cron',hour='18',jitter=600)
 async def scheduled_tasks():
         old_data = await get_data()
 
