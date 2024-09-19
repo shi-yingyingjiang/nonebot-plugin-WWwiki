@@ -167,7 +167,7 @@ def check_activities(data):
     is_start_previous_day = False
     is_end_previous_day = False
 
-    current_date = datetime.now.date()
+    current_date = datetime.now().date()
 
     for item in data:
         start_date_str, end_date_str = item["dateRange"]
@@ -193,7 +193,7 @@ def get_activities_before_and_after_today(data):
 
 
     # 当前时间
-    current_date = datetime.now.date()  
+    current_date = datetime.now().date()  
 
     # 分类列表
     start_previous_day = []
@@ -470,7 +470,7 @@ async def scheduled_tasks():
             for group_id in CONFIG['opened_groups']:
 
                 target = Target(group_id)
-                logger.info(f'成功为群{group_id}推送活动')
+                logger.info(f'成功推送活动')
                 await UniMessage.image(raw=img,).send(target=target)
 
 
