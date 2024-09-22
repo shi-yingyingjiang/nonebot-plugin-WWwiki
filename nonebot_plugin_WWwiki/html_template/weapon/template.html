@@ -1,0 +1,33 @@
+<style>
+/*--预设--*/ 
+body { padding:0px;margin: 0px; } 
+#lyrow, #lyrow input, #lyrow textarea { font-size:12px;font-family: 'Microsoft YaHei', '微软雅黑', MicrosoftJhengHei, '华文细黑', STHeiti, MingLiu; } 
+#lyrow { height:100vh;width: 100vw; } 
+#lyrow div { min-height: 18px;  } 
+#lyrow input, #lyrow textarea { border:rgb(235, 235, 235) 1px solid;border-radius: 3px;padding: 5px 8px;outline: 0; } 
+#lyrow input:hover, #lyrow textarea:hover { border: 1px solid #6bc1f2; } 
+/*--编辑--*/ 
+#lyrow .o { padding:65px 65px 65px 65px;height: 410px !important;width: 1104px !important;background:linear-gradient(180deg,rgba(173, 178, 120, 1) 1%, rgba(255, 255, 255, 1) 100%); } 
+#lyrow .oo {  } 
+#lyrow .ooo { border:rgba(0, 0, 0, 1) dotted 1px;border-radius:20px 20px 20px 20px;position:absolute;padding:20px 20px 20px 20px; } 
+#lyrow .ootw { border:rgba(0, 0, 0, 1) dotted 1px;border-radius:20px 20px 20px 20px;position:absolute;padding:10px 10px 10px 10px;left:400px;min-width: 200px; } 
+#lyrow .ooth { border:rgba(0, 0, 0, 1) dotted 1px;border-radius:20px 20px 20px 20px;position:absolute;width:746px !important;left:400px;top:200px;padding:10px 10px 10px 10px; } 
+#lyrow .weaponimg { width:256px !important;height:256px !important; } 
+#lyrow .weaponname { position:absolute;top:400px;font-size:55px;font-weight:bold;text-shadow:5px 5px 5px rgba(238, 223, 176, 1); } 
+#lyrow .attribute { margin:10px 0 10px 0;border-left:rgba(117, 102, 77, 1) solid 10px !important;padding:0 0 0 5px; } 
+
+</style>
+<!--下载font-awesome.css图标包-->
+<!--https://www.58html.com/html/template/font-awesome.zip-->
+<link rel="stylesheet" href="https://www.58html.com/gui/css/font-awesome/css/font-awesome.css">
+<div id="lyrow">
+<div class="o">
+<div class="oo">
+<div class="ooo">
+    <img src="{{weaponimg}}" class="weaponimg"></div>
+<div class="ootw">
+    <h1 class="attribute">{{attribute1}}</h1>
+    <h1 class="attribute">{{attribute2}}</h1></div>
+    <h1 class="weaponname">{{weaponname}}</h1>
+<div class="ooth">{{description}}</div></div></div>
+</div>

@@ -1,0 +1,39 @@
+<style>
+/*--预设--*/ 
+body { padding:0px;margin: 0px; }
+@font-face {
+  font-family: 'STXingkai'; /* 定义字体名称 */
+  src: url('../fonts/STXingkai.ttf'); /* 指定字体文件路径和格式 */
+}
+@font-face {
+  font-family: 'FZShuTi';
+  src: url('../fonts/FZShuTi.ttf');
+} 
+#lyrow, #lyrow input, #lyrow textarea { font-size:12px;font-family: 'Microsoft YaHei', '微软雅黑', MicrosoftJhengHei, '华文细黑', STHeiti, MingLiu; } 
+#lyrow { height:100vh;width: 100vw; } 
+#lyrow div { min-height: 18px;  } 
+#lyrow input, #lyrow textarea { border:rgb(235, 235, 235) 1px solid;border-radius: 3px;padding: 5px 8px;outline: 0; } 
+#lyrow input:hover, #lyrow textarea:hover { border: 1px solid #6bc1f2; } 
+/*--编辑--*/ 
+#lyrow .roleimg { width:648px !important; } 
+#lyrow .logo { width:504px !important;height:174px !important;top:0px;position:absolute; } 
+#lyrow .rolename { width:200px !important;height:100px !important;font-size:55px;position:absolute;left:648px;top:175px;font-weight:bold; } 
+#lyrow .roledescription { width:850px !important;height:100px !important;font-size:25px;position:absolute;left:648px;top:375px;font-weight:normal;font-family:STXingkai; } 
+#lyrow .roledescriptiontitle { width:500px !important;height:100px !important;font-size:45px;left:648px;top:275px;font-family:FZShuTi;position:absolute;font-weight:normal; } 
+#lyrow .content { border:rgba(0, 0, 0, 1) dashed 2px;border-radius:20px 20px 20px 20px;padding:20px 15px 20px 15px;font-weight:bold;margin:10px 20px 0 20px; } 
+#lyrow .o { background:radial-gradient(at 0% 0%,rgba(173, 187, 120, 1) 12%, rgba(255, 255, 255, 1) 100%);width:1512px !important;padding:0 0 20px 0; } 
+
+</style>
+<!--下载font-awesome.css图标包-->
+<!--https://www.58html.com/html/template/font-awesome.zip-->
+<link rel="stylesheet" href="https://www.58html.com/gui/css/font-awesome/css/font-awesome.css">
+<div id="lyrow">
+<div class="o">
+<div >
+    <img src="{{roleimg}}" class="roleimg">
+    <img src="../img/logo.png" class="logo">
+    <h1 class="rolename">{{rolename}}</h1>
+    <h1 class="roledescriptiontitle">{{roledescriptiontitle}}</h1>
+    <h1 class="roledescription">{{roledescription}}</h1> </div>
+<div class="content">{{content}}</div> </div>
+</div>

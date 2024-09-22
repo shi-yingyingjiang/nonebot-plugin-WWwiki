@@ -1,0 +1,138 @@
+<style>
+/*--预设--*/ 
+body { padding:0px;margin: 0px; }
+@font-face {
+  font-family: 'STXingkai'; /* 定义字体名称 */
+  src: url('../fonts/STXingkai.ttf') format('truetype'); /* 指定字体文件路径和格式 */
+}
+@font-face {
+  font-family: 'FZShuTi';
+  src: url('../fonts/FZShuTi.ttf') format('truetype');
+} 
+#lyrow, #lyrow input, #lyrow textarea { font-size:12px;font-family: 'Microsoft YaHei', '微软雅黑', MicrosoftJhengHei, '华文细黑', STHeiti, MingLiu; } 
+#lyrow { height:100vh;width: 100vw; } 
+#lyrow div { min-height: 18px;  } 
+#lyrow input, #lyrow textarea { border:rgb(235, 235, 235) 1px solid;border-radius: 3px;padding: 5px 8px;outline: 0; } 
+#lyrow input:hover, #lyrow textarea:hover { border: 1px solid #6bc1f2; } 
+/*--编辑--*/ 
+#lyrow .logo { width:504px !important;height:174px !important;position:absolute; } 
+#lyrow .roleimg { width:648px !important;height:695px !important;position:relative; } 
+#lyrow .ehcologo { position:absolute;top:265px; } 
+#lyrow .ehcotitlt { min-width:200px;position:absolute;top:265px;color:rgba(217, 214, 209, 1);font-size:40px;font-weight:bold;left:815px; }
+#lyrow .enname { position:absolute;top:325px;left:815px;max-width:200px;color:rgba(192, 166, 106, 1);font-size:25px; } 
+#lyrow .table { width:100%;color:rgba(217, 214, 209, 1);font-size:25px;border-radius:20px 20px 20px 20px;font-weight:bold; } 
+#lyrow .tr { height:50px !important; } 
+#lyrow .td {  } 
+#lyrow .tdt { border-radius:20px 20px 20px 20px;background-color:rgba(240, 240, 244, 1);width:50%;padding:0 0 0 20px; } 
+#lyrow .tdo { border-radius:20px 20px 20px 20px;background-color:rgba(240, 240, 244, 1);width:50%;padding:0 0 0 20px; } 
+#lyrow .one { background:linear-gradient(180deg,rgba(173, 178, 120, 1) 1%, rgba(255, 255, 255, 1) 100%);padding:65px 65px 65px 65px;width:1157px !important; } 
+#lyrow .title { background:linear-gradient(92deg,rgba(247, 248, 248, 1) 1%, rgba(173, 187, 120, 1) 100%);height:50px !important;text-align:left;font-weight:bold;font-size:30px;padding:11px 0 0 50px; } 
+#lyrow .trt { height:50px !important; } 
+#lyrow .trttd {  } 
+#lyrow .trttdt { border-radius:20px 20px 20px 20px;padding:0 0 0 20px;color:rgba(51, 51, 51, 1);background-color:rgba(255, 255, 255, 1); } 
+#lyrow .trttdo { width:50%;border-radius:20px 20px 20px 20px;padding:0 0 0 20px;background-color:rgba(247, 247, 247, 1);color:rgba(91, 84, 74, 1);font-weight:bold;text-align:center; } 
+#lyrow .tablet { width:100%;font-size:25px;font-weight:bold;border:rgba(0, 0, 0, 1) solid 1px;border-top:rgba(0, 0, 0, 1) solid 1px !important;border-left:rgba(0, 0, 0, 1) solid 1px !important;border-bottom:rgba(0, 0, 0, 1) solid 1px !important;border-right:rgba(0, 0, 0, 1) solid 1px !important; } 
+#lyrow .tdto { width:30%;background-color:rgba(247, 247, 247, 1);border-right:rgba(0, 0, 0, 1) solid 1px !important; } 
+#lyrow .tdtt { width:25%;border-right:rgba(0, 0, 0, 1) solid 1px !important; } 
+#lyrow .tdttt { width:20%;background-color:rgba(247, 247, 247, 1);border-right:rgba(0, 0, 0, 1) solid 1px !important; } 
+#lyrow .tdtf { width:25%; } 
+#lyrow .trtt { height:75px !important;font-size:25px;text-align:center;vertical-align:middle;border-bottom:rgba(0, 0, 0, 1) solid 1px !important; }
+#lyrow .roledescriptiontitle {position: absolute;left: 713px;top: 390px;font-family:FZShuTi;width:504px !important; }
+#lyrow .roledescription {position: absolute;left: 713px;top: 440px;font-family:STXingkai;width:504px !important; }   
+
+</style>
+<!--下载font-awesome.css图标包-->
+<!--https://www.58html.com/html/template/font-awesome.zip-->
+<link rel="stylesheet" href="https://www.58html.com/gui/css/font-awesome/css/font-awesome.css">
+<div id="lyrow">
+<div class="one">
+<div >
+    <img class="roleimg" src="{{roleimg}}">
+    <img src="../img/logo.png" class="logo">
+    <img class="ehcologo" src="{{campIcon}}">
+    <h1 class="ehcotitlt">{{title}}</h1>
+    <h1 class="enname">{{roleenname}}</h1>
+    <h1 class="roledescriptiontitle">{{roleDescriptiontitle}}</h1>
+    <h1 class="roledescription">{{roleDescription}}</h1></div>
+<div >
+<table class="table"><tbody>
+<tr class="tr">
+    <td class="tdo">{{attribute}}</td>
+    <td class="tdt">{{weapon}}</td>
+</tr>
+<tr class="tr">
+    <td class="tdo">{{gender}}</td>
+    <td class="tdt">{{birthplace}}</td>
+</tr></tbody>
+</table></div>
+<div >
+    <h1 class="title">其他信息</h1>
+<table class="table"><tbody>
+<tr class="trt">
+    <td class="trttdo">身份</td>
+    <td class="trttdt">{{identity}}</td>
+</tr>
+<tr class="trt">
+    <td class="trttdo">所属</td>
+    <td class="trttdt">{{affiliation}}</td>
+</tr>
+<tr class="trt">
+    <td class="trttdo">特殊料理</td>
+    <td class="trttdt">{{specialcuisine}}</td>
+</tr>
+<tr class="trt">
+    <td class="trttdo">中文CV</td>
+    <td class="trttdt">{{zhcv}}</td>
+</tr>
+<tr class="trt">
+    <td class="trttdo">日文CV</td>
+    <td class="trttdt">{{jpcv}}</td>
+</tr>
+<tr class="trt">
+    <td class="trttdo">英文CV</td>
+    <td class="trttdt">{{encv}}</td>
+</tr>
+<tr class="trt">
+    <td class="trttdo">韩文CV</td>
+    <td class="trttdt">{{kocv}}</td>
+</tr>
+<tr class="trt">
+    <td class="trttdo">实装版本</td>
+    <td class="trttdt">{{version}}</td>
+</tr></tbody>
+</table></div>
+<div >
+    <h1 class="title">角色统计       LV90</h1>
+<table class="tablet"><tbody>
+<tr class="trtt">
+    <td class="tdto">满突破<br>      </td>
+    <td class="tdtt">满突破<br>      </td>
+    <td class="tdttt">攻击提升<br>      </td>
+    <td class="tdtf">0%(12%)<br>      </td>
+</tr>
+<tr class="trtt">
+    <td class="tdto">基础生命<br>      </td>
+    <td class="tdtt">{{baselife}}</td>
+    <td class="tdttt">暴击伤害<br>      </td>
+    <td class="tdtf">150%<br>      </td>
+</tr>
+<tr class="trtt">
+    <td class="tdto">基础攻击<br>      </td>
+    <td class="tdtt">{{basicattack}}</td>
+    <td class="tdttt">治疗效果加成<br>      </td>
+    <td class="tdtf">0%<br>      </td>
+</tr>
+<tr class="trtt">
+    <td class="tdto">基础防御<br>      </td>
+    <td class="tdtt">{{basicdefense}}</td>
+    <td class="tdttt">最大共鸣能量<br>      </td>
+    <td class="tdtf">125<br>      </td>
+</tr>
+<tr class="trtt">
+    <td class="tdto">暴击率<br>      </td>
+    <td class="tdtt">5%(13%)<br>      </td>
+    <td class="tdttt">气动伤害提升<br>      </td>
+    <td class="tdtf">0%<br>      </td>
+</tr></tbody>
+</table></div></div>
+</div>

@@ -1,0 +1,70 @@
+<style>
+/*--预设--*/ 
+body { padding:0px;margin: 0px; }
+@font-face {
+  font-family: 'STXingkai'; /* 定义字体名称 */
+  src: url('../fonts/STXingkai.ttf'); /* 指定字体文件路径和格式 */
+}
+@font-face {
+  font-family: 'FZShuTi';
+  src: url('../fonts/FZShuTi.ttf');
+}  
+#lyrow, #lyrow input, #lyrow textarea { font-size:12px;font-family: 'Microsoft YaHei', '微软雅黑', MicrosoftJhengHei, '华文细黑', STHeiti, MingLiu; } 
+#lyrow { height:100vh;width: 100vw; } 
+#lyrow div { min-height: 18px;  } 
+#lyrow input, #lyrow textarea { border:rgb(235, 235, 235) 1px solid;border-radius: 3px;padding: 5px 8px;outline: 0; } 
+#lyrow input:hover, #lyrow textarea:hover { border: 1px solid #6bc1f2; } 
+/*--编辑--*/ 
+#lyrow .o { width:1157px !important;background:linear-gradient(180deg,rgba(173, 187, 120, 1) 1%, rgba(255, 255, 255, 1) 100%);padding:50px 50px 50px 50px;  } 
+#lyrow .roleimg { width:648px !important;height:695px !important; } 
+#lyrow .logo { height:174px !important;width:504px !important;position:absolute;left:698px;top:50px; } 
+#lyrow .rolename { width:504px !important;max-width:200px;left:698px;position:absolute;font-size:55px;top:250px; } 
+#lyrow .roledescription { width:500px !important;position:absolute;left:698px;font-size:25px;max-width:520px;top:425px;font-family:STXingkai; } 
+#lyrow .roledescriptiontitle { width:504px !important;position:absolute;font-size:50px;left:698px;top:325px;font-family:FZShuTi; }
+#lyrow .ott { padding:10px 10px 10px 10px;margin: 20px 0 0 0;width: 1170px !important; } 
+#lyrow .otto { width:50%;border:rgba(0, 0, 0, 1) solid 1px; } 
+#lyrow .ottt { width:50%;z-index:2; } 
+#lyrow .table { width:100%; } 
+#lyrow .tr {  } 
+#lyrow .tdo { width:50%;border:rgba(233, 231, 239, 1) solid 1px; } 
+#lyrow .tdt { border:rgba(233, 231, 239, 1) solid 1px; } 
+#lyrow .giftimg { width:92px !important;height:92px !important;position:relative;left:20px; } 
+#lyrow .gifttitle { width:400px !important;position:relative;left:130px;bottom:60px; } 
+#lyrow .gift { height:92px !important; }
+
+</style>
+<!--下载font-awesome.css图标包-->
+<!--https://www.58html.com/html/template/font-awesome.zip-->
+<link rel="stylesheet" href="https://www.58html.com/gui/css/font-awesome/css/font-awesome.css">
+<div id="lyrow">
+<div class="o">
+<div class="oo">
+    <img src="{{roleimg}}" class="roleimg">
+    <img src="../img/logo.png" class="logo">
+    <h1 class="rolename">{{rolename}}</h1>
+    <h1 class="roledescriptiontitle">{{roledescriptiontitle}}</h1>
+    <h1 class="roledescription">{{roledescription}}</h1></div>
+<div class="ott">
+<table class="table"><tbody>
+<tr class="tr">
+    <td class="tdo">
+<div class="gift">
+    <img src="{{giftimg1}}" class="giftimg">
+    <h1 class="gifttitle">{{gifttitle1}}</h1></div>{{giftcontent1}}</td>
+    <td class="tdt">
+<div class="gift">
+    <img src="{{giftimg2}}" class="giftimg">
+    <h1 class="gifttitle">{{gifttitle2}}</h1></div>{{giftcontent2}}</td>
+</tr>
+<tr >
+    <td class="tdo">
+<div class="gift">
+    <img src="{{giftimg3}}" class="giftimg">
+    <h1 class="gifttitle">{{gifttitle3}}</h1></div>{{giftcontent3}}</td>
+    <td class="tdt">
+<div class="gift">
+    <img src="{{giftimg4}}" class="giftimg">
+    <h1 class="gifttitle">{{gifttitle4}}</h1></div>{{giftcontent4}}</td>
+</tr></tbody>
+</table></div> </div>
+</div>

@@ -1,0 +1,26 @@
+<style>
+/*--预设--*/ 
+body { padding:0px;margin: 0px; } 
+#lyrow, #lyrow input, #lyrow textarea { font-size:12px;font-family: 'Microsoft YaHei', '微软雅黑', MicrosoftJhengHei, '华文细黑', STHeiti, MingLiu; } 
+#lyrow { height:100vh;width: 100vw; } 
+#lyrow div { min-height: 18px;  } 
+#lyrow input, #lyrow textarea { border:rgb(235, 235, 235) 1px solid;border-radius: 3px;padding: 5px 8px;outline: 0; } 
+#lyrow input:hover, #lyrow textarea:hover { border: 1px solid #6bc1f2; } 
+/*--编辑--*/ 
+#lyrow .class { width:120px !important;height:160px !important;padding:0 0 0 2px;margin:0 10px 20px 10px;border:rgba(139, 131, 120, 1) solid 1px; } 
+#lyrow .classimg { width:117px !important;height:118px !important; } 
+#lyrow .name { height:20px !important;text-align:center;vertical-align:top;font-size:14px; } 
+#lyrow .classify { flex-wrap: wrap;display:flex !important;margin:20px 0 0 0; } 
+#lyrow .o { padding:50px 25px 50px 25px;width: 450px !important; } 
+#lyrow .title { font-size:40px; } 
+
+</style>
+<!--下载font-awesome.css图标包-->
+<!--https://www.58html.com/html/template/font-awesome.zip-->
+<link rel="stylesheet" href="https://www.58html.com/gui/css/font-awesome/css/font-awesome.css">
+<div id="lyrow">
+<div class="o">
+<div >
+    <h1 class="title">{{title}}</h1> </div>
+<div class="classify">{{content}}</div></div>
+</div>

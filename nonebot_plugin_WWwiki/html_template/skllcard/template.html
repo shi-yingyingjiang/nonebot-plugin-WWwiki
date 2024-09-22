@@ -1,0 +1,56 @@
+<style>
+/*--预设--*/ 
+body { padding:0px;margin: 0px; } 
+#lyrow, #lyrow input, #lyrow textarea { font-size:12px;font-family: 'Microsoft YaHei', '微软雅黑', MicrosoftJhengHei, '华文细黑', STHeiti, MingLiu; } 
+#lyrow { height:100vh;width: 100vw; } 
+#lyrow div { min-height: 18px;  } 
+#lyrow input, #lyrow textarea { border:rgb(235, 235, 235) 1px solid;border-radius: 3px;padding: 5px 8px;outline: 0; } 
+#lyrow input:hover, #lyrow textarea:hover { border: 1px solid #6bc1f2; } 
+/*--编辑--*/ 
+#lyrow .role_img { margin:-50px 0 0 450px;width:1000px !important; } 
+#lyrow .wikilogo { width:504px !important;height:174px !important;top:0px;position:absolute;left:648px; } 
+#lyrow .rolename { position:absolute;top:180px;left:648px;font-weight:bold;font-size:55px;width:504px !important; } 
+#lyrow .roledescriptiontitle { left:648px;position:absolute;top:260px;font-family:FZShuTi;font-size:50px;width:504px !important; } 
+#lyrow .roledescription { left:648px;top:350px;position:absolute;font-family:STXingkai;font-size:25px;width:504px !important; } 
+#lyrow .normlskll { border-radius:20px 20px 20px 20px;background-image:url(http://www.58html.com/folder/imgcss/202406/c97404f76ca18391f6b6ba376aa3e5d5.jpg);background-size:auto auto;position:relative;top:10px;margin:10px 0 0 0;min-height:150px !important;padding:20px 20px 20px 20px; } 
+#lyrow .content { left:140px;position:relative;font-weight:bold;margin:15px 10px 0 10px;padding:0 0 10px 0;max-width:985px; } 
+#lyrow .skllimg { position:absolute;left:10px;top:21px; } 
+#lyrow .sklltitle { left:140px;position:relative;top:0px;font-size:20px;color:rgba(188, 158, 94, 1);font-weight:bold;width:500px !important;padding:5px 0 0 0;margin:0 0 5px 10px; } 
+#lyrow .one { padding:65px 65px 65px 65px;width:1157px !important;background:linear-gradient(180deg,rgba(173, 178, 120, 1) 1%, rgba(255, 255, 255, 1) 100%); } 
+#lyrow .jiefang { background-image:url(http://www.58html.com/folder/imgcss/202406/a9f9b2978063e9bb110db273dbe1d5b4.jpg);background-size:auto auto;border-radius:20px 20px 20px 20px;margin:20px 0 0 0;padding:20px 20px 20px 20px; } 
+#lyrow .huilu { background-image:url(http://www.58html.com/folder/imgcss/202406/9635d9715d0be333127855b532330cf9.jpg);background-size:auto auto;border-radius:20px 20px 20px 20px;margin:10px 0 0 0;padding:20px 20px 20px 20px; } 
+#lyrow .tw { width:100%; } 
+#lyrow .roleimg { width:648px !important;height:695px !important; } 
+
+</style>
+<!--下载font-awesome.css图标包-->
+<!--https://www.58html.com/html/template/font-awesome.zip-->
+<link rel="stylesheet" href="https://www.58html.com/gui/css/font-awesome/css/font-awesome.css">
+<div id="lyrow">
+<div class="one">
+<div class="tw">
+    <img class="roleimg" src="{{roleimg}}">
+    <img src="../img/logo.png" class="wikilogo">
+    <h1 class="rolename">{{rolename}}</h1>
+    <h1 class="roledescriptiontitle">{{roledescriptiontitle}}</h1>
+    <h1 class="roledescription">{{roledescription}}</h1></div>
+<div >
+<div class="normlskll">
+    <h1 class="sklltitle">{{normalattacktitle}}</h1>
+<div class="content">{{normalattack}}</div>
+    <img class="skllimg" src="{{normalattackimg}}"></div>
+<div class="normlskll">
+    <h1 class="sklltitle">{{echoskilltitle}}</h1>
+<div class="content">{{echoskill}} </div>
+    <img src="{{echoskillimg}}" class="skllimg"></div>
+<div class="normlskll">
+    <h1 class="sklltitle">{{modifiedskilltitle}}</h1>
+<div class="content">{{modifiedskill}} </div>
+    <img src="{{modifiedskillimg}}" class="skllimg"></div>
+<div class="normlskll">
+    <h1 class="sklltitle">{{prolongedskilltitle}}</h1>
+<div class="content"> {{prolongedskill}}</div>
+    <img src="{{prolongedskillimg}}" class="skllimg"></div>
+<div class="jiefang">{{echoliberation}}</div>
+<div class="huilu">{{echoloop}}</div></div></div>
+</div>
