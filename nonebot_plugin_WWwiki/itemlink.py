@@ -43,3 +43,38 @@ async def get_link(name, listdata):
         else:
             matching_entryIds = None
         return matching_entryIds
+
+
+
+async def classify(thetitle, listdata):
+    async with httpx.AsyncClient() as client:
+        res = await client.post(rolelisturl, data=listdata, headers=headers)
+        data = json.loads(res.text)
+        tagtree = data['data']['tagTree']['children'][3]['children']
+        records = data['data']['results']['records']
+
+
+        
+        target_value = None
+
+        # 在tagtree中查找search_value对应的id
+        for d in tagtree:
+            if d.get('name') == thetitle:
+                target_value = d.get('id')
+                break
+
+        # 只有当target_value被成功赋值时，才执行下面的逻辑
+        if target_value is not None:
+            results = []
+            for record in records:
+                if str(target_value) in record["content"]["relateTagIds"]:
+                    title = record["content"]["title"]
+                    content_url = record["content"]["contentUrl"]
+                    results.append({"title": title, "contentUrl": content_url})
+        else:
+            results = None
+            name_list = [d['name'] for d in tagtree]
+            thetitle = '\n'.join(name_list)
+
+        return results,thetitle
+        

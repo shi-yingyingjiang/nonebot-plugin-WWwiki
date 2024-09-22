@@ -6,7 +6,7 @@ require("nonebot_plugin_htmlrender")
 require("nonebot_plugin_apscheduler")
 from nonebot_plugin_apscheduler import scheduler
 from nonebot_plugin_alconna import UniMessage
-from nonebot_plugin_htmlrender import html_to_pic, get_new_page, template_to_pic
+from nonebot_plugin_htmlrender import html_to_pic, get_new_page, template_to_pic,md_to_pic
 
 
 __dir = Path(__file__).parent.resolve().absolute()
@@ -34,4 +34,4 @@ async def get_html(content: str):
     return rendered
 
 
-__all__ = ["UniMessage", "get_html", "html_to_pic", "get_new_page", "get_template", "template_to_pic","get_activities","scheduler","font_path"]
+__all__ = ["UniMessage", "get_html", "html_to_pic", "get_new_page", "get_template", "template_to_pic","get_activities","scheduler","font_path","md_to_pic"]

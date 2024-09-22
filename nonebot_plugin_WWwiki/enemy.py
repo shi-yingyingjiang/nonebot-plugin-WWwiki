@@ -1,12 +1,10 @@
 import httpx
 import json
-
 from nonebot.params import CommandArg
 from nonebot.adapters import Message
 from nonebot import on_command
 from bs4 import BeautifulSoup
-
-from .itemlink import get_link
+from .itemlink import get_link,classify
 from .util import UniMessage, get_template, template_to_pic
 
 enemy_cards = on_command('鸣潮敌人查询')
@@ -31,7 +29,7 @@ enemy = {
 }
 
 html_spath = get_template("enemy")
-
+classify_spath = get_template("classify")
 
 @enemy_cards.handle()
 async def _(args: Message = CommandArg()):
@@ -66,3 +64,48 @@ async def _(args: Message = CommandArg()):
             )
 
     await UniMessage.image(raw=enemy_card).finish()
+
+
+
+
+
+caseify = on_command("鸣潮敌人分类")
+
+@caseify.handle()
+async def _(args: Message = CommandArg()):
+    thetitle = args.extract_plain_text()
+    results,title = await classify(thetitle, enemy)
+    if results is None:
+        await caseify.finish('没有找到该分类，请重试输入以下分类:\n' + title)
+        
+    else:
+        template = """
+        <div class="class">
+            <img src="{img}" class="classimg">
+            <h1 class="name">{title}</h1> </div>
+            """
+
+
+        html_content = ""
+
+        for item in results:
+            img_url = item['contentUrl']
+            title = item['title']
+            html_content += template.format(img=img_url, title=title)
+
+        Data = {
+            'title': thetitle,
+            'content': html_content
+        }
+
+
+        classify_card = await template_to_pic(
+            classify_spath.parent.as_posix(),
+            classify_spath.name,
+            Data,
+            type="jpeg",
+            quality=100
+        )
+
+
+    await UniMessage.image(raw=classify_card).finish()
