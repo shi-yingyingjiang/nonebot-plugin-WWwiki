@@ -69,7 +69,7 @@ async def _(args: Message = CommandArg()):
 
 
 
-caseify = on_command("鸣潮敌人分类")
+caseify = on_command("鸣潮掉落物查询",aliases={'鸣潮掉落物'})
 
 @caseify.handle()
 async def _(args: Message = CommandArg()):

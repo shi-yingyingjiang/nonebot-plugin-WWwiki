@@ -130,6 +130,13 @@ __plugin_meta__ = PluginMetadata(
                 'brief_des': '无',
                 'detail_des': '无'
             },
+            {
+                'func': '查看掉落物',
+                'trigger_method': '鸣潮掉落物查询',
+                'trigger_condition': ' ',
+                'brief_des': '鸣潮掉落物 呓语声核',
+                'detail_des': '无'
+            },
         ],
     },
 )
