@@ -43,5 +43,27 @@ def _plugin_config():
     }
 
 
+def draw_color(name: str):
+    color_data = {
+        "背景": "#212530",
+        "背景图片": None,
+        "图标": "#e0c698",
+        "副图标": "#c5c2bc",
+        "标题": "#fff6e6",
+        "副标题": "#c19f64",
+        "简介标题": "#",
+        "简介内容": "#",
+        "群组标题": "#",
+        "群组副标题": "#",
+        "群组名称": "#",
+        "群组内容": "#",
+    }
+    if name not in color_data.keys():
+        raise "颜色不在配色中"
+    if color_data[name] == "#":
+        return "#000000"
+    return color_data[name]
+
+
 _config = _plugin_config()
 basepath = _config["basepath"]
