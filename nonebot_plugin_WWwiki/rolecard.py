@@ -12,7 +12,8 @@ from .itemlink import get_link
 from .basicinformation import get_basic_information
 from .judgmentrolename import judgment_role_name
 from .model import Model
-from .util import UniMessage, get_template, template_to_pic
+from .pil_draw.draw import draw_main
+from .util import UniMessage, get_template
 
 
 headers = {
@@ -97,10 +98,9 @@ async def role_data(args: Message = CommandArg()):
 
             }
 
-            role_card = await template_to_pic(
-                html_spath.parent.as_posix(),
-                html_spath.name,
+            role_card = await draw_main(
                 Data,
+                html_spath.name,
             )
 
         await UniMessage.image(raw=role_card).finish()

@@ -8,7 +8,8 @@ from nonebot import on_command
 from .basicinformation import get_basic_information
 from .judgmentrolename import judgment_role_name
 from .itemlink import get_link
-from .util import UniMessage, get_template, template_to_pic
+from .pil_draw.draw import draw_main
+from .util import UniMessage, get_template
 
 
 headers = {
@@ -65,12 +66,9 @@ async def _(args: Message = CommandArg()):
                 'content5': content5
             }
 
-            archive_card = await template_to_pic(
-                html_spath.parent.as_posix(),
-                html_spath.name,
+            archive_card = await draw_main(
                 Data,
-                type="jpeg",
-                quality=100
+                html_spath.name,
             )
 
         await UniMessage.image(raw=archive_card).finish()

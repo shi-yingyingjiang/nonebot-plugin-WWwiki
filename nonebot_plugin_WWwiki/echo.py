@@ -7,7 +7,8 @@ from nonebot import on_command
 from bs4 import BeautifulSoup
 
 from .itemlink import get_link
-from .util import UniMessage, get_template, template_to_pic
+from .pil_draw.draw import draw_main
+from .util import UniMessage, get_template
 
 echos = on_command('鸣潮声骸查询', aliases={'声骸查询'})
 
@@ -59,12 +60,9 @@ async def _(args: Message = CommandArg()):
                 'skll': skll
             }
 
-            echo_card = await template_to_pic(
-                html_spath.parent.as_posix(),
-                html_spath.name,
+            echo_card = await draw_main(
                 Data,
-                type="jpeg",
-                quality=100
+                html_spath.name,
             )
 
         await UniMessage.image(raw=echo_card).finish()
