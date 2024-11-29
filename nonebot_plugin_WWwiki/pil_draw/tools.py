@@ -1,6 +1,7 @@
 # coding=utf-8
 import io
 import json
+import platform
 import shutil
 import httpx
 from PIL.Image import Image as PIL_Image
@@ -178,11 +179,29 @@ async def draw_text(
             return 0
         return bbox[2]
 
+    default_font = ["msyh.ttc"]
     size = size
     if fontfile == "":
-        fontfile = "腾祥嘉丽中圆.ttf"
-    else:
-        fontfile = "NotoSansSC[wght].ttf"
+        fontfile = "msyh.ttc"
+    if not fontfile.startswith("/") or ":/" in fontfile:
+        # 获取字体绝对路径
+        font_list = [fontfile] + default_font + ["no_font"]
+        os_name = platform.system()
+        for font in font_list:
+            if font == "no_font":
+                logger.error(f"字体加载失败，请安装字体{font_list[0]}")
+                raise f"字体加载失败，请安装字体"
+            if os_name.lower() == 'windows':
+                if os.path.exists(f"C:/Windows/Fonts/{font}"):
+                    fontfile = f"C:/Windows/Fonts/{font}"
+                else:
+                    fontfile = f"C:/Users/{os.getlogin()}/AppData/Local/Microsoft/Windows/Fonts/{font}"
+            elif os_name.lower() == 'linux':
+                fontfile = f"/usr/share/fonts/{font}"
+            else:
+                print(f"当前操作系统为 {os_name}")
+            if os.path.exists(fontfile):
+                break
 
     font = ImageFont.truetype(font=fontfile, size=size)
 
