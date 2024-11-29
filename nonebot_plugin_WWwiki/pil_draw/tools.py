@@ -1,7 +1,6 @@
 # coding=utf-8
 import io
 import json
-import platform
 import shutil
 import httpx
 from PIL.Image import Image as PIL_Image
@@ -11,6 +10,7 @@ from nonebot import logger
 import os
 import time
 from .config import basepath
+import matplotlib.font_manager as fm
 
 
 def save_image(
@@ -179,27 +179,29 @@ async def draw_text(
             return 0
         return bbox[2]
 
-    default_font = ["msyh.ttc"]
-    size = size
+    default_font = ["msyh.ttc", "DejaVuSans.ttf", "msjh.ttc", "msjhl.ttc", "msjhb.ttc", "YuGothR.ttc"]
     if fontfile == "":
         fontfile = "msyh.ttc"
     if not fontfile.startswith("/") or ":/" in fontfile:
         # 获取字体绝对路径
+
+        system_font_list = fm.findSystemFonts(fontpaths=None, fontext='ttf')
+
         font_list = [fontfile] + default_font + ["no_font"]
-        os_name = platform.system()
         for font in font_list:
             if font == "no_font":
-                logger.error(f"字体加载失败，请安装字体{font_list[0]}")
-                raise f"字体加载失败，请安装字体"
-            if os_name.lower() == 'windows':
-                if os.path.exists(f"C:/Windows/Fonts/{font}"):
-                    fontfile = f"C:/Windows/Fonts/{font}"
-                else:
-                    fontfile = f"C:/Users/{os.getlogin()}/AppData/Local/Microsoft/Windows/Fonts/{font}"
-            elif os_name.lower() == 'linux':
-                fontfile = f"/usr/share/fonts/{font}"
-            else:
-                print(f"当前操作系统为 {os_name}")
+                # logger.error(f"字体加载失败，请安装字体{font_list[0]}")
+                # raise f"字体加载失败，请安装字体"
+                fontfile = font_list[0]
+                break
+
+            for font_path in system_font_list:
+                font_path = font_path.replace("\\", "/")
+                font_ = font_path.split("/")[-1]
+                if font_.lower() == font.lower():
+                    fontfile = font_path
+                    break
+
             if os.path.exists(fontfile):
                 break
 
