@@ -24,7 +24,7 @@ def _plugin_config():
             _basepath = os.path.abspath('.') + "/WWwiki/pil_draw/"
 
     except Exception as e:
-        _basepath = os.path.abspath('.') + "/KanonBot/"
+        _basepath = os.path.abspath('.') + "/WWwiki/pil_draw/"
 
     if "\\" in _basepath:
         _basepath = _basepath.replace("\\", "/")
