@@ -12,6 +12,14 @@ import time
 from .config import basepath
 import matplotlib.font_manager as fm
 
+wwwiki_draw_cache = {
+    "font_path": {}
+}
+system_font_list = fm.findSystemFonts(fontpaths=None, fontext='ttf')
+for font_path in system_font_list:
+    font_path = font_path.replace("\\", "/")
+    wwwiki_draw_cache["font_path"][font_path.split("/")[-1]] = font_path
+
 
 def save_image(
         image,
@@ -146,7 +154,7 @@ async def draw_text(
         size: int,
         textlen: int = 20,
         fontfile: str = "",
-        text_color="#000000",
+        text_color=None,
         calculate=False
 ):
     """
@@ -162,6 +170,8 @@ async def draw_text(
     """
     if texts is None:
         texts = "None"
+    if text_color is None:
+        text_color = "#000000"
 
     def get_font_render_w(text):
         if text == " ":
@@ -185,8 +195,6 @@ async def draw_text(
     if not fontfile.startswith("/") or ":/" in fontfile:
         # 获取字体绝对路径
 
-        system_font_list = fm.findSystemFonts(fontpaths=None, fontext='ttf')
-
         font_list = [fontfile] + default_font + ["no_font"]
         for font in font_list:
             if font == "no_font":
@@ -195,12 +203,9 @@ async def draw_text(
                 fontfile = font_list[0]
                 break
 
-            for font_path in system_font_list:
-                font_path = font_path.replace("\\", "/")
-                font_ = font_path.split("/")[-1]
-                if font_.lower() == font.lower():
-                    fontfile = font_path
-                    break
+            if font in wwwiki_draw_cache["font_path"].keys():
+                fontfile = wwwiki_draw_cache["font_path"][font]
+                break
 
             if os.path.exists(fontfile):
                 break
