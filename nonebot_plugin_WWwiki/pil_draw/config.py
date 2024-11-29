@@ -21,10 +21,9 @@ def _plugin_config():
         try:
             _basepath = config.plugin_wwwiki_basepath
         except Exception as e:
-            _basepath = os.path.abspath('.') + "/WWwiki/pil_draw/"
-
+            _basepath = os.path.abspath('.') + "/data/WWwiki/pil_draw/"
     except Exception as e:
-        _basepath = os.path.abspath('.') + "/WWwiki/pil_draw/"
+        _basepath = os.path.abspath('.') + "/data/WWwiki/pil_draw/"
 
     if "\\" in _basepath:
         _basepath = _basepath.replace("\\", "/")
