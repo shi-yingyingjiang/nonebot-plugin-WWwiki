@@ -1,6 +1,10 @@
 # coding=utf-8
 from PIL import Image
-from nonebot import logger
+from nonebot import logger, require
+
+require("nonebot_plugin_htmlrender")
+from nonebot_plugin_htmlrender import template_to_pic
+
 from .tools import save_image
 
 
