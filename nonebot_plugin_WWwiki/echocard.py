@@ -63,6 +63,7 @@ async def ehco_card_handle(args: Message = CommandArg()):
             echo_card = await draw_main(
                 Data,
                 html_spath.name,
+                html_spath.parent.as_posix(),
             )
 
         await UniMessage.image(raw=echo_card).finish()

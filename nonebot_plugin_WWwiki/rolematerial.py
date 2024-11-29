@@ -104,6 +104,7 @@ async def _(args: Message = CommandArg()):
             material_card = await draw_main(
                 Data,
                 html_spath.name,
+                html_spath.parent.as_posix(),
             )
 
         await UniMessage.image(raw=material_card).finish()

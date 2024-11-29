@@ -414,6 +414,7 @@ async def cardpools():
     img = await draw_main(
         Data,
         card_pool_spath.name,
+        card_pool_spath.parent.as_posix(),
     )
 
     await UniMessage.image(raw=img).finish()
@@ -435,6 +436,7 @@ async def activity():
     img = await draw_main(
         Data,
         activity_spath.name,
+        activity_spath.parent.as_posix(),
     )
 
     await UniMessage.image(raw=img).finish()
@@ -459,6 +461,7 @@ async def scheduled_tasks():
             img = await draw_main(
                 Data,
                 timing_activity.name,
+                timing_activity.parent.as_posix(),
             )
 
             for group_id in CONFIG['opened_groups']:

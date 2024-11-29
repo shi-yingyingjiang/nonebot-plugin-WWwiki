@@ -75,6 +75,7 @@ async def get_weapon_data(args: Message = CommandArg()):
             weapon_card = await draw_main(
                 Data,
                 html_spath.name,
+                html_spath.parent.as_posix(),
             )
 
         await UniMessage.image(raw=weapon_card).finish()

@@ -77,6 +77,7 @@ async def recommendationcards(args: Message = CommandArg()):
             img = await draw_main(
                 Data,
                 html_spath.name,
+                html_spath.parent.as_posix(),
             )
 
         await UniMessage.image(raw=img).finish()

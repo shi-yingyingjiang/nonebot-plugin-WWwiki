@@ -83,6 +83,7 @@ async def giftcard(args: Message = CommandArg()):
             skll_image = await draw_main(
                 Data,
                 html_spath.name,
+                html_spath.parent.as_posix(),
             )
 
         await UniMessage.image(raw=skll_image).finish()

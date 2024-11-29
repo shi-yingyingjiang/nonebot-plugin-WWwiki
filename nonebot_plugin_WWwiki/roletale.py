@@ -69,6 +69,7 @@ async def _(args: Message = CommandArg()):
             archive_card = await draw_main(
                 Data,
                 html_spath.name,
+                html_spath.parent.as_posix(),
             )
 
         await UniMessage.image(raw=archive_card).finish()

@@ -59,6 +59,7 @@ async def _(args: Message = CommandArg()):
             enemy_card = await draw_main(
                 Data,
                 html_spath.name,
+                html_spath.parent.as_posix(),
             )
 
     await UniMessage.image(raw=enemy_card).finish()
@@ -99,6 +100,7 @@ async def _(args: Message = CommandArg()):
         classify_card = await draw_main(
             Data,
             classify_spath.name,
+            classify_spath.parent.as_posix(),
         )
 
     await UniMessage.image(raw=classify_card).finish()

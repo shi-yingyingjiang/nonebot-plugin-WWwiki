@@ -101,6 +101,7 @@ async def role_data(args: Message = CommandArg()):
             role_card = await draw_main(
                 Data,
                 html_spath.name,
+                html_spath.parent.as_posix(),
             )
 
         await UniMessage.image(raw=role_card).finish()
