@@ -203,15 +203,24 @@ async def draw_form(form_data: list, size_x: int, calculate: bool = False) -> Im
         for form_y in form_x:
             if form_y.get("text") is None:
                 continue
-            draw_size = await draw_text(
-                form_y.get("text"),
-                size=form_y["size"],
-                textlen=int(size_x / len(form_x) / form_y["size"]),
-                fontfile="优设好身体.ttf",
-                text_color=form_y.get("color"),
-                calculate=True
-            )
-            draw_size = draw_size.size[1]
+            if form_y.get("type") is None or form_y.get("type") == "text":
+                draw_size = await draw_text(
+                    form_y.get("text"),
+                    size=form_y["size"],
+                    textlen=int(size_x / len(form_x) / form_y["size"]),
+                    fontfile="优设好身体.ttf",
+                    text_color=form_y.get("color"),
+                    calculate=True
+                )
+                draw_size = draw_size.size[1]
+            elif form_y.get("type") == "image":
+                if form_y.get("size") is not None and form_y.get("size")[1] is not None:
+                    draw_size = form_y.get("size")[1]
+                else:
+                    continue
+            else:
+                continue
+
             if draw_size > add_size_y:
                 add_size_y = draw_size
         size_y += add_size_y
@@ -235,14 +244,22 @@ async def draw_form(form_data: list, size_x: int, calculate: bool = False) -> Im
             num_x += 1
             if form_y.get("text") is None:
                 continue
-            paste_image = await draw_text(
-                form_y.get("text"),
-                size=form_y["size"],
-                textlen=int(size_x / len(form_x) / form_y["size"]),
-                fontfile="优设好身体.ttf",
-                text_color=form_y.get("color"),
-                calculate=False
-            )
+            if form_y.get("type") is None or form_y.get("type") == "text":
+                paste_image = await draw_text(
+                    form_y.get("text"),
+                    size=form_y["size"],
+                    textlen=int(size_x / len(form_x) / form_y["size"]),
+                    fontfile="优设好身体.ttf",
+                    text_color=form_y.get("color"),
+                    calculate=False
+                )
+            elif form_y.get("type") == "image":
+                paste_image = await load_image(form_y.get("image"))
+                if form_y.get("size") is not None:
+                    image_size = form_y.get("size")
+                    paste_image = image_resize2(paste_image, image_size)
+            else:
+                continue
             image.alpha_composite(paste_image, (
                 int(num_x * size_x / len(form_x) + (size_x * 0.01)),
                 int((num_y * size_y / len(form_data)) + (((size_y / len(form_data)) - paste_image.size[1]) / 2))
