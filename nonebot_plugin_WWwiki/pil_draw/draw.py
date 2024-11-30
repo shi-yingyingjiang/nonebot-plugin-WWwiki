@@ -87,6 +87,40 @@ async def draw_rolecard(draw_data: dict):
             {"color": draw_color("群组内容"), "size": 30, "text": draw_data.get("version")},
         ],
     ]
+    combat_data = draw_data["combat_data"]
+    forms_data_combat = [
+        [
+            {"color": draw_color("群组名称"), "size": 27, "text": combat_data[0][0]},
+            {"color": draw_color("群组内容"), "size": 27, "text": combat_data[1][0]},
+            {},
+            {"color": draw_color("群组名称"), "size": 27, "text": combat_data[3][0]},
+            {"color": draw_color("群组内容"), "size": 27, "text": combat_data[4][0]},
+        ], [
+            {"color": draw_color("群组名称"), "size": 27, "text": combat_data[0][1]},
+            {"color": draw_color("群组内容"), "size": 27, "text": combat_data[1][1]},
+            {},
+            {"color": draw_color("群组名称"), "size": 27, "text": combat_data[3][1]},
+            {"color": draw_color("群组内容"), "size": 27, "text": combat_data[4][1]},
+        ], [
+            {"color": draw_color("群组名称"), "size": 27, "text": combat_data[0][2]},
+            {"color": draw_color("群组内容"), "size": 27, "text": combat_data[1][2]},
+            {},
+            {"color": draw_color("群组名称"), "size": 27, "text": combat_data[3][2]},
+            {"color": draw_color("群组内容"), "size": 27, "text": combat_data[4][2]},
+        ], [
+            {"color": draw_color("群组名称"), "size": 27, "text": combat_data[0][3]},
+            {"color": draw_color("群组内容"), "size": 27, "text": combat_data[1][3]},
+            {},
+            {"color": draw_color("群组名称"), "size": 27, "text": combat_data[3][3]},
+            {"color": draw_color("群组内容"), "size": 27, "text": combat_data[4][3]},
+        ], [
+            {"color": draw_color("群组名称"), "size": 27, "text": combat_data[0][4]},
+            {"color": draw_color("群组内容"), "size": 27, "text": combat_data[1][4]},
+            {},
+            {"color": draw_color("群组名称"), "size": 27, "text": combat_data[3][4]},
+            {"color": draw_color("群组内容"), "size": 27, "text": combat_data[4][4]},
+        ],
+    ]
     image_x, image_y = (900, 0)
     image_y += 643  # 基础信息界面
 
@@ -172,11 +206,10 @@ async def draw_rolecard(draw_data: dict):
     )
     image.alpha_composite(paste_image, (38, 383))
 
-    # 消息栏
     x = 0
     y = 643
+    # 基础消息
     paste_image = await draw_form(forms_data_info, size_x=int(image_x * 0.95), calculate=False)
-
     paste_card = Image.new("RGBA", (int(image_x * 0.95) + 6, paste_image.size[1] + 6), draw_color("卡片描边"))
     paste_card = circle_corner(paste_card, 23)
     image.alpha_composite(paste_card, (int(image_x * 0.025) - 3, y - 3))
@@ -184,8 +217,21 @@ async def draw_rolecard(draw_data: dict):
     paste_card = circle_corner(paste_card, 20)
     image.alpha_composite(paste_card, (int(image_x * 0.025), y))
     image.alpha_composite(paste_image, (int(image_x * 0.025), y))
+    y += paste_image.size[1]
 
-    return save_image(image, to_bytes=False)
+    # 战斗数据
+    y += 20
+    paste_image = await draw_form(forms_data_combat, size_x=int(image_x * 0.95), calculate=False)
+    paste_card = Image.new("RGBA", (int(image_x * 0.95) + 6, paste_image.size[1] + 6), draw_color("卡片描边"))
+    paste_card = circle_corner(paste_card, 23)
+    image.alpha_composite(paste_card, (int(image_x * 0.025) - 3, y - 3))
+    paste_card = Image.new("RGBA", (int(image_x * 0.95), paste_image.size[1]), draw_color("卡片背景"))
+    paste_card = circle_corner(paste_card, 20)
+    image.alpha_composite(paste_card, (int(image_x * 0.025), y))
+    image.alpha_composite(paste_image, (int(image_x * 0.025), y))
+    y += paste_image.size[1]
+
+    return save_image(image, to_bytes=True)
 
 
 async def draw_form(form_data: list, size_x: int, calculate: bool = False) -> Image.Image:

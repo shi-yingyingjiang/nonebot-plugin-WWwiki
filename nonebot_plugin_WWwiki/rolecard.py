@@ -95,7 +95,7 @@ async def role_data(args: Message = CommandArg()):
                 'baselife': character_statistics[0][1][1],
                 'basicattack': character_statistics[0][1][2],
                 'basicdefense': character_statistics[0][1][3],
-
+                'combat_data': character_statistics[0],
             }
 
             role_card = await draw_main(
