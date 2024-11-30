@@ -115,7 +115,6 @@ def image_resize2(image, size: [int, int], overturn=False):
     :return: 缩放后的图像
     """
     image_background = Image.new("RGBA", size=size, color=(0, 0, 0, 0))
-    image_background = image_background.resize(size)
     w, h = image_background.size
     x, y = image.size
     if overturn:

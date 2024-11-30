@@ -126,6 +126,9 @@ async def draw_rolecard(draw_data: dict):
 
     paste_image = await draw_form(forms_data_info, size_x=int(image_x * 0.95), calculate=True)
     image_y += paste_image.size[1]
+    image_y += 20
+    paste_image = await draw_form(forms_data_combat, size_x=int(image_x * 0.95), calculate=True)
+    image_y += paste_image.size[1]
 
     image_y += 50  # 底部留空
     image = Image.new("RGBA", (image_x, image_y), (50, 50, 50, 255))
@@ -133,12 +136,14 @@ async def draw_rolecard(draw_data: dict):
     # 开始绘制
     # 立绘
     paste_image = await load_image(draw_data.get("roleimg"))
+    paste_image = image_resize2(paste_image, (720, 720))
     image.alpha_composite(paste_image, (263, -57))
 
     # 角色logo
     paste_image = await load_image(draw_data.get("campIcon"))
     paste_image = image_resize2(paste_image, (128, 128))
-    image.alpha_composite(paste_image, (745, 22))
+    paste_color = Image.new("RGBA", (128, 128), "#FFFFFFFF")
+    image.paste(paste_color, (745, 22), paste_image)
 
     # 图标
     paste_image = await draw_text(
