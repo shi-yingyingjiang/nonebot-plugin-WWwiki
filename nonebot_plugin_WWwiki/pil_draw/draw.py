@@ -275,9 +275,7 @@ async def draw_form(form_data: list, size_x: int, calculate: bool = False) -> Im
             if draw_size > add_size_y:
                 add_size_y = draw_size
         size_y += add_size_y
-        size_y += 11
-        size_y += 6
-    size_y += 16
+        size_y += int(size_x * 0.01)  # 间隔
 
     image = Image.new("RGBA", (size_x, size_y), (0, 0, 0, 0))
     if calculate is True:
@@ -316,6 +314,8 @@ async def draw_form(form_data: list, size_x: int, calculate: bool = False) -> Im
 
             if draw_size > add_size_y:
                 add_size_y = draw_size
+
+        add_size_y += int(size_x * 0.01)  # 间隔
 
         for form_y in form_x:
             num_x += 1
