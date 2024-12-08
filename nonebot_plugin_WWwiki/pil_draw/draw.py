@@ -5,7 +5,7 @@ from .config import draw_color
 
 require("nonebot_plugin_htmlrender")
 from nonebot_plugin_htmlrender import template_to_pic
-from .tools import save_image, load_image, draw_text, image_resize2, circle_corner
+from .tools import save_image, load_image, draw_text, image_resize2, circle_corner, draw_form
 
 
 async def draw_main(draw_data: dict, temp_name: str = None, temp_path: str = None):
@@ -237,113 +237,6 @@ async def draw_rolecard(draw_data: dict):
     y += paste_image.size[1]
 
     return save_image(image, to_bytes=True)
-
-
-async def draw_form(form_data: list, size_x: int, calculate: bool = False) -> Image.Image:
-    """
-    绘制表格
-    :param form_data: 表格数据
-    :param size_x: x的尺寸
-    :param calculate: 是否仅计算不绘制
-    :return:保存的路径
-    """
-    size_y = 0
-    size_y += 16
-    for form_x in form_data:
-        add_size_y = 0
-        for form_y in form_x:
-            if form_y.get("text") is None:
-                continue
-            if form_y.get("type") is None or form_y.get("type") == "text":
-                draw_size = await draw_text(
-                    form_y.get("text"),
-                    size=form_y["size"],
-                    textlen=int(size_x / len(form_x) / form_y["size"]),
-                    fontfile="优设好身体.ttf",
-                    text_color=form_y.get("color"),
-                    calculate=True
-                )
-                draw_size = draw_size.size[1]
-            elif form_y.get("type") == "image":
-                if form_y.get("size") is not None and form_y.get("size")[1] is not None:
-                    draw_size = form_y.get("size")[1]
-                else:
-                    continue
-            else:
-                continue
-
-            if draw_size > add_size_y:
-                add_size_y = draw_size
-        size_y += add_size_y
-        size_y += int(size_x * 0.01)  # 间隔
-
-    image = Image.new("RGBA", (size_x, size_y), (0, 0, 0, 0))
-    if calculate is True:
-        return image
-
-    paste_line = Image.new("RGBA", (int(size_x * 0.95), 3), draw_color("卡片分界线"))
-    draw_y = 0
-    num_y = -1
-    for form_x in form_data:
-        num_y += 1
-        num_x = -1
-        if num_y != 0:
-            image.alpha_composite(paste_line, (int(size_x * 0.025), int(draw_y)))
-
-        add_size_y = 0
-        for form_y in form_x:
-            if form_y.get("text") is None:
-                continue
-            if form_y.get("type") is None or form_y.get("type") == "text":
-                draw_size = await draw_text(
-                    form_y.get("text"),
-                    size=form_y["size"],
-                    textlen=int(size_x / len(form_x) / form_y["size"]),
-                    fontfile="优设好身体.ttf",
-                    text_color=form_y.get("color"),
-                    calculate=True
-                )
-                draw_size = draw_size.size[1]
-            elif form_y.get("type") == "image":
-                if form_y.get("size") is not None and form_y.get("size")[1] is not None:
-                    draw_size = form_y.get("size")[1]
-                else:
-                    continue
-            else:
-                continue
-
-            if draw_size > add_size_y:
-                add_size_y = draw_size
-
-        add_size_y += int(size_x * 0.01)  # 间隔
-
-        for form_y in form_x:
-            num_x += 1
-            if form_y.get("text") is None:
-                continue
-            if form_y.get("type") is None or form_y.get("type") == "text":
-                paste_image = await draw_text(
-                    form_y.get("text"),
-                    size=form_y["size"],
-                    textlen=int(size_x / len(form_x) / form_y["size"]),
-                    fontfile="优设好身体.ttf",
-                    text_color=form_y.get("color"),
-                    calculate=False
-                )
-            elif form_y.get("type") == "image":
-                paste_image = await load_image(form_y.get("image"))
-                if form_y.get("size") is not None:
-                    image_size = form_y.get("size")
-                    paste_image = image_resize2(paste_image, image_size)
-            else:
-                continue
-            image.alpha_composite(paste_image, (
-                int(num_x * size_x / len(form_x) + (size_x * 0.01)),
-                int(draw_y + ((add_size_y - paste_image.size[1]) / 2))
-            ))
-
-        draw_y += add_size_y
-    return image
 
 
 async def draw_name(draw_data: dict):
