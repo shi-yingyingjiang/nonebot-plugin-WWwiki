@@ -5,7 +5,8 @@ from nonebot.adapters import Message
 from nonebot import on_command
 from bs4 import BeautifulSoup
 from .itemlink import get_link,classify
-from .util import UniMessage, get_template, template_to_pic
+from .pil_draw.draw import draw_main
+from .util import UniMessage, get_template
 
 enemy_cards = on_command('鸣潮敌人查询')
 
@@ -55,12 +56,10 @@ async def _(args: Message = CommandArg()):
                 'table2': table2
             }
 
-            enemy_card = await template_to_pic(
-                html_spath.parent.as_posix(),
-                html_spath.name,
+            enemy_card = await draw_main(
                 Data,
-                type="jpeg",
-                quality=100
+                html_spath.name,
+                html_spath.parent.as_posix(),
             )
 
     await UniMessage.image(raw=enemy_card).finish()
@@ -98,14 +97,10 @@ async def _(args: Message = CommandArg()):
             'content': html_content
         }
 
-
-        classify_card = await template_to_pic(
-            classify_spath.parent.as_posix(),
-            classify_spath.name,
+        classify_card = await draw_main(
             Data,
-            type="jpeg",
-            quality=100
+            classify_spath.name,
+            classify_spath.parent.as_posix(),
         )
-
 
     await UniMessage.image(raw=classify_card).finish()

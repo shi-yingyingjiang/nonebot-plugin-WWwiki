@@ -5,7 +5,10 @@ from datetime import datetime, timedelta
 import json
 from nonebot import on_command,logger
 from nonebot.permission import SUPERUSER
-from .util import UniMessage, get_template, template_to_pic,get_activities,scheduler
+
+from .pil_draw.draw import draw_main
+from .pil_draw.tools import save_image
+from .util import UniMessage, get_template,get_activities,scheduler
 from nonebot_plugin_alconna import on_alconna,Target,Match
 from nonebot_plugin_alconna.uniseg import MsgTarget
 from arclet.alconna import Alconna, Option,Args
@@ -408,12 +411,10 @@ async def cardpools():
 
     Data = role_data(old_data)
 
-
-    img = await template_to_pic(
-        card_pool_spath.parent.as_posix(),
-        card_pool_spath.name,
+    img = await draw_main(
         Data,
-        
+        card_pool_spath.name,
+        card_pool_spath.parent.as_posix(),
     )
 
     await UniMessage.image(raw=img).finish()
@@ -432,14 +433,11 @@ async def activity():
         "div" : ac(old_data['ac'])
     }
 
-
-    img = await template_to_pic(
-        activity_spath.parent.as_posix(),
-        activity_spath.name,
+    img = await draw_main(
         Data,
-        
+        activity_spath.name,
+        activity_spath.parent.as_posix(),
     )
-
 
     await UniMessage.image(raw=img).finish()
 
@@ -460,11 +458,10 @@ async def scheduled_tasks():
                 "div" : ac_dica
             }
 
-            img = await template_to_pic(
-                timing_activity.parent.as_posix(),
-                timing_activity.name,
+            img = await draw_main(
                 Data,
-                
+                timing_activity.name,
+                timing_activity.parent.as_posix(),
             )
 
             for group_id in CONFIG['opened_groups']:

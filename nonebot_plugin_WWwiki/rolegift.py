@@ -9,7 +9,8 @@ from .basicinformation import get_basic_information
 from .judgmentrolename import judgment_role_name
 from .itemlink import get_link
 from .getarchives import get_gift
-from .util import UniMessage, get_template, template_to_pic
+from .pil_draw.draw import draw_main
+from .util import UniMessage, get_template
 
 html_spath = get_template("gift")
 
@@ -79,10 +80,10 @@ async def giftcard(args: Message = CommandArg()):
                 'giftcontent4': gift_four.get('giftcontent'),
             }
 
-            skll_image = await template_to_pic(
-                html_spath.parent.as_posix(),
-                html_spath.name,
+            skll_image = await draw_main(
                 Data,
+                html_spath.name,
+                html_spath.parent.as_posix(),
             )
 
         await UniMessage.image(raw=skll_image).finish()

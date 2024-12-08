@@ -9,7 +9,8 @@ from nonebot import on_command
 from .basicinformation import get_basic_information
 from .judgmentrolename import judgment_role_name
 from .itemlink import get_link
-from .util import UniMessage, get_template, template_to_pic, get_html
+from .pil_draw.draw import draw_main
+from .util import UniMessage, get_template, get_html
 
 echo_cards = on_command("鸣潮共鸣链查询")
 
@@ -59,10 +60,10 @@ async def ehco_card_handle(args: Message = CommandArg()):
                 'content': content,
             }
 
-            echo_card = await template_to_pic(
-                html_spath.parent.as_posix(),
-                html_spath.name,
+            echo_card = await draw_main(
                 Data,
+                html_spath.name,
+                html_spath.parent.as_posix(),
             )
 
         await UniMessage.image(raw=echo_card).finish()
