@@ -418,14 +418,14 @@ async def draw_form(form_data: list, size_x: int, calculate: bool = False) -> Im
     :param calculate: 是否仅计算不绘制
     :return:保存的路径
     """
-    sample_from_data = {
+    """
+    sample_from_data = [
         [
-            [
-                {"type": "text", "size": 40, "color": "#000000", "text": "文字内容"},
-                {"type": "image", "size": (30, 30), "image": "./sample.png"}
-            ]
+            {"type": "text", "size": 40, "color": "#000000", "text": "文字内容"},
+            {"type": "image", "size": (30, 30), "image": "./sample.png"}
         ]
-    }
+    ]
+    """
 
     size_y = 0
     size_y += 16
