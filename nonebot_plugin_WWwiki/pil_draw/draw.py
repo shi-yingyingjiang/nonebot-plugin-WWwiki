@@ -126,7 +126,13 @@ async def draw_rolecard(draw_data: dict):
 
     paste_image = await draw_form(forms_data_info, size_x=int(image_x * 0.95), calculate=True)
     image_y += paste_image.size[1]
-    image_y += 20
+
+    # 战斗数据-标题
+    image_y += 15
+    image_y += 40
+
+    # 战斗数据
+    image_y += 15
     paste_image = await draw_form(forms_data_combat, size_x=int(image_x * 0.95), calculate=True)
     image_y += paste_image.size[1]
 
@@ -212,26 +218,60 @@ async def draw_rolecard(draw_data: dict):
     image.alpha_composite(paste_image, (38, 383))
 
     x = 0
-    y = 643
+    y = 583
+
+    # 基础消息-标题
+    y += 15
+    paste_image = Image.new("RGBA", (10, 40), draw_color("卡片标题背景"))
+    paste_image = circle_corner(paste_image, 5)
+    image.alpha_composite(paste_image, (x + 20, y))
+    paste_image = await draw_text(
+        "基础消息",
+        size=30,
+        textlen=99,
+        fontfile="优设好身体.ttf",
+        text_color=draw_color("卡片标题"),
+        calculate=False
+    )
+    image.alpha_composite(paste_image, (x + 20 + 25, y + 5))
+    y += 40
+
     # 基础消息
+    y += 15
     paste_image = await draw_form(forms_data_info, size_x=int(image_x * 0.95), calculate=False)
     paste_card = Image.new("RGBA", (int(image_x * 0.95) + 6, paste_image.size[1] + 6), draw_color("卡片描边"))
-    paste_card = circle_corner(paste_card, 23)
+    paste_card = circle_corner(paste_card, 18)
     image.alpha_composite(paste_card, (int(image_x * 0.025) - 3, y - 3))
     paste_card = Image.new("RGBA", (int(image_x * 0.95), paste_image.size[1]), draw_color("卡片背景"))
-    paste_card = circle_corner(paste_card, 20)
+    paste_card = circle_corner(paste_card, 15)
     image.alpha_composite(paste_card, (int(image_x * 0.025), y))
     image.alpha_composite(paste_image, (int(image_x * 0.025), y))
     y += paste_image.size[1]
 
+    # 战斗数据-标题
+    y += 15
+    paste_image = Image.new("RGBA", (10, 40), draw_color("卡片标题背景"))
+    paste_image = circle_corner(paste_image, 5)
+    image.alpha_composite(paste_image, (x + 20, y))
+    paste_image = await draw_text(
+        "战斗数据",
+        size=30,
+        textlen=99,
+        fontfile="优设好身体.ttf",
+        text_color=draw_color("卡片标题"),
+        calculate=False
+    )
+    image.alpha_composite(paste_image, (x + 20 + 25, y + 5))
+    y += 40
+
     # 战斗数据
-    y += 20
+    y += 15
     paste_image = await draw_form(forms_data_combat, size_x=int(image_x * 0.95), calculate=False)
     paste_card = Image.new("RGBA", (int(image_x * 0.95) + 6, paste_image.size[1] + 6), draw_color("卡片描边"))
-    paste_card = circle_corner(paste_card, 23)
+    paste_card = circle_corner(paste_card, 18)
     image.alpha_composite(paste_card, (int(image_x * 0.025) - 3, y - 3))
     paste_card = Image.new("RGBA", (int(image_x * 0.95), paste_image.size[1]), draw_color("卡片背景"))
-    paste_card = circle_corner(paste_card, 20)
+    paste_card = circle_corner(paste_card, 15)
     image.alpha_composite(paste_card, (int(image_x * 0.025), y))
     image.alpha_composite(paste_image, (int(image_x * 0.025), y))
     y += paste_image.size[1]
