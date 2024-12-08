@@ -284,12 +284,38 @@ async def draw_form(form_data: list, size_x: int, calculate: bool = False) -> Im
         return image
 
     paste_line = Image.new("RGBA", (int(size_x * 0.95), 3), draw_color("卡片分界线"))
+    draw_y = 0
     num_y = -1
     for form_x in form_data:
         num_y += 1
         num_x = -1
         if num_y != 0:
-            image.alpha_composite(paste_line, (int(size_x * 0.025), int(num_y * size_y / len(form_data))))
+            image.alpha_composite(paste_line, (int(size_x * 0.025), int(draw_y)))
+
+        add_size_y = 0
+        for form_y in form_x:
+            if form_y.get("text") is None:
+                continue
+            if form_y.get("type") is None or form_y.get("type") == "text":
+                draw_size = await draw_text(
+                    form_y.get("text"),
+                    size=form_y["size"],
+                    textlen=int(size_x / len(form_x) / form_y["size"]),
+                    fontfile="优设好身体.ttf",
+                    text_color=form_y.get("color"),
+                    calculate=True
+                )
+                draw_size = draw_size.size[1]
+            elif form_y.get("type") == "image":
+                if form_y.get("size") is not None and form_y.get("size")[1] is not None:
+                    draw_size = form_y.get("size")[1]
+                else:
+                    continue
+            else:
+                continue
+
+            if draw_size > add_size_y:
+                add_size_y = draw_size
 
         for form_y in form_x:
             num_x += 1
@@ -313,9 +339,10 @@ async def draw_form(form_data: list, size_x: int, calculate: bool = False) -> Im
                 continue
             image.alpha_composite(paste_image, (
                 int(num_x * size_x / len(form_x) + (size_x * 0.01)),
-                int((num_y * size_y / len(form_data)) + (((size_y / len(form_data)) - paste_image.size[1]) / 2))
+                int(draw_y + ((add_size_y - paste_image.size[1]) / 2))
             ))
 
+        draw_y += add_size_y
     return image
 
 
