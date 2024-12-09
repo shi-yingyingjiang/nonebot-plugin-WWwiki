@@ -9,8 +9,10 @@ import random
 from nonebot import logger
 import os
 import time
-from .config import basepath
+from .config import basepath, draw_color
 import matplotlib.font_manager as fm
+from html.parser import HTMLParser
+
 
 wwwiki_draw_cache = {
     "font_path": {}
@@ -122,13 +124,13 @@ def image_resize2(image, size: [int, int], overturn=False):
             rex = w
             rey = int(rex * y / x)
             paste_image = image.resize((rex, rey))
-            image_background.paste(paste_image, (0, 0))
+            image_background.alpha_composite(paste_image, (0, 0))
         else:
             rey = h
             rex = int(rey * x / y)
             paste_image = image.resize((rex, rey))
             x = int((w - rex) / 2)
-            image_background.paste(paste_image, (x, 0))
+            image_background.alpha_composite(paste_image, (x, 0))
     else:
         if w / h >= x / y:
             rey = h
@@ -136,14 +138,14 @@ def image_resize2(image, size: [int, int], overturn=False):
             paste_image = image.resize((rex, rey))
             x = int((w - rex) / 2)
             y = 0
-            image_background.paste(paste_image, (x, y))
+            image_background.alpha_composite(paste_image, (x, y))
         else:
             rex = w
             rey = int(rex * y / x)
             paste_image = image.resize((rex, rey))
             x = 0
             y = int((h - rey) / 2)
-            image_background.paste(paste_image, (x, y))
+            image_background.alpha_composite(paste_image, (x, y))
 
     return image_background
 
@@ -318,6 +320,49 @@ async def load_image(path: str, size=None, mode=None, cache_image=True):
         raise "图片读取错误"
 
 
+def draw_gradient_color(
+        color_a: tuple | str,
+        color_b: tuple | str,
+        size: tuple[int, int] | list[int, int],
+):
+    """
+    绘制一张从左到右的渐变
+    :param size: 图片的尺寸
+    :param color_a: 图片读取模式
+    :param color_b: 图片读取模式
+    :return:image
+    """
+
+    def covert_color(c: tuple | str) -> tuple:
+        """
+        转换str颜色到tuple颜色
+        """
+        if type(c) is str:
+            c = (
+                int(c[1:3], 16),
+                int(c[3:5], 16),
+                int(c[5:7], 16),
+                255 if len(c) == 7 else int(c[7:9], 16)
+            )
+        return c
+
+    color_a = covert_color(color_a)
+    color_b = covert_color(color_b)
+
+    image = Image.new("RGBA", (size[0], 1), (0, 0, 0, 0))
+    img_array = image.load()
+    for i in range(size[0]):
+        color = (
+            int(color_a + ((color_b[0] - color_a[0]) / size[0] * i)),
+            int(color_a + ((color_b[1] - color_a[1]) / size[0] * i)),
+            int(color_a + ((color_b[2] - color_a[2]) / size[0] * i)),
+            int(color_a + ((color_b[3] - color_a[3]) / size[0] * i)),
+        )
+        img_array[i, 0] = color
+    image = image.resize(size)
+    return image
+
+
 async def connect_api(
         connect_type: str,
         url: str,
@@ -365,3 +410,150 @@ async def connect_api(
         shutil.copyfile(cache_file_path, file_path)
         os.remove(cache_file_path)
     return
+
+
+async def draw_form(form_data: list, size_x: int, calculate: bool = False) -> Image.Image:
+    """
+    绘制表格
+    :param form_data: 表格数据
+    :param size_x: x的尺寸
+    :param calculate: 是否仅计算不绘制
+    :return:保存的路径
+    """
+    """
+    sample_from_data = [
+        [
+            {"type": "text", "size": 40, "color": "#000000", "text": "文字内容"},
+            {"type": "image", "size": (30, 30), "image": "./sample.png"}
+        ]
+    ]
+    """
+
+    size_y = 0
+    size_y += 16
+    num_x = -1
+    for form_x in form_data:
+        num_x += 1
+        num_y = -1
+        add_size_y = 0
+        for form_y in form_x:
+            num_y += 1
+            if form_y.get("type") is None and form_y.get("text") is None:
+                continue
+            elif form_y.get("type") == "image" and form_y.get("image") is None:
+                continue
+
+            if form_y.get("draw_size") is not None:
+                draw_size = form_y.get("draw_size")
+            elif form_y.get("type") is None or form_y.get("type") == "text":
+                draw_size = await draw_text(
+                    form_y.get("text"),
+                    size=form_y["size"],
+                    textlen=int(size_x / len(form_x) / form_y["size"]),
+                    fontfile="优设好身体.ttf",
+                    text_color=form_y.get("color"),
+                    calculate=True
+                )
+                draw_size = draw_size.size
+            elif form_y.get("type") == "image":
+                if form_y.get("size") is not None and form_y.get("size")[1] is not None:
+                    draw_size = form_y.get("size")
+                else:
+                    image = await load_image(form_y.get("image"))
+                    draw_size = image.size
+            else:
+                continue
+
+            form_data[num_x][num_y]["draw_size"] = draw_size
+            if draw_size[1] > add_size_y:
+                add_size_y = draw_size[1]
+        size_y += add_size_y
+        size_y += int(size_x * 0.01)  # 间隔
+
+    image = Image.new("RGBA", (size_x, size_y), (0, 0, 0, 0))
+    if calculate is True:
+        return image
+
+    paste_line = Image.new("RGBA", (int(size_x * 0.95), 3), draw_color("卡片分界线"))
+    draw_y = 0
+    num_y = -1
+    for form_x in form_data:
+        num_y += 1
+        num_x = -1
+        if num_y != 0:
+            image.alpha_composite(paste_line, (int(size_x * 0.025), int(draw_y)))
+
+        add_size_y = 0
+        for form_y in form_x:
+            draw_size = form_y.get("draw_size")
+            if draw_size is not None and draw_size[1] > add_size_y:
+                add_size_y = draw_size[1]
+
+        add_size_y += int(size_x * 0.01)  # 间隔
+
+        for form_y in form_x:
+            num_x += 1
+            if form_y.get("text") is None:
+                continue
+
+            if form_y.get("type") is None or form_y.get("type") == "text":
+                paste_image = await draw_text(
+                    form_y.get("text"),
+                    size=form_y["size"],
+                    textlen=int(size_x / len(form_x) / form_y["size"]),
+                    fontfile="优设好身体.ttf",
+                    text_color=form_y.get("color"),
+                    calculate=False
+                )
+            elif form_y.get("type") == "image":
+                paste_image = await load_image(form_y.get("image"))
+                if form_y.get("size") is not None:
+                    image_size = form_y.get("size")
+                    paste_image = image_resize2(paste_image, image_size)
+            else:
+                continue
+            image.alpha_composite(paste_image, (
+                int(num_x * size_x / len(form_x) + (size_x * 0.01)),
+                int(draw_y + ((add_size_y - paste_image.size[1]) / 2))
+            ))
+
+        draw_y += add_size_y
+    return image
+
+
+class MyHTMLParser(HTMLParser):
+    def __init__(self):
+        super().__init__()
+        self.links = []
+        self.texts = []
+        self.recording = False
+
+    def handle_starttag(self, tag, attrs):
+        if tag == 'img':
+            for name, value in attrs:
+                if name == 'src':
+                    self.links.append(value)
+        if tag == 'p':
+            self.recording = True
+
+    def handle_endtag(self, tag):
+        if tag == 'p':
+            self.recording = False
+
+    def handle_data(self, data):
+        if self.recording:
+            self.texts.append(data.strip())
+
+
+def parser_html(html):
+    """
+    解析html内容
+    parser.links = ["http://github.com/example.png"]
+    parser.texts = ["text", "text"]
+    :param html: html内容
+    :return:parser
+    """
+    parser = MyHTMLParser()
+    parser.feed(html)
+    return parser
+
