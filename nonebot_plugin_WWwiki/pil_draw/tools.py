@@ -124,13 +124,13 @@ def image_resize2(image, size: [int, int], overturn=False):
             rex = w
             rey = int(rex * y / x)
             paste_image = image.resize((rex, rey))
-            image_background.paste(paste_image, (0, 0))
+            image_background.alpha_composite(paste_image, (0, 0))
         else:
             rey = h
             rex = int(rey * x / y)
             paste_image = image.resize((rex, rey))
             x = int((w - rex) / 2)
-            image_background.paste(paste_image, (x, 0))
+            image_background.alpha_composite(paste_image, (x, 0))
     else:
         if w / h >= x / y:
             rey = h
@@ -138,14 +138,14 @@ def image_resize2(image, size: [int, int], overturn=False):
             paste_image = image.resize((rex, rey))
             x = int((w - rex) / 2)
             y = 0
-            image_background.paste(paste_image, (x, y))
+            image_background.alpha_composite(paste_image, (x, y))
         else:
             rex = w
             rey = int(rex * y / x)
             paste_image = image.resize((rex, rey))
             x = 0
             y = int((h - rey) / 2)
-            image_background.paste(paste_image, (x, y))
+            image_background.alpha_composite(paste_image, (x, y))
 
     return image_background
 

@@ -87,7 +87,7 @@ async def draw_rolecard(draw_data: dict):
             {"color": draw_color("群组内容"), "size": 28, "text": draw_data.get("version")},
         ],
     ]
-    combat_data = draw_data["combat_data"]
+    combat_data = draw_data.get("combat_data")
     forms_data_combat = [
         [
             {"color": draw_color("群组名称"), "size": 30, "text": combat_data[0][0]},
@@ -147,7 +147,8 @@ async def draw_rolecard(draw_data: dict):
     image_y += 50  # 底部留空
     image = Image.new("RGBA", (image_x, image_y), (50, 50, 50, 255))
 
-    # 开始绘制
+    # ## 开始绘制 ##
+
     # 立绘
     paste_image = await load_image(draw_data.get("roleimg"))
     paste_image = image_resize2(paste_image, (720, 720))
