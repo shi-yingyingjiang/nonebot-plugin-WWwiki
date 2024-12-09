@@ -452,7 +452,7 @@ async def draw_form(
                 draw_size = form_y.get("draw_size")
             elif form_y.get("type") is None or form_y.get("type") == "text":
                 textlen = int(size_x / len(form_x) / form_y["size"])
-                if num_x < len(form_x) - 1 and form_x[num_x + 1] == {}:
+                if num_y < len(form_x) - 1 and form_x[num_y + 1] == {}:
                     textlen += textlen
                 draw_size = await draw_text(
                     form_y.get("text"),
@@ -490,21 +490,21 @@ async def draw_form(
 
     paste_line = Image.new("RGBA", (int(size_x * 0.95), 3), draw_color("卡片分界线"))
     draw_y = 0
-    for num_y, form_x in enumerate(form_data):
-        if num_y != 0:
+    for num_x, form_x in enumerate(form_data):
+        if num_x != 0:
             image.alpha_composite(paste_line, (int(size_x * 0.025), int(draw_y)))
 
-        add_size_y = add_size_y_list[num_y]
+        add_size_y = add_size_y_list[num_x]
 
         add_size_y += int(size_x * 0.01)  # 间隔
 
-        for num_x, form_y in enumerate(form_x):
+        for num_y, form_y in enumerate(form_x):
             if form_y.get("text") is None:
                 continue
 
             if form_y.get("type") is None or form_y.get("type") == "text":
                 textlen = int(size_x / len(form_x) / form_y["size"])
-                if num_x < len(form_x) - 1 and form_x[num_x + 1] == {}:
+                if num_y < len(form_x) - 1 and form_x[num_y + 1] == {}:
                     textlen += textlen
                 paste_image = await draw_text(
                     form_y.get("text"),
@@ -522,7 +522,7 @@ async def draw_form(
             else:
                 continue
             image.alpha_composite(paste_image, (
-                int(num_x * size_x / len(form_x) + (size_x * 0.01)),
+                int(num_y * size_x / len(form_x) + (size_x * 0.01)),
                 int(draw_y + ((add_size_y - paste_image.size[1]) / 2))
             ))
 
