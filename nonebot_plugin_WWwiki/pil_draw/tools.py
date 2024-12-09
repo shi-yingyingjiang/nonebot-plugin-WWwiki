@@ -412,13 +412,20 @@ async def connect_api(
     return
 
 
-async def draw_form(form_data: list, size_x: int, uniform_size: bool = True, calculate: bool = False) -> Image.Image:
+async def draw_form(
+        form_data: list[list[dict]],
+        size_x: int,
+        uniform_size: bool = True,
+        calculate: bool = True,
+        out_of_form: bool = True
+) -> Image.Image:
     """
     绘制表格
     :param form_data: 表格数据
     :param size_x: x的尺寸
     :param uniform_size: 统一尺寸（使用每行最大的尺寸）
     :param calculate: 是否仅计算不绘制
+    :param out_of_form: 在右边为空时，文字允许超出格子范围
     :return:保存的路径
     """
     """
@@ -448,10 +455,13 @@ async def draw_form(form_data: list, size_x: int, uniform_size: bool = True, cal
             if form_y.get("draw_size") is not None:
                 draw_size = form_y.get("draw_size")
             elif form_y.get("type") is None or form_y.get("type") == "text":
+                textlen = int(size_x / len(form_x) / form_y["size"])
+                if num_x < len(form_x) - 1 and form_x[num_x + 1] == {}:
+                    textlen += textlen
                 draw_size = await draw_text(
                     form_y.get("text"),
                     size=form_y["size"],
-                    textlen=int(size_x / len(form_x) / form_y["size"]),
+                    textlen=textlen,
                     fontfile="优设好身体.ttf",
                     text_color=form_y.get("color"),
                     calculate=True
@@ -497,10 +507,13 @@ async def draw_form(form_data: list, size_x: int, uniform_size: bool = True, cal
                 continue
 
             if form_y.get("type") is None or form_y.get("type") == "text":
+                textlen = int(size_x / len(form_x) / form_y["size"])
+                if num_x < len(form_x) - 1 and form_x[num_x + 1] == {}:
+                    textlen += textlen
                 paste_image = await draw_text(
                     form_y.get("text"),
                     size=form_y["size"],
-                    textlen=int(size_x / len(form_x) / form_y["size"]),
+                    textlen=textlen,
                     fontfile="优设好身体.ttf",
                     text_color=form_y.get("color"),
                     calculate=False
