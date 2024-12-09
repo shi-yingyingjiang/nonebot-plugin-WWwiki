@@ -54,7 +54,9 @@ async def ehco_card_handle(args: Message = CommandArg()):
 
             Data = {
                 'roleimg': info_data.get('role_img'),
+                'roleenname': info_data.get('role_en_name'),
                 'rolename': info_data.get('role_name'),
+                'campIcon': info_data.get('campIcon'),
                 'roledescription': info_data.get('role_description'),
                 'roledescriptiontitle': info_data.get('role_description_title'),
                 'content': content,
