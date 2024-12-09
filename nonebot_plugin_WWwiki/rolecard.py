@@ -59,6 +59,9 @@ async def role_data(args: Message = CommandArg()):
             data_dict = df.set_index(df.columns[0])[df.columns[1]].to_dict()
             my_dict = data_dict
 
+            # 获取战斗风格数据
+            fighting_style_content = data.get('data').get('content').get('modules')[1].get('components')[3].get('content')
+
             def get_value_from_dict(dictionary, key):
                 return dictionary.get(key, "未知")
 
@@ -96,6 +99,7 @@ async def role_data(args: Message = CommandArg()):
                 'basicattack': character_statistics[0][1][2],
                 'basicdefense': character_statistics[0][1][3],
                 'combat_data': character_statistics[0],
+                'fighting_style_content': fighting_style_content
             }
 
             role_card = await draw_main(

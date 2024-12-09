@@ -11,6 +11,8 @@ import os
 import time
 from .config import basepath, draw_color
 import matplotlib.font_manager as fm
+from html.parser import HTMLParser
+
 
 wwwiki_draw_cache = {
     "font_path": {}
@@ -517,3 +519,41 @@ async def draw_form(form_data: list, size_x: int, calculate: bool = False) -> Im
 
         draw_y += add_size_y
     return image
+
+
+class MyHTMLParser(HTMLParser):
+    def __init__(self):
+        super().__init__()
+        self.links = []
+        self.texts = []
+        self.recording = False
+
+    def handle_starttag(self, tag, attrs):
+        if tag == 'img':
+            for name, value in attrs:
+                if name == 'src':
+                    self.links.append(value)
+        if tag == 'p':
+            self.recording = True
+
+    def handle_endtag(self, tag):
+        if tag == 'p':
+            self.recording = False
+
+    def handle_data(self, data):
+        if self.recording:
+            self.texts.append(data.strip())
+
+
+def parser_html(html):
+    """
+    解析html内容
+    parser.links = ["http://github.com/example.png"]
+    parser.texts = ["text", "text"]
+    :param html: html内容
+    :return:parser
+    """
+    parser = MyHTMLParser()
+    parser.feed(html)
+    return parser
+
