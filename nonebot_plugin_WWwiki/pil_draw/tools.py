@@ -499,7 +499,9 @@ async def draw_form(
         add_size_y += int(size_x * 0.01)  # 间隔
 
         for num_y, form_y in enumerate(form_x):
-            if form_y.get("text") is None:
+            if form_y.get("type") is None and form_y.get("text") is None:
+                continue
+            elif form_y.get("type") == "image" and form_y.get("image") is None:
                 continue
 
             if form_y.get("type") is None or form_y.get("type") == "text":
@@ -516,9 +518,16 @@ async def draw_form(
                 )
             elif form_y.get("type") == "image":
                 paste_image = await load_image(form_y.get("image"))
-                if form_y.get("size") is not None:
-                    image_size = form_y.get("size")
+                image_size = form_y.get("size")
+                if image_size is not None:
                     paste_image = image_resize2(paste_image, image_size)
+                else:
+                    image_size = paste_image.size
+                if form_y.get("color") is not None:
+                    paste_card = Image.new("RGBA", image_size, (0, 0, 0, 0))
+                    paste_color = Image.new("RGBA", image_size, form_y.get("color"))
+                    paste_card.paste(paste_color, (0, 0), paste_image)
+                    paste_image = paste_card
             else:
                 continue
             image.alpha_composite(paste_image, (
