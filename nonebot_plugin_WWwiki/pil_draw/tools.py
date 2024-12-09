@@ -412,11 +412,12 @@ async def connect_api(
     return
 
 
-async def draw_form(form_data: list, size_x: int, calculate: bool = False) -> Image.Image:
+async def draw_form(form_data: list, size_x: int, uniform_size: bool = True, calculate: bool = False) -> Image.Image:
     """
     绘制表格
     :param form_data: 表格数据
     :param size_x: x的尺寸
+    :param uniform_size: 统一尺寸（使用每行最大的尺寸）
     :param calculate: 是否仅计算不绘制
     :return:保存的路径
     """
@@ -432,6 +433,7 @@ async def draw_form(form_data: list, size_x: int, calculate: bool = False) -> Im
     size_y = 0
     size_y += 16
     num_x = -1
+    add_size_y_list = []
     for form_x in form_data:
         num_x += 1
         num_y = -1
@@ -467,8 +469,14 @@ async def draw_form(form_data: list, size_x: int, calculate: bool = False) -> Im
             form_data[num_x][num_y]["draw_size"] = draw_size
             if draw_size[1] > add_size_y:
                 add_size_y = draw_size[1]
-        size_y += add_size_y
+        add_size_y_list.append(add_size_y)
         size_y += int(size_x * 0.01)  # 间隔
+    if uniform_size is True:
+        max_size = max(add_size_y_list)
+        for i in range(len(add_size_y_list)):
+            add_size_y_list[i] = max_size
+    for s in add_size_y_list:
+        size_y += s
 
     image = Image.new("RGBA", (size_x, size_y), (0, 0, 0, 0))
     if calculate is True:
@@ -476,23 +484,15 @@ async def draw_form(form_data: list, size_x: int, calculate: bool = False) -> Im
 
     paste_line = Image.new("RGBA", (int(size_x * 0.95), 3), draw_color("卡片分界线"))
     draw_y = 0
-    num_y = -1
-    for form_x in form_data:
-        num_y += 1
-        num_x = -1
+    for num_y, form_x in enumerate(form_data):
         if num_y != 0:
             image.alpha_composite(paste_line, (int(size_x * 0.025), int(draw_y)))
 
-        add_size_y = 0
-        for form_y in form_x:
-            draw_size = form_y.get("draw_size")
-            if draw_size is not None and draw_size[1] > add_size_y:
-                add_size_y = draw_size[1]
+        add_size_y = add_size_y_list[num_y]
 
         add_size_y += int(size_x * 0.01)  # 间隔
 
-        for form_y in form_x:
-            num_x += 1
+        for num_x, form_y in enumerate(form_x):
             if form_y.get("text") is None:
                 continue
 
