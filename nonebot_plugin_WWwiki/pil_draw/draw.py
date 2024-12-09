@@ -145,9 +145,9 @@ async def draw_rolecard(draw_data: dict):
     image_y += paste_image.size[1]
 
     image_y += 50  # 底部留空
-    image = Image.new("RGBA", (image_x, image_y), (50, 50, 50, 255))
 
     # ## 开始绘制 ##
+    image = Image.new("RGBA", (image_x, image_y), draw_color("背景"))
 
     # 立绘
     paste_image = await load_image(draw_data.get("roleimg"))
@@ -204,7 +204,7 @@ async def draw_rolecard(draw_data: dict):
     )
     image.alpha_composite(paste_image, (38, 230))
 
-    # 简介标题
+    # 简介标题（共鸣能力）
     paste_image = await draw_text(
         draw_data.get("roleDescriptiontitle"),
         size=30,
@@ -213,9 +213,12 @@ async def draw_rolecard(draw_data: dict):
         text_color=draw_color("简介标题"),
         calculate=False
     )
+    paste_card = Image.new("RGBA", (paste_image.size[0] + 10, paste_image.size[1] + 10), draw_color("背景"))
+    paste_card = circle_corner(paste_card, 10)
+    image.alpha_composite(paste_card, (38 - 5, 346 - 5))
     image.alpha_composite(paste_image, (38, 346))
 
-    # 简介内容
+    # 简介内容（共鸣能力介绍）
     paste_image = await draw_text(
         draw_data.get("roleDescription"),
         size=24,
@@ -224,6 +227,9 @@ async def draw_rolecard(draw_data: dict):
         text_color=draw_color("简介内容"),
         calculate=False
     )
+    paste_card = Image.new("RGBA", (paste_image.size[0] + 10, paste_image.size[1] + 10), draw_color("背景"))
+    paste_card = circle_corner(paste_card, 10)
+    image.alpha_composite(paste_card, (38 - 5, 383 - 5))
     image.alpha_composite(paste_image, (38, 383))
 
     x = 0

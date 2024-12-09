@@ -44,7 +44,7 @@ def _plugin_config():
 
 def draw_color(name: str):
     color_data = {
-        "背景": "#434343",
+        "背景": "#323232",
         "背景图片": None,
         "图标": "#e0c698",
         "副图标": "#c5c2bc",
