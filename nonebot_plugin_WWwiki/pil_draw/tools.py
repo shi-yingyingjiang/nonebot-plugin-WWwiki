@@ -439,14 +439,10 @@ async def draw_form(
 
     size_y = 0
     size_y += 16
-    num_x = -1
     add_size_y_list = []
-    for form_x in form_data:
-        num_x += 1
-        num_y = -1
+    for num_x, form_x in enumerate(form_data):
         add_size_y = 0
-        for form_y in form_x:
-            num_y += 1
+        for num_y, form_y in enumerate(form_x):
             if form_y.get("type") is None and form_y.get("text") is None:
                 continue
             elif form_y.get("type") == "image" and form_y.get("image") is None:
