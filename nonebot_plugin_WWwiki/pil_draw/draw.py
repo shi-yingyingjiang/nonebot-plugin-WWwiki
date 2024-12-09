@@ -51,40 +51,40 @@ async def draw_rolecard(draw_data: dict):
     forms_data_info = [
         [
             {"color": draw_color("群组名称"), "size": 28, "text": draw_data.get("attribute").split("：")[0]},
-            {"color": draw_color("群组内容"), "size": 28, "text": draw_data.get("attribute").split("：")[1]},
+            {"color": draw_color("群组内容"), "size": 26, "text": draw_data.get("attribute").split("：")[1]},
             {},
             {"color": draw_color("群组名称"), "size": 28, "text": "特殊料理"},
-            {"color": draw_color("群组内容"), "size": 28, "text": draw_data.get("specialcuisine")},
+            {"color": draw_color("群组内容"), "size": 26, "text": draw_data.get("specialcuisine")},
         ], [
             {"color": draw_color("群组名称"), "size": 28, "text": draw_data.get("gender").split("：")[0]},
-            {"color": draw_color("群组内容"), "size": 28, "text": draw_data.get("gender").split("：")[1]},
+            {"color": draw_color("群组内容"), "size": 26, "text": draw_data.get("gender").split("：")[1]},
             {},
             {"color": draw_color("群组名称"), "size": 28, "text": "中文cv"},
-            {"color": draw_color("群组内容"), "size": 28, "text": draw_data.get("zhcv")},
+            {"color": draw_color("群组内容"), "size": 26, "text": draw_data.get("zhcv")},
         ], [
             {"color": draw_color("群组名称"), "size": 28, "text": draw_data.get("birthplace").split("：")[0]},
-            {"color": draw_color("群组内容"), "size": 28, "text": draw_data.get("birthplace").split("：")[1]},
+            {"color": draw_color("群组内容"), "size": 26, "text": draw_data.get("birthplace").split("：")[1]},
             {},
             {"color": draw_color("群组名称"), "size": 28, "text": "日文cv"},
-            {"color": draw_color("群组内容"), "size": 28, "text": draw_data.get("jpcv")},
+            {"color": draw_color("群组内容"), "size": 26, "text": draw_data.get("jpcv")},
         ], [
             {"color": draw_color("群组名称"), "size": 28, "text": draw_data.get("weapon").split("：")[0]},
-            {"color": draw_color("群组内容"), "size": 28, "text": draw_data.get("weapon").split("：")[1]},
+            {"color": draw_color("群组内容"), "size": 26, "text": draw_data.get("weapon").split("：")[1]},
             {},
             {"color": draw_color("群组名称"), "size": 28, "text": "英文cv"},
-            {"color": draw_color("群组内容"), "size": 25, "text": draw_data.get("encv")},
+            {"color": draw_color("群组内容"), "size": 22, "text": draw_data.get("encv")},
         ], [
             {"color": draw_color("群组名称"), "size": 28, "text": "身份"},
-            {"color": draw_color("群组内容"), "size": 28, "text": draw_data.get("identity")},
+            {"color": draw_color("群组内容"), "size": 26, "text": draw_data.get("identity")},
             {},
             {"color": draw_color("群组名称"), "size": 28, "text": "韩文cv"},
-            {"color": draw_color("群组内容"), "size": 28, "text": draw_data.get("kocv")},
+            {"color": draw_color("群组内容"), "size": 22, "text": draw_data.get("kocv")},
         ], [
             {"color": draw_color("群组名称"), "size": 28, "text": "所属"},
-            {"color": draw_color("群组内容"), "size": 28, "text": draw_data.get("affiliation")},
+            {"color": draw_color("群组内容"), "size": 26, "text": draw_data.get("affiliation")},
             {},
             {"color": draw_color("群组名称"), "size": 28, "text": "实装版本"},
-            {"color": draw_color("群组内容"), "size": 28, "text": draw_data.get("version")},
+            {"color": draw_color("群组内容"), "size": 26, "text": draw_data.get("version")},
         ],
     ]
     combat_data = draw_data.get("combat_data")
