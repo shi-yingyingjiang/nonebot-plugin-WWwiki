@@ -60,7 +60,7 @@ async def role_data(args: Message = CommandArg()):
             my_dict = data_dict
 
             # 获取战斗风格数据
-            fighting_style_content = data.get('data').get('content').get('modules')[1].get('components')[3].get('content')
+            fighting_style_content = data.get('data').get('content').get('modules')[0].get('components')[3].get('content')
 
             def get_value_from_dict(dictionary, key):
                 return dictionary.get(key, "未知")
