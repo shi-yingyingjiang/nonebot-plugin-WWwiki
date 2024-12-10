@@ -453,7 +453,9 @@ async def draw_form(
             elif form_y.get("type") is None or form_y.get("type") == "text":
                 textlen = int(size_x / len(form_x) / form_y["size"])
                 if num_y < len(form_x) - 1 and form_x[num_y + 1] == {}:
-                    textlen += textlen
+                    textlen += textlen * 0.8
+                    if num_y < len(form_x) - 2 and form_x[num_y + 2] == {}:
+                        textlen += textlen * 0.8
                 draw_size = await draw_text(
                     form_y.get("text"),
                     size=form_y["size"],
@@ -507,7 +509,9 @@ async def draw_form(
             if form_y.get("type") is None or form_y.get("type") == "text":
                 textlen = int(size_x / len(form_x) / form_y["size"])
                 if num_y < len(form_x) - 1 and form_x[num_y + 1] == {}:
-                    textlen += textlen
+                    textlen += textlen * 0.8
+                    if num_y < len(form_x) - 2 and form_x[num_y + 2] == {}:
+                        textlen += textlen * 0.8
                 paste_image = await draw_text(
                     form_y.get("text"),
                     size=form_y["size"],
