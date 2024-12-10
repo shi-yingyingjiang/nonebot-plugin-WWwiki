@@ -22,8 +22,8 @@ async def draw_main(draw_data: dict, temp_name: str = None, temp_path: str = Non
     elif template_name == "echolink":
         return await draw_echolink(draw_data)
     # 鸣潮共鸣链查询
-    elif template_name == "":
-        return await draw_name(draw_data)
+    elif template_name == "recommendation":
+        return await draw_recommendation(draw_data)
     # 鸣潮
     elif template_name == "":
         return await draw_name(draw_data)
@@ -501,6 +501,189 @@ async def draw_echolink(draw_data: dict):
     # 共鸣链
     y += 15
     paste_image = await draw_form(echolink_data_combat, size_x=int(image_x * 0.95), calculate=False)
+    paste_card = Image.new("RGBA", (int(image_x * 0.95) + 6, paste_image.size[1] + 6), draw_color("卡片描边"))
+    paste_card = circle_corner(paste_card, 18)
+    image.alpha_composite(paste_card, (int(image_x * 0.025) - 3, y - 3))
+    paste_card = Image.new("RGBA", (int(image_x * 0.95), paste_image.size[1]), draw_color("卡片背景"))
+    paste_card = circle_corner(paste_card, 15)
+    image.alpha_composite(paste_card, (int(image_x * 0.025), y))
+    image.alpha_composite(paste_image, (int(image_x * 0.025), y))
+    y += paste_image.size[1]
+
+    return save_image(image, to_bytes=True)
+
+
+async def draw_recommendation(draw_data: dict):
+    """
+    绘制
+    """
+    # 获取数据
+    weapons_recommended = draw_data.get("weapons_recommended")
+    echo_recommended = draw_data.get("echo_recommended")
+    team_recommended = draw_data.get("team_recommended")
+    skll_recommended = draw_data.get("skll_recommended")
+
+    # 解析html
+    weapons_data = []
+    links = parser_html(weapons_recommended).links
+    soup = BeautifulSoup(weapons_recommended, 'html.parser')
+    table = soup.find('table')
+    rows = table.find_all('tr')
+    for i, row in enumerate(rows):
+        cols = row.find_all(['td', 'th'])
+        cols_text = [col.get_text(strip=True) for col in cols]
+        if cols_text[0].startswith("武器首位推荐"):
+            cols_text[0] = "武器首位推荐\n" + cols_text[0][6:]
+
+        right_cols_text_list = []
+        right_cols = cols[1:]
+        for num, col in enumerate(right_cols):
+            paragraphs = col.find_all('p')
+            for paragraph in paragraphs:
+                right_cols_text_list.append(paragraph.get_text(strip=True))
+
+            text = ""
+            for t in right_cols_text_list:
+                text += f"{t}\n \n"
+            text = text.removesuffix("\n \n")
+            cols_text[1] = text
+
+        link = links[(i - 1) * 2]
+        if i == 0:
+            weapons_data.append([
+                {"color": draw_color("群组名称"), "size": 28, "text": cols_text[0]},
+                {},
+                {"color": draw_color("群组内容"), "size": 22, "text": cols_text[1]},
+                {},
+                {},
+            ])
+        else:
+            weapons_data.append([
+                {"color": draw_color("群组名称"), "size": 28, "text": cols_text[0]},
+                {"color": None, "type": "image", "size": (130, 130), "image": link},
+                {"color": draw_color("群组内容"), "size": 22, "text": cols_text[1]},
+                {},
+                {},
+            ])
+
+    image_x, image_y = (900, 0)
+    image_y += 643  # 基础信息界面
+
+    paste_image = await draw_form(weapons_data, size_x=int(image_x * 0.95), calculate=True)
+    image_y += paste_image.size[1]
+
+    image_y += 50  # 底部留空
+
+    # ## 开始绘制 ##
+    image = Image.new("RGBA", (image_x, image_y), draw_color("背景"))
+
+    # 卡片基础信息
+    if True:
+        # 立绘
+        paste_image = await load_image(draw_data.get("roleimg"))
+        paste_image = image_resize2(paste_image, (720, 720))
+        image.alpha_composite(paste_image, (263, -57))
+
+        # 角色logo
+        paste_image = await load_image(draw_data.get("campIcon"))
+        paste_image = image_resize2(paste_image, (128, 128))
+        paste_color = Image.new("RGBA", (128, 128), "#FFFFFFFF")
+        image.paste(paste_color, (745, 22), paste_image)
+
+        # 图标
+        paste_image = await draw_text(
+            "鸣潮WIKI",
+            size=36,
+            textlen=99,
+            fontfile="优设好身体.ttf",
+            text_color=draw_color("图标"),
+            calculate=False
+        )
+        image.alpha_composite(paste_image, (25, 26))
+
+        # 副图标
+        paste_image = await draw_text(
+            "wuthering waves",
+            size=19,
+            textlen=99,
+            fontfile="优设好身体.ttf",
+            text_color=draw_color("副图标"),
+            calculate=False
+        )
+        image.alpha_composite(paste_image, (17, 60))
+
+        # 标题-名称
+        paste_image = await draw_text(
+            draw_data.get("rolename"),
+            size=72,
+            textlen=99,
+            fontfile="优设好身体.ttf",
+            text_color=draw_color("标题"),
+            calculate=False
+        )
+        image.alpha_composite(paste_image, (38, 150))
+
+        # 副标题-英文名称
+        paste_image = await draw_text(
+            draw_data.get("roleenname"),
+            size=36,
+            textlen=99,
+            fontfile="优设好身体.ttf",
+            text_color=draw_color("副标题"),
+            calculate=False
+        )
+        image.alpha_composite(paste_image, (38, 230))
+
+        # 简介标题（共鸣能力）
+        paste_image = await draw_text(
+            draw_data.get("roledescriptiontitle"),
+            size=30,
+            textlen=99,
+            fontfile="优设好身体.ttf",
+            text_color=draw_color("简介标题"),
+            calculate=False
+        )
+        paste_card = Image.new("RGBA", (paste_image.size[0] + 10, paste_image.size[1] + 10), draw_color("背景"))
+        paste_card = circle_corner(paste_card, 10)
+        image.alpha_composite(paste_card, (38 - 5, 346 - 5))
+        image.alpha_composite(paste_image, (38, 346))
+
+        # 简介内容（共鸣能力介绍）
+        paste_image = await draw_text(
+            draw_data.get("roledescription"),
+            size=24,
+            textlen=16,
+            fontfile="优设好身体.ttf",
+            text_color=draw_color("简介内容"),
+            calculate=False
+        )
+        paste_card = Image.new("RGBA", (paste_image.size[0] + 10, paste_image.size[1] + 10), draw_color("背景"))
+        paste_card = circle_corner(paste_card, 10)
+        image.alpha_composite(paste_card, (38 - 5, 383 - 5))
+        image.alpha_composite(paste_image, (38, 383))
+
+        x = 0
+        y = 583
+
+    # 武器推荐-标题
+    y += 15
+    paste_image = Image.new("RGBA", (10, 40), draw_color("卡片标题背景"))
+    paste_image = circle_corner(paste_image, 5)
+    image.alpha_composite(paste_image, (x + 20, y))
+    paste_image = await draw_text(
+        "武器推荐",
+        size=30,
+        textlen=99,
+        fontfile="优设好身体.ttf",
+        text_color=draw_color("卡片标题"),
+        calculate=False
+    )
+    image.alpha_composite(paste_image, (x + 20 + 25, y + 5))
+    y += 40
+
+    # 武器推荐
+    y += 15
+    paste_image = await draw_form(weapons_data, size_x=int(image_x * 0.95), calculate=False)
     paste_card = Image.new("RGBA", (int(image_x * 0.95) + 6, paste_image.size[1] + 6), draw_color("卡片描边"))
     paste_card = circle_corner(paste_card, 18)
     image.alpha_composite(paste_card, (int(image_x * 0.025) - 3, y - 3))

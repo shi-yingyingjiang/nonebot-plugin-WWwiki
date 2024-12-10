@@ -66,6 +66,8 @@ async def recommendationcards(args: Message = CommandArg()):
             Data = {
                 'roleimg': info_data.get('role_img'),
                 'rolename': info_data.get('role_name'),
+                'campIcon': info_data.get('campIcon'),
+                'roleenname': info_data.get('role_en_name'),
                 'roledescription': info_data.get('role_description'),
                 'roledescriptiontitle': info_data.get('role_description_title'),
                 'weapons_recommended': weapons_recommended,
