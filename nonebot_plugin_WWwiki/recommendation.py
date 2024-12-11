@@ -15,7 +15,7 @@ from .util import UniMessage, get_template
 html_spath = get_template("recommendation")
 
 
-recommendation_cards = on_command('鸣潮角色配队推荐')
+recommendation_cards = on_command('鸣潮角色养成推荐')
 
 headers = {
     'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/125.0.0.0 Safari/537.36 Edg/125.0.0.0',
@@ -66,6 +66,8 @@ async def recommendationcards(args: Message = CommandArg()):
             Data = {
                 'roleimg': info_data.get('role_img'),
                 'rolename': info_data.get('role_name'),
+                'campIcon': info_data.get('campIcon'),
+                'roleenname': info_data.get('role_en_name'),
                 'roledescription': info_data.get('role_description'),
                 'roledescriptiontitle': info_data.get('role_description_title'),
                 'weapons_recommended': weapons_recommended,
