@@ -12,6 +12,7 @@ import time
 from .config import basepath, draw_color
 import matplotlib.font_manager as fm
 from html.parser import HTMLParser
+from ..util import font_path as plugin_font_path
 
 
 wwwiki_draw_cache = {
@@ -21,6 +22,9 @@ system_font_list = fm.findSystemFonts(fontpaths=None, fontext='ttf')
 for font_path in system_font_list:
     font_path = font_path.replace("\\", "/")
     wwwiki_draw_cache["font_path"][font_path.split("/")[-1]] = font_path
+fonts = os.listdir(plugin_font_path)
+for font in fonts:
+    wwwiki_draw_cache["font_path"][font] = f"{plugin_font_path}/{font}".replace("\\", "/")
 
 
 def save_image(
