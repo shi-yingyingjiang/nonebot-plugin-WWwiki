@@ -2,7 +2,7 @@
 from PIL import Image
 from nonebot import logger, require
 from .config import draw_color
-from .tools import save_image, load_image, draw_text, image_resize2, circle_corner, draw_form, parser_html
+from .tools import save_image, load_image, draw_text, image_resize2, circle_corner, draw_form, parser_html, mix_image
 from bs4 import BeautifulSoup
 
 require("nonebot_plugin_htmlrender")
@@ -548,19 +548,23 @@ async def draw_recommendation(draw_data: dict):
             text = text.removesuffix("\n \n")
             cols_text[1] = text
 
-        link = links[(i - 1) * 2]
+        link1 = links[(i - 1) * 2]
+        link2 = links[((i - 1) * 2) + 1]
+        link2 = await load_image(link2)
+        link2 = image_resize2(link2, (264, 86))
+        link_image = await mix_image(link1, link2)
         if i == 0:
             weapons_data.append([
                 {"color": draw_color("群组名称"), "size": 28, "text": cols_text[0]},
-                {},
                 {"color": draw_color("群组内容"), "size": 22, "text": cols_text[1]},
+                {},
                 {},
                 {},
             ])
         else:
             weapons_data.append([
                 {"color": draw_color("群组名称"), "size": 28, "text": cols_text[0]},
-                {"color": None, "type": "image", "size": (130, 130), "image": link},
+                {"color": None, "type": "image", "size": (150, 150), "image": link_image},
                 {"color": draw_color("群组内容"), "size": 22, "text": cols_text[1]},
                 {},
                 {},

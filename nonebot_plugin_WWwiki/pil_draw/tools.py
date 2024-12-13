@@ -583,3 +583,42 @@ def parser_html(html):
     parser.feed(html)
     return parser
 
+
+async def mix_image(image_1, image_2, mix_type=1):
+    """
+    将两张图合并为1张
+    :param image_1: 要合并的图像1
+    :param image_2: 要合并的图像2
+    :param mix_type: 合成方式。1：竖向
+    :return:
+    """
+    if type(image_1) is str:
+        image_1 = await load_image(image_1)
+    if type(image_2) is str:
+        image_2 = await load_image(image_2)
+    if mix_type == 1:
+        x1, y1 = image_1.size
+        x2, y2 = image_2.size
+        if image_1.mode == "RGB":
+            image_1 = image_1.convert("RGBA")
+        if image_2.mode == "RGB":
+            image_2 = image_2.convert("RGBA")
+
+        if x1 > x2:
+            x2_m = x1
+            y2_m = int(x2_m / x2 * y2)
+            images = Image.new("RGBA", (x2_m, y2_m + y1), (0, 0, 0, 0))
+            image_2_m = image_2.resize((x2_m, y2_m))
+            images.alpha_composite(image_1, (0, 0))
+            images.alpha_composite(image_2_m, (0, y1))
+            return images
+        else:  # x1 < x2
+            x1_m = x2
+            y1_m = int(x1_m / x1 * y1)
+            images = Image.new("RGBA", (x1_m, y1_m + y2), (0, 0, 0, 0))
+            image_1_m = image_1.resize((x1_m, y1_m))
+            images.alpha_composite(image_1_m, (0, 0))
+            images.alpha_composite(image_2, (0, y1_m))
+            return images
+    raise "未知的合并图像方式"
+
