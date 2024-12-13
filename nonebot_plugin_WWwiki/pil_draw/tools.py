@@ -32,7 +32,8 @@ def save_image(
         image_path: str = None,
         image_name: int | str = None,
         relative_path=False,
-        to_bytes: bool = False):
+        to_bytes: bool = False,
+        mode: str = "jpg"):
     """
     保存图片文件到缓存文件夹
     :param image:要保存的图片
@@ -40,9 +41,11 @@ def save_image(
     :param image_name:图片名称，不填为随机数字
     :param relative_path: 是否返回相对路径
     :param to_bytes: 是否转为bytes
+    :param mode: 保存的图片格式
     :return:保存的路径
     """
-    image = image.convert("RGB")
+    if mode == "jpg":
+        image = image.convert("RGB")
     if to_bytes is True and type(image) is PIL_Image:
         # 将Pillow图像数据保存到内存中
         image_stream = io.BytesIO()
@@ -64,9 +67,9 @@ def save_image(
         while True:
             num -= 1
             random_num = str(random.randint(1000, 9999))
-            if os.path.exists(f"{real_path}{image_name}_{random_num}.jpg"):
+            if os.path.exists(f"{real_path}{image_name}_{random_num}.{mode}"):
                 continue
-            image_name = f"{image_name}_{random_num}.jpg"
+            image_name = f"{image_name}_{random_num}.{mode}"
             break
 
     logger.debug(f"保存图片文件：{real_path}{image_name}")
@@ -121,6 +124,7 @@ def image_resize2(image, size: [int, int], overturn=False):
     :return: 缩放后的图像
     """
     image_background = Image.new("RGBA", size=size, color=(0, 0, 0, 0))
+    image = image.convert("RGBA")
     w, h = image_background.size
     x, y = image.size
     if overturn:
@@ -288,6 +292,8 @@ async def load_image(path: str, size=None, mode=None, cache_image=True):
     :param mode: 图片读取模式
     :return:image
     """
+    if type(path) is Image.Image:
+        return path
     if mode is None:
         mode = "r"
     try:
