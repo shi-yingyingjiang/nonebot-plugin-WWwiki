@@ -523,7 +523,7 @@ async def draw_recommendation(draw_data: dict):
     team_recommended = draw_data.get("team_recommended")
     skll_recommended = draw_data.get("skll_recommended")
 
-    # 解析html
+    # 解析html - 武器推荐
     weapons_data = []
     links = parser_html(weapons_recommended).links
     soup = BeautifulSoup(weapons_recommended, 'html.parser')
@@ -570,10 +570,63 @@ async def draw_recommendation(draw_data: dict):
                 {},
             ])
 
+    # 解析html - 配队推荐
+    team_data = []
+    links = parser_html(team_recommended).links
+    soup = BeautifulSoup(team_recommended, 'html.parser')
+    table = soup.find('table')
+    rows = table.find_all('tr')
+    for i, row in enumerate(rows):
+        cols = row.find_all(['td', 'th'])
+        cols_text = [col.get_text(strip=True) for col in cols]
+        if cols_text[0].startswith("武器首位推荐"):
+            cols_text[0] = "武器首位推荐\n" + cols_text[0][6:]
+
+        right_cols_text_list = []
+        right_cols = cols[1:]
+        for num, col in enumerate(right_cols):
+            paragraphs = col.find_all('p')
+            for paragraph in paragraphs:
+                right_cols_text_list.append(paragraph.get_text(strip=True))
+
+            text = ""
+            for t in right_cols_text_list:
+                text += f"{t}\n \n"
+            text = text.removesuffix("\n \n")
+            cols_text[1] = text
+
+        cols_text[0] = cols_text[0].replace("\\xa0", "")
+        cols_text[1] = cols_text[1].replace("\\xa0", "")
+
+        if i in [0, 1] or cols_text[0] == "副输出":
+            team_data.append([
+                {"color": draw_color("群组名称"), "size": 28, "text": cols_text[0]},
+                {"color": draw_color("群组内容"), "size": 22, "text": cols_text[1]},
+                {},
+                {},
+                {},
+            ])
+        else:
+            link = links[0]
+            links.remove(link)
+            team_data.append([
+                {"color": draw_color("群组名称"), "size": 28, "text": cols_text[0]},
+                {"color": None, "type": "image", "size": (150, 150), "image": link},
+                {"color": draw_color("群组内容"), "size": 22, "text": cols_text[1]},
+                {},
+                {},
+            ])
+
+    # 计算图片尺寸
     image_x, image_y = (900, 0)
     image_y += 643  # 基础信息界面
 
+    # 武器推荐
     paste_image = await draw_form(weapons_data, size_x=int(image_x * 0.95), calculate=True)
+    image_y += paste_image.size[1]
+
+    # 配队推荐
+    paste_image = await draw_form(team_data, size_x=int(image_x * 0.95), calculate=True)
     image_y += paste_image.size[1]
 
     image_y += 50  # 底部留空
@@ -688,6 +741,34 @@ async def draw_recommendation(draw_data: dict):
     # 武器推荐
     y += 15
     paste_image = await draw_form(weapons_data, size_x=int(image_x * 0.95), calculate=False)
+    paste_card = Image.new("RGBA", (int(image_x * 0.95) + 6, paste_image.size[1] + 6), draw_color("卡片描边"))
+    paste_card = circle_corner(paste_card, 18)
+    image.alpha_composite(paste_card, (int(image_x * 0.025) - 3, y - 3))
+    paste_card = Image.new("RGBA", (int(image_x * 0.95), paste_image.size[1]), draw_color("卡片背景"))
+    paste_card = circle_corner(paste_card, 15)
+    image.alpha_composite(paste_card, (int(image_x * 0.025), y))
+    image.alpha_composite(paste_image, (int(image_x * 0.025), y))
+    y += paste_image.size[1]
+
+    # 配队推荐-标题
+    y += 15
+    paste_image = Image.new("RGBA", (10, 40), draw_color("卡片标题背景"))
+    paste_image = circle_corner(paste_image, 5)
+    image.alpha_composite(paste_image, (x + 20, y))
+    paste_image = await draw_text(
+        "配队推荐",
+        size=30,
+        textlen=99,
+        fontfile="优设好身体.ttf",
+        text_color=draw_color("卡片标题"),
+        calculate=False
+    )
+    image.alpha_composite(paste_image, (x + 20 + 25, y + 5))
+    y += 40
+
+    # 配队推荐
+    y += 15
+    paste_image = await draw_form(team_data, size_x=int(image_x * 0.95), calculate=False)
     paste_card = Image.new("RGBA", (int(image_x * 0.95) + 6, paste_image.size[1] + 6), draw_color("卡片描边"))
     paste_card = circle_corner(paste_card, 18)
     image.alpha_composite(paste_card, (int(image_x * 0.025) - 3, y - 3))
