@@ -579,8 +579,6 @@ async def draw_recommendation(draw_data: dict):
     for i, row in enumerate(rows):
         cols = row.find_all(['td', 'th'])
         cols_text = [col.get_text(strip=True) for col in cols]
-        if cols_text[0].startswith("武器首位推荐"):
-            cols_text[0] = "武器首位推荐\n" + cols_text[0][6:]
 
         right_cols_text_list = []
         right_cols = cols[1:]
@@ -611,7 +609,7 @@ async def draw_recommendation(draw_data: dict):
             links.remove(link)
             team_data.append([
                 {"color": draw_color("群组名称"), "size": 28, "text": cols_text[0]},
-                {"color": None, "type": "image", "size": (150, 150), "image": link},
+                {"color": None, "type": "image", "size": (130, 130), "image": link},
                 {"color": draw_color("群组内容"), "size": 22, "text": cols_text[1]},
                 {},
                 {},
@@ -624,10 +622,14 @@ async def draw_recommendation(draw_data: dict):
     # 武器推荐
     paste_image = await draw_form(weapons_data, size_x=int(image_x * 0.95), calculate=True)
     image_y += paste_image.size[1]
+    image_y += 15
 
     # 配队推荐
+    image_y += 40
+    image_y += 15
     paste_image = await draw_form(team_data, size_x=int(image_x * 0.95), calculate=True)
     image_y += paste_image.size[1]
+    image_y += 15
 
     image_y += 50  # 底部留空
 
