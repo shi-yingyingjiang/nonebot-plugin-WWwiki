@@ -542,11 +542,11 @@ async def draw_recommendation(draw_data: dict):
             for paragraph in paragraphs:
                 right_cols_text_list.append(paragraph.get_text(strip=True))
 
-            text = ""
-            for t in right_cols_text_list:
-                text += f"{t}\n \n"
-            text = text.removesuffix("\n \n")
-            cols_text[1] = text
+        text = ""
+        for t in right_cols_text_list:
+            text += f"{t}\n \n"
+        text = text.removesuffix("\n \n")
+        cols_text[1] = text
 
         link1 = links[(i - 1) * 2]
         link2 = links[((i - 1) * 2) + 1]
@@ -587,11 +587,11 @@ async def draw_recommendation(draw_data: dict):
             for paragraph in paragraphs:
                 right_cols_text_list.append(paragraph.get_text(strip=True))
 
-            text = ""
-            for t in right_cols_text_list:
-                text += f"{t}\n \n"
-            text = text.removesuffix("\n \n")
-            cols_text[1] = text
+        text = ""
+        for t in right_cols_text_list:
+            text += f"{t}\n \n"
+        text = text.removesuffix("\n \n")
+        cols_text[1] = text
 
         cols_text[0] = cols_text[0].replace("\\xa0", "")
         cols_text[1] = cols_text[1].replace("\\xa0", "")
@@ -625,18 +625,7 @@ async def draw_recommendation(draw_data: dict):
         cols = row.find_all(['td', 'th'])
         cols_text = [col.get_text(strip=True) for col in cols]
 
-        right_cols_text_list = []
-        right_cols = cols[1:]
-        for num, col in enumerate(right_cols):
-            paragraphs = col.find_all('p')
-            for paragraph in paragraphs:
-                right_cols_text_list.append(paragraph.get_text(strip=True))
-
-            text = ""
-            for t in right_cols_text_list:
-                text += f"{t}\n \n"
-            text = text.removesuffix("\n \n")
-            cols_text[1] = text
+        cols_text[1] = cols_text[1].replace("\\xa0", "")
 
         if i == 0:
             skll_data.append([
