@@ -124,6 +124,12 @@ def image_resize2(image, size: [int, int], overturn=False):
     :param overturn: 是否放大到全屏
     :return: 缩放后的图像
     """
+    x, y = image.size
+    if size[0] is None:
+        size = (int(size[1] * x / y), size[1])
+    if size[1] is None:
+        size = (size[0], int(size[0] * y / x))
+
     image_background = Image.new("RGBA", size=size, color=(0, 0, 0, 0))
     image = image.convert("RGBA")
     w, h = image_background.size
