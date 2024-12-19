@@ -160,7 +160,6 @@ async def help_msg():
         
         markdown_content += f"| {func} | {trigger_method} | {trigger_condition} | {brief_des} | {detail_des} |\n"
 
-
-        img = await md_to_pic(markdown_content)
+    img = await md_to_pic(markdown_content)
 
     await UniMessage.image(raw=img).finish()
