@@ -488,7 +488,8 @@ async def draw_form(
         size_x: int,
         uniform_size: bool = True,
         calculate: bool = True,
-        out_of_form: bool = True
+        out_of_form: bool = True,
+        font_file_path: str = None
 ) -> Image.Image:
     """
     绘制表格
@@ -497,6 +498,7 @@ async def draw_form(
     :param uniform_size: 统一尺寸（使用每行最大的尺寸）
     :param calculate: 是否仅计算不绘制
     :param out_of_form: 在右边为空时，文字允许超出格子范围
+    :param font_file_path: 字体文件
     :return:保存的路径
     """
     """
@@ -531,7 +533,7 @@ async def draw_form(
                     form_y.get("text"),
                     size=form_y["size"],
                     textlen=textlen,
-                    fontfile="优设好身体.ttf",
+                    fontfile=font_file_path if form_y.get("font") is None else form_y.get("font"),
                     text_color=form_y.get("color"),
                     calculate=True
                 )
@@ -587,7 +589,7 @@ async def draw_form(
                     form_y.get("text"),
                     size=form_y["size"],
                     textlen=textlen,
-                    fontfile="优设好身体.ttf",
+                    fontfile=font_file_path if form_y.get("font") is None else form_y.get("font"),
                     text_color=form_y.get("color"),
                     calculate=False
                 )

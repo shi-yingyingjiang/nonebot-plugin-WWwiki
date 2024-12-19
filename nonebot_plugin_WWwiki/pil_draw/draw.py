@@ -9,6 +9,9 @@ from bs4 import BeautifulSoup
 require("nonebot_plugin_htmlrender")
 from nonebot_plugin_htmlrender import template_to_pic
 
+# 推荐安装JiYingHuiPianHuiSong-2.ttf字体
+font_file_path = "JiYingHuiPianHuiSong-2.ttf"
+
 
 async def draw_main(draw_data: dict, temp_name: str = None, temp_path: str = None):
     logger.debug(f"draw_data: {draw_data}")
@@ -126,7 +129,12 @@ async def draw_rolecard(draw_data: dict):
     image_x, image_y = (900, 0)
     image_y += 643  # 基础信息界面
 
-    paste_image = await draw_form(forms_data_info, size_x=int(image_x * 0.95), calculate=True)
+    paste_image = await draw_form(
+        forms_data_info,
+        size_x=int(image_x * 0.95),
+        calculate=True,
+        font_file_path=font_file_path
+    )
     image_y += paste_image.size[1]
 
     # 战斗风格-标题
@@ -143,7 +151,12 @@ async def draw_rolecard(draw_data: dict):
 
     # 战斗数据
     image_y += 15
-    paste_image = await draw_form(forms_data_combat, size_x=int(image_x * 0.95), calculate=True)
+    paste_image = await draw_form(
+        forms_data_combat,
+        size_x=int(image_x * 0.95),
+        calculate=True,
+        font_file_path=font_file_path
+    )
     image_y += paste_image.size[1]
 
     image_y += 50  # 底部留空
@@ -167,7 +180,7 @@ async def draw_rolecard(draw_data: dict):
         "鸣潮WIKI",
         size=36,
         textlen=99,
-        fontfile="优设好身体.ttf",
+        fontfile=font_file_path,
         text_color=draw_color("图标"),
         calculate=False
     )
@@ -178,7 +191,7 @@ async def draw_rolecard(draw_data: dict):
         "wuthering waves",
         size=19,
         textlen=99,
-        fontfile="优设好身体.ttf",
+        fontfile=font_file_path,
         text_color=draw_color("副图标"),
         calculate=False
     )
@@ -189,7 +202,7 @@ async def draw_rolecard(draw_data: dict):
         draw_data.get("title"),
         size=72,
         textlen=99,
-        fontfile="优设好身体.ttf",
+        fontfile=font_file_path,
         text_color=draw_color("标题"),
         calculate=False
     )
@@ -200,7 +213,7 @@ async def draw_rolecard(draw_data: dict):
         draw_data.get("roleenname"),
         size=36,
         textlen=99,
-        fontfile="优设好身体.ttf",
+        fontfile=font_file_path,
         text_color=draw_color("副标题"),
         calculate=False
     )
@@ -211,7 +224,7 @@ async def draw_rolecard(draw_data: dict):
         draw_data.get("roleDescriptiontitle"),
         size=30,
         textlen=99,
-        fontfile="优设好身体.ttf",
+        fontfile=font_file_path,
         text_color=draw_color("简介标题"),
         calculate=False
     )
@@ -225,7 +238,7 @@ async def draw_rolecard(draw_data: dict):
         draw_data.get("roleDescription"),
         size=24,
         textlen=16,
-        fontfile="优设好身体.ttf",
+        fontfile=font_file_path,
         text_color=draw_color("简介内容"),
         calculate=False
     )
@@ -246,7 +259,7 @@ async def draw_rolecard(draw_data: dict):
         "基础消息",
         size=30,
         textlen=99,
-        fontfile="优设好身体.ttf",
+        fontfile=font_file_path,
         text_color=draw_color("卡片标题"),
         calculate=False
     )
@@ -255,7 +268,12 @@ async def draw_rolecard(draw_data: dict):
 
     # 基础消息
     y += 15
-    paste_image = await draw_form(forms_data_info, size_x=int(image_x * 0.95), calculate=False)
+    paste_image = await draw_form(
+        forms_data_info,
+        size_x=int(image_x * 0.95),
+        calculate=False,
+        font_file_path=font_file_path
+    )
     paste_card = Image.new("RGBA", (int(image_x * 0.95) + 6, paste_image.size[1] + 6), draw_color("卡片描边"))
     paste_card = circle_corner(paste_card, 18)
     image.alpha_composite(paste_card, (int(image_x * 0.025) - 3, y - 3))
@@ -274,7 +292,7 @@ async def draw_rolecard(draw_data: dict):
         "战斗风格",
         size=30,
         textlen=99,
-        fontfile="优设好身体.ttf",
+        fontfile=font_file_path,
         text_color=draw_color("卡片标题"),
         calculate=False
     )
@@ -310,7 +328,7 @@ async def draw_rolecard(draw_data: dict):
             fighting_style[1],
             size=30,
             textlen=10,
-            fontfile="优设好身体.ttf",
+            fontfile=font_file_path,
             text_color=draw_color("群组内容"),
             calculate=False
         )
@@ -320,7 +338,7 @@ async def draw_rolecard(draw_data: dict):
             fighting_style[2],
             size=20,
             textlen=15,
-            fontfile="优设好身体.ttf",
+            fontfile=font_file_path,
             text_color=draw_color("群组名称"),
             calculate=False
         )
@@ -338,7 +356,7 @@ async def draw_rolecard(draw_data: dict):
         "战斗数据",
         size=30,
         textlen=99,
-        fontfile="优设好身体.ttf",
+        fontfile=font_file_path,
         text_color=draw_color("卡片标题"),
         calculate=False
     )
@@ -347,7 +365,12 @@ async def draw_rolecard(draw_data: dict):
 
     # 战斗数据
     y += 15
-    paste_image = await draw_form(forms_data_combat, size_x=int(image_x * 0.95), calculate=False)
+    paste_image = await draw_form(
+        forms_data_combat,
+        size_x=int(image_x * 0.95),
+        calculate=False,
+        font_file_path=font_file_path
+    )
     paste_card = Image.new("RGBA", (int(image_x * 0.95) + 6, paste_image.size[1] + 6), draw_color("卡片描边"))
     paste_card = circle_corner(paste_card, 18)
     image.alpha_composite(paste_card, (int(image_x * 0.025) - 3, y - 3))
@@ -389,7 +412,12 @@ async def draw_echolink(draw_data: dict):
     image_x, image_y = (900, 0)
     image_y += 643  # 基础信息界面
 
-    paste_image = await draw_form(echolink_data_combat, size_x=int(image_x * 0.95), calculate=True)
+    paste_image = await draw_form(
+        echolink_data_combat,
+        size_x=int(image_x * 0.95),
+        calculate=True,
+        font_file_path=font_file_path
+    )
     image_y += paste_image.size[1]
 
     image_y += 50  # 底部留空
@@ -413,7 +441,7 @@ async def draw_echolink(draw_data: dict):
         "鸣潮WIKI",
         size=36,
         textlen=99,
-        fontfile="优设好身体.ttf",
+        fontfile=font_file_path,
         text_color=draw_color("图标"),
         calculate=False
     )
@@ -424,7 +452,7 @@ async def draw_echolink(draw_data: dict):
         "wuthering waves",
         size=19,
         textlen=99,
-        fontfile="优设好身体.ttf",
+        fontfile=font_file_path,
         text_color=draw_color("副图标"),
         calculate=False
     )
@@ -435,7 +463,7 @@ async def draw_echolink(draw_data: dict):
         draw_data.get("rolename"),
         size=72,
         textlen=99,
-        fontfile="优设好身体.ttf",
+        fontfile=font_file_path,
         text_color=draw_color("标题"),
         calculate=False
     )
@@ -446,7 +474,7 @@ async def draw_echolink(draw_data: dict):
         draw_data.get("roleenname"),
         size=36,
         textlen=99,
-        fontfile="优设好身体.ttf",
+        fontfile=font_file_path,
         text_color=draw_color("副标题"),
         calculate=False
     )
@@ -457,7 +485,7 @@ async def draw_echolink(draw_data: dict):
         draw_data.get("roledescriptiontitle"),
         size=30,
         textlen=99,
-        fontfile="优设好身体.ttf",
+        fontfile=font_file_path,
         text_color=draw_color("简介标题"),
         calculate=False
     )
@@ -471,7 +499,7 @@ async def draw_echolink(draw_data: dict):
         draw_data.get("roledescription"),
         size=24,
         textlen=16,
-        fontfile="优设好身体.ttf",
+        fontfile=font_file_path,
         text_color=draw_color("简介内容"),
         calculate=False
     )
@@ -492,7 +520,7 @@ async def draw_echolink(draw_data: dict):
         "共鸣链",
         size=30,
         textlen=99,
-        fontfile="优设好身体.ttf",
+        fontfile=font_file_path,
         text_color=draw_color("卡片标题"),
         calculate=False
     )
@@ -501,7 +529,12 @@ async def draw_echolink(draw_data: dict):
 
     # 共鸣链
     y += 15
-    paste_image = await draw_form(echolink_data_combat, size_x=int(image_x * 0.95), calculate=False)
+    paste_image = await draw_form(
+        echolink_data_combat,
+        size_x=int(image_x * 0.95),
+        calculate=False,
+        font_file_path=font_file_path
+    )
     paste_card = Image.new("RGBA", (int(image_x * 0.95) + 6, paste_image.size[1] + 6), draw_color("卡片描边"))
     paste_card = circle_corner(paste_card, 18)
     image.alpha_composite(paste_card, (int(image_x * 0.025) - 3, y - 3))
@@ -676,28 +709,48 @@ async def draw_recommendation(draw_data: dict):
     image_y += 643  # 基础信息界面
 
     # 武器推荐
-    paste_image = await draw_form(weapons_data, size_x=int(image_x * 0.95), calculate=True)
+    paste_image = await draw_form(
+        weapons_data,
+        size_x=int(image_x * 0.95),
+        calculate=True,
+        font_file_path=font_file_path
+    )
     image_y += paste_image.size[1]
     image_y += 15
 
     # 声骸推荐
     image_y += 40
     image_y += 15
-    paste_image = await draw_form(echo_data, size_x=int(image_x * 0.95), calculate=True)
+    paste_image = await draw_form(
+        echo_data,
+        size_x=int(image_x * 0.95),
+        calculate=True,
+        font_file_path=font_file_path
+    )
     image_y += paste_image.size[1]
     image_y += 15
 
     # 配队推荐
     image_y += 40
     image_y += 15
-    paste_image = await draw_form(team_data, size_x=int(image_x * 0.95), calculate=True)
+    paste_image = await draw_form(
+        team_data,
+        size_x=int(image_x * 0.95),
+        calculate=True,
+        font_file_path=font_file_path
+    )
     image_y += paste_image.size[1]
     image_y += 15
 
     # 技能加点推荐
     image_y += 40
     image_y += 15
-    paste_image = await draw_form(skll_data, size_x=int(image_x * 0.95), calculate=True)
+    paste_image = await draw_form(
+        skll_data,
+        size_x=int(image_x * 0.95),
+        calculate=True,
+        font_file_path=font_file_path
+    )
     image_y += paste_image.size[1]
     image_y += 15
 
@@ -724,7 +777,7 @@ async def draw_recommendation(draw_data: dict):
             "鸣潮WIKI",
             size=36,
             textlen=99,
-            fontfile="优设好身体.ttf",
+            fontfile=font_file_path,
             text_color=draw_color("图标"),
             calculate=False
         )
@@ -735,7 +788,7 @@ async def draw_recommendation(draw_data: dict):
             "wuthering waves",
             size=19,
             textlen=99,
-            fontfile="优设好身体.ttf",
+            fontfile=font_file_path,
             text_color=draw_color("副图标"),
             calculate=False
         )
@@ -746,7 +799,7 @@ async def draw_recommendation(draw_data: dict):
             draw_data.get("rolename"),
             size=72,
             textlen=99,
-            fontfile="优设好身体.ttf",
+            fontfile=font_file_path,
             text_color=draw_color("标题"),
             calculate=False
         )
@@ -757,7 +810,7 @@ async def draw_recommendation(draw_data: dict):
             draw_data.get("roleenname"),
             size=36,
             textlen=99,
-            fontfile="优设好身体.ttf",
+            fontfile=font_file_path,
             text_color=draw_color("副标题"),
             calculate=False
         )
@@ -768,7 +821,7 @@ async def draw_recommendation(draw_data: dict):
             draw_data.get("roledescriptiontitle"),
             size=30,
             textlen=99,
-            fontfile="优设好身体.ttf",
+            fontfile=font_file_path,
             text_color=draw_color("简介标题"),
             calculate=False
         )
@@ -782,7 +835,7 @@ async def draw_recommendation(draw_data: dict):
             draw_data.get("roledescription"),
             size=24,
             textlen=16,
-            fontfile="优设好身体.ttf",
+            fontfile=font_file_path,
             text_color=draw_color("简介内容"),
             calculate=False
         )
@@ -803,7 +856,7 @@ async def draw_recommendation(draw_data: dict):
         "武器推荐",
         size=30,
         textlen=99,
-        fontfile="优设好身体.ttf",
+        fontfile=font_file_path,
         text_color=draw_color("卡片标题"),
         calculate=False
     )
@@ -812,7 +865,12 @@ async def draw_recommendation(draw_data: dict):
 
     # 武器推荐
     y += 15
-    paste_image = await draw_form(weapons_data, size_x=int(image_x * 0.95), calculate=False)
+    paste_image = await draw_form(
+        weapons_data,
+        size_x=int(image_x * 0.95),
+        calculate=False,
+        font_file_path=font_file_path
+    )
     paste_card = Image.new("RGBA", (int(image_x * 0.95) + 6, paste_image.size[1] + 6), draw_color("卡片描边"))
     paste_card = circle_corner(paste_card, 18)
     image.alpha_composite(paste_card, (int(image_x * 0.025) - 3, y - 3))
@@ -831,7 +889,7 @@ async def draw_recommendation(draw_data: dict):
         "声骸推荐",
         size=30,
         textlen=99,
-        fontfile="优设好身体.ttf",
+        fontfile=font_file_path,
         text_color=draw_color("卡片标题"),
         calculate=False
     )
@@ -840,7 +898,12 @@ async def draw_recommendation(draw_data: dict):
 
     # 声骸推荐
     y += 15
-    paste_image = await draw_form(echo_data, size_x=int(image_x * 0.95), calculate=False)
+    paste_image = await draw_form(
+        echo_data,
+        size_x=int(image_x * 0.95),
+        calculate=False,
+        font_file_path=font_file_path
+    )
     paste_card = Image.new("RGBA", (int(image_x * 0.95) + 6, paste_image.size[1] + 6), draw_color("卡片描边"))
     paste_card = circle_corner(paste_card, 18)
     image.alpha_composite(paste_card, (int(image_x * 0.025) - 3, y - 3))
@@ -859,7 +922,7 @@ async def draw_recommendation(draw_data: dict):
         "配队推荐",
         size=30,
         textlen=99,
-        fontfile="优设好身体.ttf",
+        fontfile=font_file_path,
         text_color=draw_color("卡片标题"),
         calculate=False
     )
@@ -868,7 +931,12 @@ async def draw_recommendation(draw_data: dict):
 
     # 配队推荐
     y += 15
-    paste_image = await draw_form(team_data, size_x=int(image_x * 0.95), calculate=False)
+    paste_image = await draw_form(
+        team_data,
+        size_x=int(image_x * 0.95),
+        calculate=False,
+        font_file_path=font_file_path
+    )
     paste_card = Image.new("RGBA", (int(image_x * 0.95) + 6, paste_image.size[1] + 6), draw_color("卡片描边"))
     paste_card = circle_corner(paste_card, 18)
     image.alpha_composite(paste_card, (int(image_x * 0.025) - 3, y - 3))
@@ -887,7 +955,7 @@ async def draw_recommendation(draw_data: dict):
         "技能加点推荐",
         size=30,
         textlen=99,
-        fontfile="优设好身体.ttf",
+        fontfile=font_file_path,
         text_color=draw_color("卡片标题"),
         calculate=False
     )
@@ -896,7 +964,12 @@ async def draw_recommendation(draw_data: dict):
 
     # 技能加点推荐
     y += 15
-    paste_image = await draw_form(skll_data, size_x=int(image_x * 0.95), calculate=False)
+    paste_image = await draw_form(
+        skll_data,
+        size_x=int(image_x * 0.95),
+        calculate=False,
+        font_file_path=font_file_path
+    )
     paste_card = Image.new("RGBA", (int(image_x * 0.95) + 6, paste_image.size[1] + 6), draw_color("卡片描边"))
     paste_card = circle_corner(paste_card, 18)
     image.alpha_composite(paste_card, (int(image_x * 0.025) - 3, y - 3))
