@@ -2,7 +2,8 @@
 from PIL import Image
 from nonebot import logger, require
 from .config import draw_color
-from .tools import save_image, load_image, draw_text, image_resize2, circle_corner, draw_form, parser_html, mix_image
+from .tools import save_image, load_image, draw_text, image_resize2, circle_corner, draw_form, parser_html, mix_image, \
+    get_html_text_url
 from bs4 import BeautifulSoup
 
 require("nonebot_plugin_htmlrender")
@@ -570,6 +571,30 @@ async def draw_recommendation(draw_data: dict):
                 {},
             ])
 
+    # 解析html - 声骸推荐
+    echo_data = []
+    soup = BeautifulSoup(echo_recommended, 'html.parser')
+    table = soup.find('table')
+    rows = table.find_all('tr')
+    for i, row in enumerate(rows):
+        cols = row.find_all(['td', 'th'])
+        cols_text = []
+        text = get_html_text_url(cols[0].children)
+        text = text.replace("\\xa0", "")
+        cols_text.append(text)
+
+        text = get_html_text_url(cols[1].children)
+        text = text.replace("\\xa0", "")
+        cols_text.append(text)
+
+        echo_data.append([
+            {"color": draw_color("群组名称"), "size": 28, "text": cols_text[0]},
+            {"color": draw_color("群组内容"), "size": 22, "text": cols_text[1]},
+            {},
+            {},
+            {},
+        ])
+
     # 解析html - 配队推荐
     team_data = []
     links = parser_html(team_recommended).links
@@ -652,6 +677,13 @@ async def draw_recommendation(draw_data: dict):
 
     # 武器推荐
     paste_image = await draw_form(weapons_data, size_x=int(image_x * 0.95), calculate=True)
+    image_y += paste_image.size[1]
+    image_y += 15
+
+    # 声骸推荐
+    image_y += 40
+    image_y += 15
+    paste_image = await draw_form(echo_data, size_x=int(image_x * 0.95), calculate=True)
     image_y += paste_image.size[1]
     image_y += 15
 
@@ -781,6 +813,34 @@ async def draw_recommendation(draw_data: dict):
     # 武器推荐
     y += 15
     paste_image = await draw_form(weapons_data, size_x=int(image_x * 0.95), calculate=False)
+    paste_card = Image.new("RGBA", (int(image_x * 0.95) + 6, paste_image.size[1] + 6), draw_color("卡片描边"))
+    paste_card = circle_corner(paste_card, 18)
+    image.alpha_composite(paste_card, (int(image_x * 0.025) - 3, y - 3))
+    paste_card = Image.new("RGBA", (int(image_x * 0.95), paste_image.size[1]), draw_color("卡片背景"))
+    paste_card = circle_corner(paste_card, 15)
+    image.alpha_composite(paste_card, (int(image_x * 0.025), y))
+    image.alpha_composite(paste_image, (int(image_x * 0.025), y))
+    y += paste_image.size[1]
+
+    # 声骸推荐-标题
+    y += 15
+    paste_image = Image.new("RGBA", (10, 40), draw_color("卡片标题背景"))
+    paste_image = circle_corner(paste_image, 5)
+    image.alpha_composite(paste_image, (x + 20, y))
+    paste_image = await draw_text(
+        "声骸推荐",
+        size=30,
+        textlen=99,
+        fontfile="优设好身体.ttf",
+        text_color=draw_color("卡片标题"),
+        calculate=False
+    )
+    image.alpha_composite(paste_image, (x + 20 + 25, y + 5))
+    y += 40
+
+    # 声骸推荐
+    y += 15
+    paste_image = await draw_form(echo_data, size_x=int(image_x * 0.95), calculate=False)
     paste_card = Image.new("RGBA", (int(image_x * 0.95) + 6, paste_image.size[1] + 6), draw_color("卡片描边"))
     paste_card = circle_corner(paste_card, 18)
     image.alpha_composite(paste_card, (int(image_x * 0.025) - 3, y - 3))
