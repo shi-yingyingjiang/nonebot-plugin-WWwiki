@@ -589,8 +589,8 @@ async def draw_recommendation(draw_data: dict):
         link_image = await mix_image(link1, link2)
         if i == 0:
             weapons_data.append([
-                {"color": draw_color("群组名称"), "size": 28, "text": cols_text[0]},
-                {"color": draw_color("群组内容"), "size": 22, "text": cols_text[1]},
+                {"color": draw_color("群组名称"), "size": 30, "text": cols_text[0]},
+                {"color": draw_color("群组内容"), "size": 23, "text": cols_text[1]},
                 {},
                 {},
                 {},
