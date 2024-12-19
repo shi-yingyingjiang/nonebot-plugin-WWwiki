@@ -1,6 +1,7 @@
 # coding=utf-8
 import io
 import json
+import re
 import shutil
 import httpx
 from PIL.Image import Image as PIL_Image
@@ -198,6 +199,10 @@ async def draw_text(
             return 0
         return bbox[2]
 
+    def sequence_generator(sequence):
+        for value in sequence:
+            yield value
+
     default_font = ["msyh.ttc", "DejaVuSans.ttf", "msjh.ttc", "msjhl.ttc", "msjhb.ttc", "YuGothR.ttc"]
     if fontfile == "":
         fontfile = "msyh.ttc"
@@ -226,6 +231,9 @@ async def draw_text(
     print_y = 0
     jump_num = 0
     text_num = -1
+    max_text_y = 0
+    max_text_y_list = []
+    texts_len = len(texts)
     for text in texts:
         text_num += 1
         if jump_num > 0:
@@ -233,14 +241,40 @@ async def draw_text(
         else:
             if (textlen * size) < print_x or text == "\n":
                 print_x = 0
-                print_y += 1.3 * size
+                print_y += 1.3 * max_text_y
+                max_text_y_list.append(max_text_y)
+                max_text_y = 0
                 if text == "\n":
                     continue
-            if text in ["\n", " "]:
-                if text == " ":
-                    print_x += get_font_render_w(text) + 2
-            else:
+            if text == " ":
                 print_x += get_font_render_w(text) + 2
+                if size > max_text_y:
+                    max_text_y = size
+                continue
+            if text == "<":
+                while text_num + jump_num < texts_len and texts[text_num + jump_num] != ">":
+                    jump_num += 1
+                jump_num += 0
+
+                text = texts[text_num:text_num + jump_num]
+                pattern = r'src="([^"]+)"'
+                urls = re.findall(pattern, text)
+                if urls:
+                    pattern = r'width="(\d+)"'
+                    image_size_x = re.findall(pattern, text)
+
+                    paste_image = await load_image(urls[0])
+                    if image_size_x:
+                        paste_image = image_resize2(paste_image, (int(image_size_x[0]), None))
+                    print_x += paste_image.size[0] + 2
+                    if paste_image.size[1] > max_text_y:
+                        max_text_y = paste_image.size[1]
+                    continue
+            print_x += get_font_render_w(text) + 2
+            if size > max_text_y:
+                max_text_y = size
+    max_text_y_list.append(max_text_y)
+    text_y_list = sequence_generator(max_text_y_list)
 
     x = int((textlen + 1.5) * size)
     y = int(print_y + 1.2 * size)
@@ -254,6 +288,7 @@ async def draw_text(
         print_y = 0
         jump_num = 0
         text_num = -1
+        draw_max_text_y = next(text_y_list)
         for text in texts:
             text_num += 1
             if jump_num > 0:
@@ -261,18 +296,38 @@ async def draw_text(
             else:
                 if (textlen * size) < print_x or text == "\n":
                     print_x = 0
-                    print_y += 1.3 * size
+                    print_y += draw_max_text_y
+                    draw_max_text_y = next(text_y_list, None)
                     if text == "\n":
                         continue
                 if text in ["\n", " "]:
                     if text == " ":
                         print_x += get_font_render_w(text) + 2
-                else:
-                    draw_image.text(xy=(int(print_x), int(print_y)),
-                                    text=text,
-                                    fill=text_color,
-                                    font=font)
-                    print_x += get_font_render_w(text) + 2
+                    continue
+                if text == "<":
+                    while text_num + jump_num < texts_len and texts[text_num + jump_num] != ">":
+                        jump_num += 1
+                    jump_num += 0
+
+                    text = texts[text_num:text_num + jump_num]
+                    pattern = r'src="([^"]+)"'
+                    urls = re.findall(pattern, text)
+                    if urls:
+                        pattern = r'width="(\d+)"'
+                        image_size_x = re.findall(pattern, text)
+
+                        paste_image = await load_image(urls[0])
+                        if image_size_x:
+                            paste_image = image_resize2(paste_image, (int(image_size_x[0]), None))
+                        image.alpha_composite(paste_image, (int(print_x), int(print_y)))
+                        print_x += paste_image.size[0] + 2
+                        continue
+
+                draw_image.text(xy=(int(print_x), int(print_y)),
+                                text=text,
+                                fill=text_color,
+                                font=font)
+                print_x += get_font_render_w(text) + 2
         # 把输出的图片裁剪为只有内容的部分
         bbox = image.getbbox()
         if bbox is None:
