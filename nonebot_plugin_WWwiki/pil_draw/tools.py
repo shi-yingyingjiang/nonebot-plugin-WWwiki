@@ -689,3 +689,14 @@ async def mix_image(image_1, image_2, mix_type=1):
             return images
     raise "未知的合并图像方式"
 
+
+def get_html_text_url(datas):
+    return_data = ""
+    for data in datas:
+        if data.name is None:
+            return_data += str(data)
+        elif data.name == "img":
+            return_data += str(data)
+        else:
+            return_data += get_html_text_url(data.children)
+    return return_data
