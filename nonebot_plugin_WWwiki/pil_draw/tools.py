@@ -1,6 +1,7 @@
 # coding=utf-8
 import io
 import json
+import re
 import shutil
 import httpx
 from PIL.Image import Image as PIL_Image
@@ -12,6 +13,7 @@ import time
 from .config import basepath, draw_color
 import matplotlib.font_manager as fm
 from html.parser import HTMLParser
+from ..util import font_path as plugin_font_path
 
 
 wwwiki_draw_cache = {
@@ -21,6 +23,9 @@ system_font_list = fm.findSystemFonts(fontpaths=None, fontext='ttf')
 for font_path in system_font_list:
     font_path = font_path.replace("\\", "/")
     wwwiki_draw_cache["font_path"][font_path.split("/")[-1]] = font_path
+fonts = os.listdir(plugin_font_path)
+for font in fonts:
+    wwwiki_draw_cache["font_path"][font] = f"{plugin_font_path}/{font}".replace("\\", "/")
 
 
 def save_image(
@@ -28,7 +33,8 @@ def save_image(
         image_path: str = None,
         image_name: int | str = None,
         relative_path=False,
-        to_bytes: bool = False):
+        to_bytes: bool = False,
+        mode: str = "jpg"):
     """
     保存图片文件到缓存文件夹
     :param image:要保存的图片
@@ -36,9 +42,11 @@ def save_image(
     :param image_name:图片名称，不填为随机数字
     :param relative_path: 是否返回相对路径
     :param to_bytes: 是否转为bytes
+    :param mode: 保存的图片格式
     :return:保存的路径
     """
-    image = image.convert("RGB")
+    if mode == "jpg":
+        image = image.convert("RGB")
     if to_bytes is True and type(image) is PIL_Image:
         # 将Pillow图像数据保存到内存中
         image_stream = io.BytesIO()
@@ -60,9 +68,9 @@ def save_image(
         while True:
             num -= 1
             random_num = str(random.randint(1000, 9999))
-            if os.path.exists(f"{real_path}{image_name}_{random_num}.jpg"):
+            if os.path.exists(f"{real_path}{image_name}_{random_num}.{mode}"):
                 continue
-            image_name = f"{image_name}_{random_num}.jpg"
+            image_name = f"{image_name}_{random_num}.{mode}"
             break
 
     logger.debug(f"保存图片文件：{real_path}{image_name}")
@@ -116,7 +124,14 @@ def image_resize2(image, size: [int, int], overturn=False):
     :param overturn: 是否放大到全屏
     :return: 缩放后的图像
     """
+    x, y = image.size
+    if size[0] is None:
+        size = (int(size[1] * x / y), size[1])
+    if size[1] is None:
+        size = (size[0], int(size[0] * y / x))
+
     image_background = Image.new("RGBA", size=size, color=(0, 0, 0, 0))
+    image = image.convert("RGBA")
     w, h = image_background.size
     x, y = image.size
     if overturn:
@@ -190,6 +205,10 @@ async def draw_text(
             return 0
         return bbox[2]
 
+    def sequence_generator(sequence):
+        for value in sequence:
+            yield value
+
     default_font = ["msyh.ttc", "DejaVuSans.ttf", "msjh.ttc", "msjhl.ttc", "msjhb.ttc", "YuGothR.ttc"]
     if fontfile == "":
         fontfile = "msyh.ttc"
@@ -218,6 +237,9 @@ async def draw_text(
     print_y = 0
     jump_num = 0
     text_num = -1
+    max_text_y = 0
+    max_text_y_list = []
+    texts_len = len(texts)
     for text in texts:
         text_num += 1
         if jump_num > 0:
@@ -225,14 +247,40 @@ async def draw_text(
         else:
             if (textlen * size) < print_x or text == "\n":
                 print_x = 0
-                print_y += 1.3 * size
+                print_y += 1.3 * max_text_y
+                max_text_y_list.append(max_text_y)
+                max_text_y = 0
                 if text == "\n":
                     continue
-            if text in ["\n", " "]:
-                if text == " ":
-                    print_x += get_font_render_w(text) + 2
-            else:
+            if text == " ":
                 print_x += get_font_render_w(text) + 2
+                if size > max_text_y:
+                    max_text_y = size
+                continue
+            if text == "<":
+                while text_num + jump_num < texts_len and texts[text_num + jump_num] != ">":
+                    jump_num += 1
+                jump_num += 0
+
+                text = texts[text_num:text_num + jump_num]
+                pattern = r'src="([^"]+)"'
+                urls = re.findall(pattern, text)
+                if urls:
+                    pattern = r'width="(\d+)"'
+                    image_size_x = re.findall(pattern, text)
+
+                    paste_image = await load_image(urls[0])
+                    if image_size_x:
+                        paste_image = image_resize2(paste_image, (int(image_size_x[0]), None))
+                    print_x += paste_image.size[0] + 2
+                    if paste_image.size[1] > max_text_y:
+                        max_text_y = paste_image.size[1]
+                    continue
+            print_x += get_font_render_w(text) + 2
+            if size > max_text_y:
+                max_text_y = size
+    max_text_y_list.append(max_text_y)
+    text_y_list = sequence_generator(max_text_y_list)
 
     x = int((textlen + 1.5) * size)
     y = int(print_y + 1.2 * size)
@@ -246,6 +294,7 @@ async def draw_text(
         print_y = 0
         jump_num = 0
         text_num = -1
+        draw_max_text_y = next(text_y_list)
         for text in texts:
             text_num += 1
             if jump_num > 0:
@@ -253,18 +302,38 @@ async def draw_text(
             else:
                 if (textlen * size) < print_x or text == "\n":
                     print_x = 0
-                    print_y += 1.3 * size
+                    print_y += draw_max_text_y
+                    draw_max_text_y = next(text_y_list, None)
                     if text == "\n":
                         continue
                 if text in ["\n", " "]:
                     if text == " ":
                         print_x += get_font_render_w(text) + 2
-                else:
-                    draw_image.text(xy=(int(print_x), int(print_y)),
-                                    text=text,
-                                    fill=text_color,
-                                    font=font)
-                    print_x += get_font_render_w(text) + 2
+                    continue
+                if text == "<":
+                    while text_num + jump_num < texts_len and texts[text_num + jump_num] != ">":
+                        jump_num += 1
+                    jump_num += 0
+
+                    text = texts[text_num:text_num + jump_num]
+                    pattern = r'src="([^"]+)"'
+                    urls = re.findall(pattern, text)
+                    if urls:
+                        pattern = r'width="(\d+)"'
+                        image_size_x = re.findall(pattern, text)
+
+                        paste_image = await load_image(urls[0])
+                        if image_size_x:
+                            paste_image = image_resize2(paste_image, (int(image_size_x[0]), None))
+                        image.alpha_composite(paste_image, (int(print_x), int(print_y)))
+                        print_x += paste_image.size[0] + 2
+                        continue
+
+                draw_image.text(xy=(int(print_x), int(print_y)),
+                                text=text,
+                                fill=text_color,
+                                font=font)
+                print_x += get_font_render_w(text) + 2
         # 把输出的图片裁剪为只有内容的部分
         bbox = image.getbbox()
         if bbox is None:
@@ -284,6 +353,8 @@ async def load_image(path: str, size=None, mode=None, cache_image=True):
     :param mode: 图片读取模式
     :return:image
     """
+    if type(path) is Image.Image:
+        return path
     if mode is None:
         mode = "r"
     try:
@@ -417,7 +488,8 @@ async def draw_form(
         size_x: int,
         uniform_size: bool = True,
         calculate: bool = True,
-        out_of_form: bool = True
+        out_of_form: bool = True,
+        font_file_path: str = None
 ) -> Image.Image:
     """
     绘制表格
@@ -426,6 +498,7 @@ async def draw_form(
     :param uniform_size: 统一尺寸（使用每行最大的尺寸）
     :param calculate: 是否仅计算不绘制
     :param out_of_form: 在右边为空时，文字允许超出格子范围
+    :param font_file_path: 字体文件
     :return:保存的路径
     """
     """
@@ -460,7 +533,7 @@ async def draw_form(
                     form_y.get("text"),
                     size=form_y["size"],
                     textlen=textlen,
-                    fontfile="优设好身体.ttf",
+                    fontfile=font_file_path if form_y.get("font") is None else form_y.get("font"),
                     text_color=form_y.get("color"),
                     calculate=True
                 )
@@ -516,7 +589,7 @@ async def draw_form(
                     form_y.get("text"),
                     size=form_y["size"],
                     textlen=textlen,
-                    fontfile="优设好身体.ttf",
+                    fontfile=font_file_path if form_y.get("font") is None else form_y.get("font"),
                     text_color=form_y.get("color"),
                     calculate=False
                 )
@@ -579,3 +652,53 @@ def parser_html(html):
     parser.feed(html)
     return parser
 
+
+async def mix_image(image_1, image_2, mix_type=1):
+    """
+    将两张图合并为1张
+    :param image_1: 要合并的图像1
+    :param image_2: 要合并的图像2
+    :param mix_type: 合成方式。1：竖向
+    :return:
+    """
+    if type(image_1) is str:
+        image_1 = await load_image(image_1)
+    if type(image_2) is str:
+        image_2 = await load_image(image_2)
+    if mix_type == 1:
+        x1, y1 = image_1.size
+        x2, y2 = image_2.size
+        if image_1.mode == "RGB":
+            image_1 = image_1.convert("RGBA")
+        if image_2.mode == "RGB":
+            image_2 = image_2.convert("RGBA")
+
+        if x1 > x2:
+            x2_m = x1
+            y2_m = int(x2_m / x2 * y2)
+            images = Image.new("RGBA", (x2_m, y2_m + y1), (0, 0, 0, 0))
+            image_2_m = image_2.resize((x2_m, y2_m))
+            images.alpha_composite(image_1, (0, 0))
+            images.alpha_composite(image_2_m, (0, y1))
+            return images
+        else:  # x1 < x2
+            x1_m = x2
+            y1_m = int(x1_m / x1 * y1)
+            images = Image.new("RGBA", (x1_m, y1_m + y2), (0, 0, 0, 0))
+            image_1_m = image_1.resize((x1_m, y1_m))
+            images.alpha_composite(image_1_m, (0, 0))
+            images.alpha_composite(image_2, (0, y1_m))
+            return images
+    raise "未知的合并图像方式"
+
+
+def get_html_text_url(datas):
+    return_data = ""
+    for data in datas:
+        if data.name is None:
+            return_data += str(data)
+        elif data.name == "img":
+            return_data += str(data)
+        else:
+            return_data += get_html_text_url(data.children)
+    return return_data
