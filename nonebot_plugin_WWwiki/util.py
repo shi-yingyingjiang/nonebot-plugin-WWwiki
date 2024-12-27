@@ -1,3 +1,4 @@
+# coding=utf-8
 from pathlib import Path
 from jinja2 import Template
 from nonebot import require

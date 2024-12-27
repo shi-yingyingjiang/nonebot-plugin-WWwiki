@@ -1,3 +1,4 @@
+# coding=utf-8
 from nonebot.plugin import PluginMetadata, inherit_supported_adapters
 from .echo import echos
 from .echocard import echo_cards
