@@ -1,31 +1,55 @@
 <style>
 /*--预设--*/ 
-body { padding:0px;margin: 0px; } 
+body { padding:0px;margin: 0px; }
+@font-face {
+  font-family: 'SanJiHuaChaoTi-Zhong-2';
+  src: url('../fonts/SanJiHuaChaoTi-Zhong-2.ttf') format('truetype');
+}  
 #lyrow, #lyrow input, #lyrow textarea { font-size:12px;font-family: 'Microsoft YaHei', '微软雅黑', MicrosoftJhengHei, '华文细黑', STHeiti, MingLiu; } 
 #lyrow { height:100vh;width: 100vw; } 
 #lyrow div { min-height: 18px;  } 
 #lyrow input, #lyrow textarea { border:rgb(235, 235, 235) 1px solid;border-radius: 3px;padding: 5px 8px;outline: 0; } 
 #lyrow input:hover, #lyrow textarea:hover { border: 1px solid #6bc1f2; } 
 /*--编辑--*/ 
-#lyrow .o { width:400px !important;padding:50px 50px 50px 73px;background:linear-gradient(0deg,rgba(255, 255, 255, 1) 1%, rgba(173, 187, 120, 1) 100%); } 
-#lyrow .oo { width:242px !important;margin:0 0 20px 0; } 
-#lyrow .ot { width: 375px !important;border: rgba(220, 220, 220, 1) solid 2px;align-items: center;margin: 0 0 20px 0;border-radius: 5px 5px 5px 5px;padding: 0 2px 0 2px;justify-content: flex-start;display: flex !important; } 
-#lyrow .title {  } 
-#lyrow .t { width:375px !important; } 
-#lyrow .img { width:68px !important;height:68px !important;padding: 0 0 0 10px; } 
-#lyrow .aimg { width:68px !important;height:68px !important; } 
-#lyrow .atitle { width:300px !important;padding: 0 0 0 10px; } 
-#lyrow .at { font-size:16px;color:rgba(163, 131, 92, 1); } 
-#lyrow .time { font-size:12px;width: 300px !important; } 
-#lyrow .tp { font-size:12px; } 
+#lyrow .boss { width:1500px !important;background: linear-gradient(to right, #0f2027, #203a43, #0f2027);} 
+#lyrow .activities { width:80%; margin:0 0 0 10%;flex-wrap:wrap;justify-content:space-between;display:flex !important; } 
+#lyrow .block { justify-content:flex-start;display:flex !important;width:35%;border: rgba(255, 255, 255, 1) solid 1px;margin:20px 0 20px 0;border-radius: 25px 25px 25px 25px;align-items: center;padding: 10px 10px 10px 10px;backdrop-filter: blur(100px);background: rgb(22, 24, 35);box-shadow: 3px 3px 10px rgba(255, 255, 255, 0.2); } 
+#lyrow .img {margin:0 15px 0 0;}
+#lyrow .role { margin-top: 16px;display:flex ;height: 50%; } 
+#lyrow .fourstar { display: flex;justify-content: space-between;flex-direction: column;width: 100%; } 
+#lyrow .fourimg { width: 52px;height: 52px;object-fit: cover; } 
+#lyrow .fiveimg { width: 130px;height: 175px;object-fit: cover; } 
+#lyrow .fivestar { margin:0 6% 0 0;width: 100%;height: 50%;position: relative; } 
+#lyrow .fourrange { margin:53% 0 0 0; } 
+#lyrow .rolepool { border:  rgba(255, 255, 255, 1) solid 1px;margin:20px 0 20px 0;border-radius: 15px 15px 15px 15px;align-items: center;padding: 10px 10px 10px 10px;backdrop-filter: blur(50px);background: rgb(22, 24, 35);box-shadow: 3px 3px 10px rgba(255, 255, 255, 0.2);width: 45%;display: flex;justify-content: center; } 
+#lyrow .weapon { flex-wrap: wrap;gap: 5px;margin-top: 16px;display:flex ;align-items: center;height: 52px;margin-top: 10px;flex-direction: column;} 
+#lyrow .wimg { width: 52px;;height: 52px;object-fit: cover; } 
+#lyrow .progress { flex-direction: column;display: flex !important;margin-left: 20px;width: 50%; } 
+#lyrow .title { font-size: 30px;text-align: center;color: rgb(255, 255, 255);font-family: SanJiHuaChaoTi-Zhong-2; } 
+#lyrow .timeinterval { font-size: 20px;text-align: center;color: rgb(255, 255, 255);font-family: SanJiHuaChaoTi-Zhong-2; } 
+#lyrow .remainingtime { font-size: 30px;text-align: center;color: rgb(255, 255, 255);font-family: SanJiHuaChaoTi-Zhong-2; } 
+#lyrow .pool { gap: 4px;flex-wrap:wrap;display: flex;width: 50%; }
+#lyrow .imgborder { border-radius: 15px;}
+#lyrow .cardpool { width: 80%;margin:0 0 0 10%;flex-wrap:wrap;justify-content:space-between;display:flex !important;}
+#lyrow 
+        .rounded-full { border-radius: 9999px;}
+        .w-full { width: 80%; }
+        .h-full { height: 10px; }
+        .bg-blue-600 { background-color: #3b82f6; }
+        .bg-Yellow-300 { background-color: #FFFF00; }
+        .bg-Green-300 { background-color: #90EE90; }
+        .bg-gray-200 { background-color: #DCDCDC; }
+        
+         
 
 </style>
 <!--下载font-awesome.css图标包-->
 <!--https://www.58html.com/html/template/font-awesome.zip-->
 <link rel="stylesheet" href="https://www.58html.com/gui/css/font-awesome/css/font-awesome.css">
+<body>
 <div id="lyrow">
-<div class="o">
-<div class="oo">
-    <h1 class="title">版本活动</h1></div>
-<div class="t">{{div}}</div></div>
+<div class="boss">
+<div class="cardpool">{{pool_content}}</div>
+<div class="activities"> {{activity_content}}</div></div>
 </div>
+</body>
