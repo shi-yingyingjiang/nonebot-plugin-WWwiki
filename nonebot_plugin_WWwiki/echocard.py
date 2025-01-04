@@ -1,5 +1,5 @@
+# coding=utf-8
 import json
-
 import httpx
 from jinja2 import Template
 from nonebot.params import CommandArg

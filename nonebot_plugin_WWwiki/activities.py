@@ -1,3 +1,4 @@
+# coding=utf-8
 import asyncio
 from typing import Dict, List
 import httpx

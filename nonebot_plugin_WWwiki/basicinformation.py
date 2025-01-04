@@ -1,3 +1,6 @@
+# coding=utf-8
+
+
 def get_basic_information(data):
     role_name = data.get('data').get('content').get('modules')[0].get('components')[0].get('role').get('title')
     role_img = data.get('data').get('content').get('modules')[0].get('components')[0].get('role').get('figures')[0].get('url')
