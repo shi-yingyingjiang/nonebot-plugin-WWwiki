@@ -1,3 +1,4 @@
+# coding=utf-8
 from pathlib import Path
 
 from nonebot import on_command
