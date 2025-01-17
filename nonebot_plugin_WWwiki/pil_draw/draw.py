@@ -332,17 +332,18 @@ async def draw_rolecard(draw_data: dict):
             text_color=draw_color("群组内容"),
             calculate=False
         )
-        paste_card.alpha_composite(paste_image, ((i * form_size) + 114, 15))
+        paste_card.alpha_composite(paste_image, ((i * form_size) + 94, 15))
 
+        textlen = 15 if len(fighting_styles) == 2 else 9
         paste_image = await draw_text(
             fighting_style[2],
             size=20,
-            textlen=15,
+            textlen=textlen,
             fontfile=font_file_path,
             text_color=draw_color("群组名称"),
             calculate=False
         )
-        paste_card.alpha_composite(paste_image, ((i * form_size) + 114, 52))
+        paste_card.alpha_composite(paste_image, ((i * form_size) + 94, 52))
 
     image.alpha_composite(paste_card, (int(image_x * 0.025), y))
     y += paste_card.size[1]
