@@ -23,7 +23,7 @@ __plugin_meta__ = PluginMetadata(
     usage='鸣潮wiki帮助',
     type="application",
     homepage="https://github.com/shi-yingyingjiang/nonebot-plugin-WWwiki",
-    supported_adapters=inherit_supported_adapters("nonebot_plugin_alconna", "nonebot_plugin_htmlrender", "nonebot_plugin_apscheduler"),
+    supported_adapters=inherit_supported_adapters("nonebot_plugin_alconna", "nonebot_plugin_htmlrender", "nonebot_plugin_apscheduler", "nonebot-plugin-uninfo"),
     extra={
         'menu_data': [
             {
