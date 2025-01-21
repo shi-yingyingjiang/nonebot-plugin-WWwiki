@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "nonebot-plugin-WWwiki"
-version = "0.2.3"
+version = "0.2.4"
 description = "发送kurobbs的数据"
 authors = ["shiyingyingjiang <2798134864@qq.com>"]
 license = "MIT"
@@ -20,6 +20,7 @@ pydantic = ">=1.10.11"
 Pillow = ">=9.4.0"
 beautifulsoup4 = ">=4.12.3"
 nonebot-plugin-alconna = ">=0.52.2"
+nonebot-plugin-uninfo = ">=0.6.5"
 nonebot-plugin-htmlrender = ">=0.3.2"
 lxml = ">=5.2.2"
 nonebot-plugin-apscheduler = ">=0.5.0"
@@ -48,7 +49,7 @@ build-backend = "pdm.backend"
 
 [project]
 name = "nonebot-plugin-WWwiki"
-version = "0.2.3"
+version = "0.2.4"
 description = "发送kurobbs的数据"
 authors = [
     {name = "rf_tar_railt", email = "3165388245@qq.com"},
@@ -62,6 +63,7 @@ dependencies = [
     "beautifulsoup4>=4.12.3",
     "nonebot2[httpx]>=2.3.0",
     "nonebot-plugin-alconna>=0.52.2",
+    "nonebot-plugin-uninfo>=0.6.5"
     "nonebot-plugin-htmlrender>=0.3.2",
     "nonebot-plugin-apscheduler>=0.5.0",
     "lxml>=5.2.2",
