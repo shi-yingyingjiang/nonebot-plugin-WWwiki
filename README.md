@@ -92,6 +92,6 @@ PS：本人不精通html等的内容的设计，所以成品图效果比较丑�
 ## 注意！ 本项目未在gitcode发布，请注意分别！
 
 ## ❤ 鸣谢
-感谢[RF](https://github.com/RF-Tar-Railt)提供使用[htmlrender]（https://github.com/kexue-z/nonebot-plugin-htmlrender）插件出图代码部分
+感谢[RF](https://github.com/RF-Tar-Railt)提供使用nonebot-plugin-htmlrender插件出图代码部分
 
 感谢[SuperGuGuGu](https://github.com/SuperGuGuGu)提供使用PIL出图代码
