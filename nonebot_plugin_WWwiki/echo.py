@@ -52,7 +52,7 @@ async def _(args: Message = CommandArg()):
             name = data['data']['name']
             src = img['src']
             info = data['data']['content']['modules'][0]['components'][1]['content']
-            skll = data['data']['content']['modules'][0]['components'][2]['tabs'][0]['content']
+            skll = data['data']['content']['modules'][1]['components'][0]['tabs'][0]['content']
 
             Data = {
                 'name': name,
