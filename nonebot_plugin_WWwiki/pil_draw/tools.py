@@ -668,9 +668,9 @@ async def mix_image(image_1, image_2, mix_type=1):
     if mix_type == 1:
         x1, y1 = image_1.size
         x2, y2 = image_2.size
-        if image_1.mode == "RGB":
+        if image_1.mode != "RGBA":
             image_1 = image_1.convert("RGBA")
-        if image_2.mode == "RGB":
+        if image_2.mode != "RGBA":
             image_2 = image_2.convert("RGBA")
 
         if x1 > x2:
