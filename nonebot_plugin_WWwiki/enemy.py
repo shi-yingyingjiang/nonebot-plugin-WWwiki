@@ -7,7 +7,8 @@ from nonebot import on_command
 from bs4 import BeautifulSoup
 from .itemlink import get_link,classify
 from .pil_draw.draw import draw_main
-from .util import UniMessage, get_template
+from .util import UniMessage, get_template, template_to_pic
+from .config import plugin_config
 
 enemy_cards = on_command('鸣潮敌人查询')
 
@@ -57,13 +58,20 @@ async def _(args: Message = CommandArg()):
                 'table2': table2
             }
 
-            enemy_card = await draw_main(
-                Data,
-                html_spath.name,
-                html_spath.parent.as_posix(),
-            )
+            if plugin_config.makeimg_mode == 'htmltopic':
+                img = await template_to_pic(
+                    html_spath.parent.as_posix(),
+                    html_spath.name,
+                    Data,
+                )
+            elif plugin_config.makeimg_mode == 'piltopic':
+                img = await draw_main(
+                    Data,
+                    html_spath.name,
+                    html_spath.parent.as_posix(),
+                )
 
-    await UniMessage.image(raw=enemy_card).finish()
+    await UniMessage.image(raw=img).finish()
 
 
 
@@ -98,10 +106,17 @@ async def _(args: Message = CommandArg()):
             'content': html_content
         }
 
-        classify_card = await draw_main(
-            Data,
-            classify_spath.name,
-            classify_spath.parent.as_posix(),
-        )
+        if plugin_config.makeimg_mode == 'htmltopic':
+            img = await template_to_pic(
+                html_spath.parent.as_posix(),
+                html_spath.name,
+                Data,
+            )
+        elif plugin_config.makeimg_mode == 'piltopic':
+            img = await draw_main(
+                Data,
+                html_spath.name,
+                html_spath.parent.as_posix(),
+            )
 
-    await UniMessage.image(raw=classify_card).finish()
+    await UniMessage.image(raw=img).finish()

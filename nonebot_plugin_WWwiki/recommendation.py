@@ -11,7 +11,7 @@ from .basicinformation import get_basic_information
 from .judgmentrolename import judgment_role_name
 from .itemlink import get_link
 from .pil_draw.draw import draw_main
-from .util import UniMessage, get_template
+from .util import UniMessage, get_template,template_to_pic
 
 html_spath = get_template("recommendation")
 
@@ -28,6 +28,11 @@ headers = {
     'Wiki_type': '9'
 
 }
+# relist = {
+#     'catalogueId': '1323',
+#     'page': '1',
+#     'limit': '1000'
+# }
 listdata = {
     'catalogueId': '1105',
     'page': '1',
@@ -42,26 +47,27 @@ async def recommendationcards(args: Message = CommandArg()):
     if role_id is None:
         await recommendation_cards.finish(f'没有找到角色,错误参数：' + role_name)
     else:
+        roledata = {
+            'id': role_id
+        }
+
         async with httpx.AsyncClient() as client:
-            roledata = {
-                'id': role_id
-            }
+            # relink ="https://api.kurobbs.com/wiki/core/catalogue/item/getPage"
             roledataurl = 'https://api.kurobbs.com/wiki/core/catalogue/item/getEntryDetail'
+            # redata_r = await client.post(relink, data=roleid, headers=headers)
+            # redata = json.loads(redata_r.text)
+            # rerecords = redata['data']['results']['records']
             roledata_r = await client.post(roledataurl, data=roledata, headers=headers)
             data = json.loads(roledata_r.text)
 
             info_data = get_basic_information(data)
-            weapons_recommended_data = \
-            data.get('data').get('content').get('modules')[2].get('components')[0].get('tabs')[0].get('content')
+            weapons_recommended_data = data.get('data').get('content').get('modules')[2].get('components')[1].get('tabs')[0].get('content')
             weapons_recommended = get_recommendation(weapons_recommended_data)
-            echo_recommended_data = data.get('data').get('content').get('modules')[2].get('components')[0].get('tabs')[
-                1].get('content')
+            echo_recommended_data = data.get('data').get('content').get('modules')[2].get('components')[1].get('tabs')[1].get('content')
             echo_recommended = get_recommendation(echo_recommended_data)
-            team_recommended_data = data.get('data').get('content').get('modules')[2].get('components')[0].get('tabs')[
-                2].get('content')
+            team_recommended_data = data.get('data').get('content').get('modules')[2].get('components')[1].get('tabs')[2].get('content')
             team_recommended = get_recommendation(team_recommended_data)
-            skll_recommended_data = data.get('data').get('content').get('modules')[2].get('components')[0].get('tabs')[
-                3].get('content')
+            skll_recommended_data = data.get('data').get('content').get('modules')[2].get('components')[1].get('tabs')[3].get('content')
             skll_recommended = get_recommendation(skll_recommended_data)
 
             Data = {
@@ -77,10 +83,10 @@ async def recommendationcards(args: Message = CommandArg()):
                 'skll_recommended': skll_recommended
             }
 
-            img = await draw_main(
-                Data,
-                html_spath.name,
+            img = await template_to_pic(
                 html_spath.parent.as_posix(),
+                html_spath.name,
+                Data,
             )
 
         await UniMessage.image(raw=img).finish()

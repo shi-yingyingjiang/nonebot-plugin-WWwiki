@@ -9,7 +9,8 @@ from bs4 import BeautifulSoup
 
 from .itemlink import get_link
 from .pil_draw.draw import draw_main
-from .util import UniMessage, get_template
+from .util import UniMessage, get_template, template_to_pic
+from .config import plugin_config
 
 echos = on_command('鸣潮声骸查询', aliases={'声骸查询'})
 
@@ -61,10 +62,17 @@ async def _(args: Message = CommandArg()):
                 'skll': skll
             }
 
-            echo_card = await draw_main(
-                Data,
-                html_spath.name,
-                html_spath.parent.as_posix(),
-            )
+            if plugin_config.makeimg_mode == 'htmltopic':
+                img = await template_to_pic(
+                    html_spath.parent.as_posix(),
+                    html_spath.name,
+                    Data,
+                )
+            elif plugin_config.makeimg_mode == 'piltopic':
+                img = await draw_main(
+                    Data,
+                    html_spath.name,
+                    html_spath.parent.as_posix(),
+                )
 
-        await UniMessage.image(raw=echo_card).finish()
+        await UniMessage.image(raw=img).finish()

@@ -7,17 +7,20 @@ from nonebot.params import CommandArg
 from nonebot import on_command
 
 from .getmaterial import (
-    getelementarymaterials,
-    getintermediatematerials,
-    getseniormaterials,
-    getultimatematerials,
-    getskillmaterials
+    # getelementarymaterials,
+    # getintermediatematerials,
+    # getseniormaterials,
+    # getultimatematerials,
+    # getskillmaterials,
+    role_breakthrough,
+    skill_breakthrough
 )
 from .basicinformation import get_basic_information
 from .judgmentrolename import judgment_role_name
 from .itemlink import get_link
 from .pil_draw.draw import draw_main
-from .util import UniMessage, get_template
+from .util import UniMessage, get_template, template_to_pic
+from .config import plugin_config
 
 
 material_cards = on_command("鸣潮突破材料")
@@ -56,56 +59,67 @@ async def _(args: Message = CommandArg()):
             roledata_r = await client.post(roledataurl, data=roledata, headers=headers)
             data = json.loads(roledata_r.text)
 
-            elementary_material = data.get('data').get('content').get('modules')[1].get('components')[2].get('tabs')[
-                0].get('content')
-            intermediate_material = data.get('data').get('content').get('modules')[1].get('components')[2].get('tabs')[
-                1].get('content')
-            senior_material = data.get('data').get('content').get('modules')[1].get('components')[2].get('tabs')[3].get(
-                'content')
-            ultimate_material = data.get('data').get('content').get('modules')[1].get('components')[2].get('tabs')[
-                5].get('content')
-            skll_material = data.get('data').get('content').get('modules')[1].get('components')[3].get('tabs')[0].get(
-                'content')
+            # elementary_material = data.get('data').get('content').get('modules')[1].get('components')[2].get('tabs')[
+            #     0].get('content')
+            role_breakthrough_data = data['data']['content']['modules'][1]['components'][2]['tabs'][5]['content']
+            skill_breakthrough_data = data['data']['content']['modules'][1]['components'][3]['tabs'][0]['content']
+            # intermediate_material = data.get('data').get('content').get('modules')[1].get('components')[2].get('tabs')[
+            #     1].get('content')
+            # senior_material = data.get('data').get('content').get('modules')[1].get('components')[2].get('tabs')[3].get(
+            #     'content')
+            # ultimate_material = data.get('data').get('content').get('modules')[1].get('components')[2].get('tabs')[
+            #     5].get('content')
+            # skll_material = data.get('data').get('content').get('modules')[1].get('components')[3].get('tabs')[0].get(
+            #     'content')
             besicinfo = get_basic_information(data)
-            elementary_material = getelementarymaterials(elementary_material)
-            intermediate_material = getintermediatematerials(intermediate_material)
-            senior_material = getseniormaterials(senior_material)
-            ultimate_material = getultimatematerials(ultimate_material)
-            skll_material = getskillmaterials(skll_material)
+            # elementary_material = getelementarymaterials(elementary_material)
+            # intermediate_material = getintermediatematerials(intermediate_material)
+            # senior_material = getseniormaterials(senior_material)
+            # ultimate_material = getultimatematerials(ultimate_material)
+            # skll_material = getskillmaterials(skll_material)
+            rolebreakthrough = role_breakthrough(role_breakthrough_data)
+            skillbreakthrough = skill_breakthrough(skill_breakthrough_data)
 
             Data = {
                 "rolename": besicinfo.get('role_name'),
                 'roleimg': besicinfo.get('role_img'),
                 'roledescriptiontitle': besicinfo.get('role_description_title'),
                 'roledescription': besicinfo.get('role_description'),
-                'elementarytitle': elementary_material.get('title'),
-                'elementaryimg': elementary_material.get('img'),
-                'intermediatetitle': intermediate_material.get('title'),
-                'intermediateimg': intermediate_material.get('img'),
-                'seniortitle': senior_material.get('title'),
-                'seniorimg': senior_material.get('img'),
-                'ultimatetitle': ultimate_material.get('title'),
-                'ultimateimg': ultimate_material.get('img'),
-                'footagetitle': ultimate_material.get('footagetitle'),
-                'footageimg': ultimate_material.get('footageimg'),
-                'universaltitle': ultimate_material.get('universaltitle'),
-                'universalimg': ultimate_material.get('universalimg'),
-                'elementarymaterialtitle': skll_material.get('elementarytitle'),
-                'elementarymaterialimg': skll_material.get('elementaryimg'),
-                'intermediatematerialtitle': skll_material.get('intermediatetitle'),
-                'intermediatematerialimg': skll_material.get('intermediateimg'),
-                'seniormaterialtitle': skll_material.get('seniortitle'),
-                'seniormaterialimg': skll_material.get('seniorimg'),
-                'ultimatematerialtitle': skll_material.get('ultimatetitle'),
-                'ultimatematerialimg': skll_material.get('ultimateimg'),
-                'extratitle': skll_material.get('extratitle'),
-                'extraimg': skll_material.get('extraimg'),
+                'elementarytitle': skillbreakthrough[0][1],
+                'elementaryimg': skillbreakthrough[0][0],
+                'intermediatetitle': skillbreakthrough[2][1],
+                'intermediateimg': skillbreakthrough[2][0],
+                'seniortitle': skillbreakthrough[4][1],
+                'seniorimg': skillbreakthrough[4][0],
+                'ultimatetitle': skillbreakthrough[6][1],
+                'ultimateimg': skillbreakthrough[6][0],
+                'footagetitle': rolebreakthrough[0][1],
+                'footageimg': rolebreakthrough[0][0],
+                'universaltitle': rolebreakthrough[1][1],
+                'universalimg': rolebreakthrough[1][0],
+                'elementarymaterialtitle': skillbreakthrough[1][1],
+                'elementarymaterialimg': skillbreakthrough[1][0],
+                'intermediatematerialtitle': skillbreakthrough[3][1],
+                'intermediatematerialimg': skillbreakthrough[3][0],
+                'seniormaterialtitle': skillbreakthrough[5][1],
+                'seniormaterialimg': skillbreakthrough[5][0],
+                'ultimatematerialtitle': skillbreakthrough[7][1],
+                'ultimatematerialimg': skillbreakthrough[7][0],
+                'extratitle': skillbreakthrough[8][1],
+                'extraimg': skillbreakthrough[8][0],
             }
 
-            material_card = await draw_main(
-                Data,
-                html_spath.name,
-                html_spath.parent.as_posix(),
-            )
+            if plugin_config.makeimg_mode == 'htmltopic':
+                img = await template_to_pic(
+                    html_spath.parent.as_posix(),
+                    html_spath.name,
+                    Data,
+                )
+            elif plugin_config.makeimg_mode == 'piltopic':
+                img = await draw_main(
+                    Data,
+                    html_spath.name,
+                    html_spath.parent.as_posix(),
+                )
 
-        await UniMessage.image(raw=material_card).finish()
+        await UniMessage.image(raw=img).finish()

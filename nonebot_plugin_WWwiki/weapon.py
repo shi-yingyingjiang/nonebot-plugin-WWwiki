@@ -9,7 +9,8 @@ from bs4 import BeautifulSoup
 
 from .itemlink import get_link
 from .pil_draw.draw import draw_main
-from .util import UniMessage, get_template
+from .util import UniMessage, get_template, template_to_pic
+from .config import plugin_config
 
 
 weapon_cards = on_command('鸣潮武器查询')
@@ -73,10 +74,17 @@ async def get_weapon_data(args: Message = CommandArg()):
                 'description': description,
             }
 
-            weapon_card = await draw_main(
-                Data,
-                html_spath.name,
-                html_spath.parent.as_posix(),
-            )
+            if plugin_config.makeimg_mode == 'htmltopic':
+                img = await template_to_pic(
+                    html_spath.parent.as_posix(),
+                    html_spath.name,
+                    Data,
+                )
+            elif plugin_config.makeimg_mode == 'piltopic':
+                img = await draw_main(
+                    Data,
+                    html_spath.name,
+                    html_spath.parent.as_posix(),
+                )
 
-        await UniMessage.image(raw=weapon_card).finish()
+        await UniMessage.image(raw=img).finish()

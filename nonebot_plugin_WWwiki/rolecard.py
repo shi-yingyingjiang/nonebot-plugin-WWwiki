@@ -3,18 +3,17 @@ import json
 import httpx
 from io import StringIO
 from pandas import read_html
-
 from nonebot import on_command
 from nonebot.adapters import Message
 from nonebot.params import CommandArg
 from nonebot.compat import type_validate_json
-
+from .config import plugin_config
 from .itemlink import get_link
 from .basicinformation import get_basic_information
 from .judgmentrolename import judgment_role_name
 from .model import Model
 from .pil_draw.draw import draw_main
-from .util import UniMessage, get_template
+from .util import UniMessage, get_template, template_to_pic
 
 
 headers = {
@@ -60,6 +59,7 @@ async def role_data(args: Message = CommandArg()):
             data_dict = df.set_index(df.columns[0])[df.columns[1]].to_dict()
             my_dict = data_dict
 
+
             # 获取战斗风格数据
             fighting_style_content = data.get('data').get('content').get('modules')[0].get('components')[3].get('content')
 
@@ -85,9 +85,13 @@ async def role_data(args: Message = CommandArg()):
                 'campIcon': besicinfo.get('campIcon'),
                 'title': besicinfo.get('role_name'),
                 'attribute': besicinfo.get('attribute'),
+                'attributevalue': besicinfo.get('attribute').split('：')[1],
                 'birthplace': besicinfo.get('birthplace'),
+                'birthplacevalue': besicinfo.get('birthplace').split('：')[1],
                 'weapon': besicinfo.get('weapon'),
+                'weaponvalue': besicinfo.get('weapon').split('：')[1],
                 'gender': besicinfo.get('role_gender'),
+                'gendervalue': besicinfo.get('role_gender').split('：')[1],
                 'identity': otherinfo_dict.get('identity'),
                 'affiliation': otherinfo_dict.get('affiliation'),
                 'specialcuisine': otherinfo_dict.get('specialcuisine'),
@@ -99,14 +103,29 @@ async def role_data(args: Message = CommandArg()):
                 'baselife': character_statistics[0][1][1],
                 'basicattack': character_statistics[0][1][2],
                 'basicdefense': character_statistics[0][1][3],
+                'promotion': character_statistics[0][3][0],
+                'promotionvalue': character_statistics[0][4][0],
+                'criticaldamage': character_statistics[0][4][1],
+                'bonus': character_statistics[0][3][2],
+                'bonusvalue': character_statistics[0][4][2],
+                'energy': character_statistics[0][4][3],
+                'criticalstrikechance': character_statistics[0][1][4],
+                'injurycategory': character_statistics[0][3][4],
                 'combat_data': character_statistics[0],
                 'fighting_style_content': fighting_style_content
             }
 
-            role_card = await draw_main(
-                Data,
-                html_spath.name,
-                html_spath.parent.as_posix(),
-            )
+            if plugin_config.makeimg_mode == 'htmltopic':
+                img = await template_to_pic(
+                    html_spath.parent.as_posix(),
+                    html_spath.name,
+                    Data,
+                )
+            elif plugin_config.makeimg_mode == 'piltopic':
+                img = await draw_main(
+                    Data,
+                    html_spath.name,
+                    html_spath.parent.as_posix(),
+                )
 
-        await UniMessage.image(raw=role_card).finish()
+        await UniMessage.image(raw=img).finish()
