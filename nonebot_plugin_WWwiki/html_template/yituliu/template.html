@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>RotateY Example</title>
+    <style>
+        .container {
+            /* 设置透视视角 */
+            /* perspective: 1000px; */
+            width: 100%;
+            height: 100%;
+        }
+        @font-face {
+            font-family: 'SanJiHuaChaoTi-Zhong-2';
+            src: url('../fonts/SanJiHuaChaoTi-Zhong-2.ttf') format('truetype');
+        }
+        .box {
+            width: 100%;
+            height: 100%;
+            display: flex;
+            align-items: center;
+            position: relative;
+        }
+        .content{
+            width: 100%;
+            height: 100%;
+            /* backdrop-filter: blur(50px); */
+            background-color: rgba(248, 248, 255,0.9);
+            box-shadow: 0px 15px 25px rgba(220, 220, 220, 0.5);
+            display: flex;
+            justify-content: center;
+            margin: 0px 0px 50px 0px;
+            font-size: 25px;
+        }
+        .content table td {
+            background-color: inherit !important; /* 继承 .content 的背景颜色 */
+        }
+        .content table td p strong span{
+            font-size: inherit !important;
+        }
+        .content table td p span{
+            font-size: inherit !important;
+        }
+        .content table td strong span{
+            font-size: inherit !important;
+        }
+        .content table td span{
+            font-size: inherit !important;
+        }
+        .biggest {
+            width: 1250px;
+            /* height: 100vh; */
+            background: linear-gradient(to right, #0f2027, #203a43, #0f2027);
+            display: flex;
+            flex-direction: column;
+            /* justify-content: space-around; */
+            align-items: center;
+            padding: 25px 25px 25px 25px;
+        }
+        .cbody{
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            width: 100%;
+            height: 100%;
+        }
+        .image-container{
+            position: relative;
+            display: inline-block;
+        }
+        .shuzhijuzhong{
+            display: flex;
+            flex-direction: column;
+            align-items: center;  
+        }
+        p{
+            margin: 5px;
+        }
+        .shuzhijuzhong.content table {
+            margin-bottom: 50px;
+        }
+        .shuzhijuzhong.content table:last-child {
+            margin-bottom: 0; /* 最后一个表格不需要底部间距 */
+        }
+        table{
+            border:solid black;
+        }
+        .title{
+            justify-content: flex-start;
+            display: flex !important;
+            align-items: center;
+            width: 100%;
+            margin: 0px 0px 10px 0px;
+        }
+        .title-span{
+            color: azure;font-size: 50px;
+            border: rgb(163,131,92) solid 1px;
+            background-color: rgb(187,159,94);
+            padding: 10px 10px 10px 10px;
+            border-radius: 20px 0 20px 0;
+        }
+        .team{
+            font-size: 50px;
+        }
+        body{
+            font-family: 'SanJiHuaChaoTi-Zhong-2';
+        }
+    </style>
+</head>
+<body>
+<div class="biggest">
+    <div class="container">
+        <div class="box">
+            <img src="{{roleimg}}">
+            <div style="display: flex; flex-direction: column;">
+                <div style="position: absolute; top: 0; right: 10px;display: flex;flex-direction: column;align-items: center;">
+                    <span style="color: rgb(187,159,94);font-size: 25px;">鸣潮WIKI</span>
+                    <span style="color: rgb(220,220,220);">wuthering waves</span>
+                </div>
+                <div style="display: flex; flex-direction: column;margin: 0px 0px 100px 0px;">
+                    <span style="color: rgb(248,248,255); font-size: 75px;">{{rolename}}</span>
+                    <span style="color: rgb(163,131,92); font-size: 60px;">{{enname}}</span>
+                </div>
+                <div style="display: flex; flex-direction: column;">
+                    <span style="color: rgb(248,248,255); font-size: 40px;margin: 0px 0px 10px 0px;">{{ability}}</span>
+                    <span style="color: rgb(190,190,190); font-size: 25px;">{{introduce}}</span>
+                </div> 
+            </div>
+        </div>
+    </div>    
+    <div class="cbody">
+        <div class="title">
+            <span class="title-span">战斗风格</span>
+        </div>
+        <div class="content">
+            {{style}}
+        </div>
+        <div class="title">
+            <span class="title-span">技能加点及养成材料</span>
+        </div>
+        <div class="content" style="display: flex; flex-direction: column; align-items: center;">
+            {{material}}
+        </div>
+        <div class="title">
+            <span class="title-span">角色机制</span>
+        </div>
+        <div class="content" style="display: flex; flex-direction: column; align-items: center;">
+                {{mechanism}}
+        </div>
+        <div class="title">
+            <span class="title-span">声骸套装推荐</span>
+        </div>
+        <div class="shuzhijuzhong content">
+            {{equipment}}
+        </div>
+        <div class="title">
+            <span class="title-span">武器推荐</span>
+        </div>
+        <div class="shuzhijuzhong content">
+            {{weapon}}
+        </div>
+        <div class="title">
+            <span class="title-span">编队推荐</span>
+        </div>
+        <div class="shuzhijuzhong content">
+            {{team}}
+        </div>
+    </div>
+</div>
+</body>
+</html>
