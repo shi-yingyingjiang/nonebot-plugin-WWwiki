@@ -19,27 +19,32 @@ async def draw_main(draw_data: dict, temp_name: str = None, temp_path: str = Non
     logger.debug(f"template_path: {temp_path}")
     logger.debug(f"template_name: {template_name}")
 
-    # 鸣潮角色查询
-    if template_name == "rolecard":
-        return await draw_rolecard(draw_data)
-    # 鸣潮技能查询
-    elif template_name == "echolink":
-        return await draw_echolink(draw_data)
-    # 鸣潮共鸣链查询
-    elif template_name == "recommendation":
-        return await draw_recommendation(draw_data)
-    # 鸣潮
-    elif template_name == "":
-        return await draw_name(draw_data)
-    # 鸣潮
-    elif template_name == "":
-        return await draw_name(draw_data)
-    # 鸣潮
-    elif template_name == "":
-        return await draw_name(draw_data)
-    # 鸣潮
-    elif template_name == "":
-        return await draw_name(draw_data)
+    try:
+        # 鸣潮角色查询
+        if template_name == "rolecard":
+            return await draw_rolecard(draw_data)
+        # 鸣潮技能查询
+        elif template_name == "echolink":
+            return await draw_echolink(draw_data)
+        # 鸣潮共鸣链查询
+        elif template_name == "recommendation":
+            return await draw_recommendation(draw_data)
+        # 鸣潮
+        elif template_name == "":
+            return await draw_name(draw_data)
+        # 鸣潮
+        elif template_name == "":
+            return await draw_name(draw_data)
+        # 鸣潮
+        elif template_name == "":
+            return await draw_name(draw_data)
+        # 鸣潮
+        elif template_name == "":
+            return await draw_name(draw_data)
+
+    except Exception as e:
+        logger.error(e)
+        logger.error("pil绘制失败")
 
     img = await template_to_pic(
         temp_path,
