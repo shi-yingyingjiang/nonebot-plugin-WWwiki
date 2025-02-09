@@ -3,7 +3,6 @@ from nonebot.plugin import PluginMetadata, inherit_supported_adapters
 from .echo import echos
 from .echocard import echo_cards
 from .enemy import enemy_cards
-from .help import help_img
 from .recommendation import recommendation_cards
 from .role_list import role_list
 from .rolearchives import archive_cards
