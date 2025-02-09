@@ -19,27 +19,32 @@ async def draw_main(draw_data: dict, temp_name: str = None, temp_path: str = Non
     logger.debug(f"template_path: {temp_path}")
     logger.debug(f"template_name: {template_name}")
 
-    # 鸣潮角色查询
-    if template_name == "rolecard":
-        return await draw_rolecard(draw_data)
-    # 鸣潮技能查询
-    elif template_name == "echolink":
-        return await draw_echolink(draw_data)
-    # 鸣潮共鸣链查询
-    elif template_name == "recommendation":
-        return await draw_recommendation(draw_data)
-    # 鸣潮
-    elif template_name == "":
-        return await draw_name(draw_data)
-    # 鸣潮
-    elif template_name == "":
-        return await draw_name(draw_data)
-    # 鸣潮
-    elif template_name == "":
-        return await draw_name(draw_data)
-    # 鸣潮
-    elif template_name == "":
-        return await draw_name(draw_data)
+    try:
+        # 鸣潮角色查询
+        if template_name == "rolecard":
+            return await draw_rolecard(draw_data)
+        # 鸣潮技能查询
+        elif template_name == "echolink":
+            return await draw_echolink(draw_data)
+        # 鸣潮共鸣链查询
+        elif template_name == "recommendation":
+            return await draw_recommendation(draw_data)
+        # 鸣潮
+        elif template_name == "":
+            return await draw_name(draw_data)
+        # 鸣潮
+        elif template_name == "":
+            return await draw_name(draw_data)
+        # 鸣潮
+        elif template_name == "":
+            return await draw_name(draw_data)
+        # 鸣潮
+        elif template_name == "":
+            return await draw_name(draw_data)
+
+    except Exception as e:
+        logger.error(e)
+        logger.error("pil绘制失败")
 
     img = await template_to_pic(
         temp_path,
@@ -143,7 +148,15 @@ async def draw_rolecard(draw_data: dict):
 
     # 战斗风格
     image_y += 15
-    image_y += 105
+    fighting_style = draw_data.get("fighting_style_content")
+    fighting_style = parser_html(fighting_style)
+    links = fighting_style.links
+    texts = fighting_style.texts
+    fighting_styles = []
+    for i in range(len(links)):
+        fighting_styles.append([links[i], texts[2 * i], texts[2 * i + 1]])
+    # fighting_style = [["http://github.com/example.png", "title", "text"]]
+    image_y += ((len(fighting_styles) + 2) // 3) * 105
 
     # 战斗数据-标题
     image_y += 15
@@ -301,28 +314,26 @@ async def draw_rolecard(draw_data: dict):
 
     # 战斗风格
     y += 15
-    fighting_style = draw_data.get("fighting_style_content")
-    fighting_style = parser_html(fighting_style)
-    links = fighting_style.links
-    texts = fighting_style.texts
-    fighting_styles = []
-    for i in range(len(links)):
-        fighting_styles.append([links[i], texts[2 * i], texts[2 * i + 1]])
-    # fighting_style = [["http://github.com/example.png", "text", "text"]]
-
-    paste_card = Image.new("RGBA", (int(image_x * 0.95) + 6, 105 + 6), draw_color("卡片描边"))
+    y_num = (len(fighting_styles) + 2) // 3
+    paste_card = Image.new("RGBA", (int(image_x * 0.95) + 6, (105 * y_num) + 6), draw_color("卡片描边"))
     paste_card = circle_corner(paste_card, 18)
     image.alpha_composite(paste_card, (int(image_x * 0.025) - 3, y - 3))
-    paste_card = Image.new("RGBA", (int(image_x * 0.95), 105), draw_color("卡片背景"))
+    paste_card = Image.new("RGBA", (int(image_x * 0.95), (105 * y_num)), draw_color("卡片背景"))
     paste_card = circle_corner(paste_card, 15)
     image.alpha_composite(paste_card, (int(image_x * 0.025), y))
-    paste_card = Image.new("RGBA", (850, 105), (0, 0, 0, 0))
-    form_size = int(850 / len(fighting_styles))
+    paste_card = Image.new("RGBA", (850, (105 * y_num)), (0, 0, 0, 0))
+    form_size = int(850 / len(fighting_styles)) if len(fighting_styles) <= 3 else 283
+    add_y = 0
     for i, fighting_style in enumerate(fighting_styles):
+        if i != 0:
+            i = i - ((i // 3) * 3)
+            if i == 0:
+                add_y += 105
+
         paste_image = await load_image(fighting_style[0])
         paste_image = image_resize2(paste_image, (96, 96))
         paste_color = Image.new("RGBA", (96, 96), "#ffffff")
-        paste_card.paste(paste_color, ((i * form_size), 5), paste_image)
+        paste_card.paste(paste_color, ((i * form_size), 5 + add_y), paste_image)
 
         paste_image = await draw_text(
             fighting_style[1],
@@ -332,7 +343,7 @@ async def draw_rolecard(draw_data: dict):
             text_color=draw_color("群组内容"),
             calculate=False
         )
-        paste_card.alpha_composite(paste_image, ((i * form_size) + 94, 15))
+        paste_card.alpha_composite(paste_image, ((i * form_size) + 94, 15 + add_y))
 
         if len(fighting_styles) == 1:
             textlen = 25
@@ -348,7 +359,7 @@ async def draw_rolecard(draw_data: dict):
             text_color=draw_color("群组名称"),
             calculate=False
         )
-        paste_card.alpha_composite(paste_image, ((i * form_size) + 94, 52))
+        paste_card.alpha_composite(paste_image, ((i * form_size) + 94, 52 + add_y))
 
     image.alpha_composite(paste_card, (int(image_x * 0.025), y))
     y += paste_card.size[1]
