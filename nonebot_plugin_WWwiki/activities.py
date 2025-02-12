@@ -540,6 +540,18 @@ async def pool(data):
     else:
         remaining_days = (end_date - current_date).days + 1
 
+    if current_date  < start_date:
+        Time_remaining = f"未开始"
+    elif current_date  > end_date:
+        Time_remaining = f"已结束"
+    else:
+        # 计算与结束时间的差
+        delta = end_date - current_date 
+        days = delta.days
+        hours = delta.seconds // 3600
+        minutes = (delta.seconds // 60) % 60
+        Time_remaining = f"{days}天{hours}小时{minutes}分钟"
+
     # 计算剩余时间占比
     if total_days == 0:
         remaining_percentage = 0
@@ -565,9 +577,9 @@ async def pool(data):
     seconds = time_difference.seconds
 
     # 计算小时数和分钟数
-    hours = seconds // 3600
-    minutes = (seconds % 3600) // 60
-    Time_remaining = f'{days}天{hours}小时{minutes}分钟'
+    # hours = seconds // 3600
+    # minutes = (seconds % 3600) // 60
+    # Time_remaining = f'{days}天{hours}小时{minutes}分钟'
 
     html_template = '''
     <div class="rolepool">

@@ -12,7 +12,7 @@ from .rolematerial import material_cards
 from .roleskll import skll_cards
 from .roletale import tale_cards
 from .weapon import weapon_cards
-from .activities import *
+from .activities import activities,reminder
 from .yituliu import yituliu_cards
 
 
@@ -22,7 +22,7 @@ __plugin_meta__ = PluginMetadata(
     usage='鸣潮wiki帮助',
     type="application",
     homepage="https://github.com/shi-yingyingjiang/nonebot-plugin-WWwiki",
-    supported_adapters=inherit_supported_adapters("nonebot_plugin_alconna", "nonebot_plugin_htmlrender"),
+    supported_adapters=inherit_supported_adapters("nonebot_plugin_alconna", "nonebot_plugin_htmlrender","nonebot_plugin_apscheduler", "nonebot-plugin-uninfo"),
     extra={
         'menu_data': [
             {
