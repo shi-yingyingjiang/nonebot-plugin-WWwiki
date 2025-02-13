@@ -6,11 +6,9 @@ from datetime import datetime, timedelta
 import json
 from nonebot import on_command,logger
 from nonebot.permission import SUPERUSER
-from jinja2 import Template
-from nonebot_plugin_uninfo.permission import ADMIN
 from .pil_draw.draw import draw_main
 from .pil_draw.tools import save_image
-from .util import UniMessage, get_template,get_activities,scheduler
+from .util import UniMessage, get_template,get_activities,scheduler,ADMIN
 from nonebot_plugin_alconna import on_alconna,Target,Match
 from nonebot_plugin_alconna.uniseg import MsgTarget
 from arclet.alconna import Alconna, Option,Args
