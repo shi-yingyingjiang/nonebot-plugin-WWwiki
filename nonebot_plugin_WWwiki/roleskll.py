@@ -5,7 +5,6 @@ import httpx
 from nonebot.adapters import Message
 from nonebot.params import CommandArg
 from nonebot import on_command
-
 from .basicinformation import get_basic_information
 from .judgmentrolename import judgment_role_name
 from .getskll import extract_between_second_p_and_hr, extract_after_first_p
@@ -81,7 +80,11 @@ async def skllcard(args: Message = CommandArg()):
                 'echoskilltitle': echo_skill.get('title'),
                 'echoskillimg': echo_skill.get('img'),
                 'echoloop': echo_loop.get('content'),
+                'echolooptitle': echo_loop.get('title'),
+                'echoloopimg': echo_loop.get('img'),
                 'echoliberation': echo_liberation.get('content'),
+                'echoliberationtitle': echo_liberation.get('title'),
+                'echoliberationimg': echo_liberation.get('img'),
                 'modifiedskill': modified_skill.get('content'),
                 'modifiedskilltitle': modified_skill.get('title'),
                 'modifiedskillimg': modified_skill.get('img'),
