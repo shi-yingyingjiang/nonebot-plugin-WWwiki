@@ -28,11 +28,6 @@ headers = {
     'Wiki_type': '9'
 
 }
-# relist = {
-#     'catalogueId': '1323',
-#     'page': '1',
-#     'limit': '1000'
-# }
 listdata = {
     'catalogueId': '1105',
     'page': '1',
@@ -52,41 +47,43 @@ async def recommendationcards(args: Message = CommandArg()):
         }
 
         async with httpx.AsyncClient() as client:
-            # relink ="https://api.kurobbs.com/wiki/core/catalogue/item/getPage"
             roledataurl = 'https://api.kurobbs.com/wiki/core/catalogue/item/getEntryDetail'
-            # redata_r = await client.post(relink, data=roleid, headers=headers)
-            # redata = json.loads(redata_r.text)
-            # rerecords = redata['data']['results']['records']
             roledata_r = await client.post(roledataurl, data=roledata, headers=headers)
             data = json.loads(roledata_r.text)
 
             info_data = get_basic_information(data)
-            weapons_recommended_data = data.get('data').get('content').get('modules')[2].get('components')[1].get('tabs')[0].get('content')
-            weapons_recommended = get_recommendation(weapons_recommended_data)
-            echo_recommended_data = data.get('data').get('content').get('modules')[2].get('components')[1].get('tabs')[1].get('content')
-            echo_recommended = get_recommendation(echo_recommended_data)
-            team_recommended_data = data.get('data').get('content').get('modules')[2].get('components')[1].get('tabs')[2].get('content')
-            team_recommended = get_recommendation(team_recommended_data)
-            skll_recommended_data = data.get('data').get('content').get('modules')[2].get('components')[1].get('tabs')[3].get('content')
-            skll_recommended = get_recommendation(skll_recommended_data)
+            components=data['data']['content']['modules'][2]['components']
+            for item in components:
+                if item['title'] == '角色养成推荐':
+                    weapons_recommended_data = item['tabs'][0]['content']
+                    weapons_recommended = get_recommendation(weapons_recommended_data)
+                    echo_recommended_data = item['tabs'][1]['content']
+                    echo_recommended = get_recommendation(echo_recommended_data)
+                    team_recommended_data = item['tabs'][2]['content']
+                    team_recommended = get_recommendation(team_recommended_data)
+                    skll_recommended_data = item['tabs'][3]['content']
+                    skll_recommended = get_recommendation(skll_recommended_data)
 
-            Data = {
-                'roleimg': info_data.get('role_img'),
-                'rolename': info_data.get('role_name'),
-                'campIcon': info_data.get('campIcon'),
-                'roleenname': info_data.get('role_en_name'),
-                'roledescription': info_data.get('role_description'),
-                'roledescriptiontitle': info_data.get('role_description_title'),
-                'weapons_recommended': weapons_recommended,
-                'echo_recommended': echo_recommended,
-                'team_recommended': team_recommended,
-                'skll_recommended': skll_recommended
-            }
+                    Data = {
+                        'roleimg': info_data.get('role_img'),
+                        'rolename': info_data.get('role_name'),
+                        'campIcon': info_data.get('campIcon'),
+                        'roleenname': info_data.get('role_en_name'),
+                        'roledescription': info_data.get('role_description'),
+                        'roledescriptiontitle': info_data.get('role_description_title'),
+                        'weapons_recommended': weapons_recommended,
+                        'echo_recommended': echo_recommended,
+                        'team_recommended': team_recommended,
+                        'skll_recommended': skll_recommended
+                    }
 
-            img = await template_to_pic(
-                html_spath.parent.as_posix(),
-                html_spath.name,
-                Data,
-            )
+                    img = await template_to_pic(
+                        html_spath.parent.as_posix(),
+                        html_spath.name,
+                        Data,
+                    )
 
-        await UniMessage.image(raw=img).finish()
+                    await UniMessage.image(raw=img).finish()
+                    break
+            else:
+                await recommendation_cards.finish('角色暂无养成推荐,请尝试使用一图流')
