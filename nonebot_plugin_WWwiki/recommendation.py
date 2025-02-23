@@ -53,37 +53,38 @@ async def recommendationcards(args: Message = CommandArg()):
 
             info_data = get_basic_information(data)
             components=data['data']['content']['modules'][2]['components']
-            for item in components:
-                if item['title'] == '角色养成推荐':
-                    weapons_recommended_data = item['tabs'][0]['content']
-                    weapons_recommended = get_recommendation(weapons_recommended_data)
-                    echo_recommended_data = item['tabs'][1]['content']
-                    echo_recommended = get_recommendation(echo_recommended_data)
-                    team_recommended_data = item['tabs'][2]['content']
-                    team_recommended = get_recommendation(team_recommended_data)
-                    skll_recommended_data = item['tabs'][3]['content']
-                    skll_recommended = get_recommendation(skll_recommended_data)
+            component = next((r for r in components if r.get('title') in ('角色搭配推荐','角色养成推荐')), None)
+            # for item in components:
+            if component:
+                item = component
+                weapons_recommended_data = item['tabs'][0]['content']
+                weapons_recommended = get_recommendation(weapons_recommended_data)
+                echo_recommended_data = item['tabs'][1]['content']
+                echo_recommended = get_recommendation(echo_recommended_data)
+                team_recommended_data = item['tabs'][2]['content']
+                team_recommended = get_recommendation(team_recommended_data)
+                skll_recommended_data = item['tabs'][3]['content']
+                skll_recommended = get_recommendation(skll_recommended_data)
 
-                    Data = {
-                        'roleimg': info_data.get('role_img'),
-                        'rolename': info_data.get('role_name'),
-                        'campIcon': info_data.get('campIcon'),
-                        'roleenname': info_data.get('role_en_name'),
-                        'roledescription': info_data.get('role_description'),
-                        'roledescriptiontitle': info_data.get('role_description_title'),
-                        'weapons_recommended': weapons_recommended,
-                        'echo_recommended': echo_recommended,
-                        'team_recommended': team_recommended,
-                        'skll_recommended': skll_recommended
-                    }
+                Data = {
+                    'roleimg': info_data.get('role_img'),
+                    'rolename': info_data.get('role_name'),
+                    'campIcon': info_data.get('campIcon'),
+                    'roleenname': info_data.get('role_en_name'),
+                    'roledescription': info_data.get('role_description'),
+                    'roledescriptiontitle': info_data.get('role_description_title'),
+                    'weapons_recommended': weapons_recommended,
+                    'echo_recommended': echo_recommended,
+                    'team_recommended': team_recommended,
+                    'skll_recommended': skll_recommended
+                }
 
-                    img = await template_to_pic(
-                        html_spath.parent.as_posix(),
-                        html_spath.name,
-                        Data,
-                    )
+                img = await template_to_pic(
+                    html_spath.parent.as_posix(),
+                    html_spath.name,
+                    Data,
+                )
 
-                    await UniMessage.image(raw=img).finish()
-                    break
+                await UniMessage.image(raw=img).finish()
             else:
                 await recommendation_cards.finish('角色暂无养成推荐,请尝试使用一图流')
