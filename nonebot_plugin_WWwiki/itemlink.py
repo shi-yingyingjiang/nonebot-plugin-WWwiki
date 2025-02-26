@@ -1,6 +1,7 @@
 # coding=utf-8
 import httpx
 import json
+from pypinyin import lazy_pinyin
 
 headers = {
     'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/125.0.0.0 Safari/537.36 Edg/125.0.0.0',
@@ -23,9 +24,12 @@ rolelisturl = 'https://api.kurobbs.com/wiki/core/catalogue/item/getPage'
 def is_value_in_dicts_list(dict_list, key, value):
     """判断给定的值是否在列表中任意字典的指定键的值中存在"""
     for dictionary in dict_list:
-        if value == dictionary.get(key):  # 使用get方法避免键不存在时抛出错误
-            return True
-    return False
+        truevalue = dictionary.get(key)
+        valuepinyin = lazy_pinyin(value)
+        truevaluepinyin = lazy_pinyin(truevalue)
+        if valuepinyin==truevaluepinyin:  # 使用get方法避免键不存在时抛出错误
+            return True,truevalue
+    return False,None
 
 
 # 示例用法
@@ -39,10 +43,11 @@ async def get_link(name, listdata):
         records = role_list.get('data').get('results').get('records')
         key_to_check = "name"
         value_to_check = name
-        if is_value_in_dicts_list(records, key_to_check, value_to_check):
-            matching_entryIds = [item['entryId'] for item in records if item['name'] == name]
+        state,value = is_value_in_dicts_list(records, key_to_check, value_to_check)
+        if state:
+            matching_entryIds = [item['entryId'] for item in records if item['name'] == value]
         else:
-            matching_entryIds = None
+            matching_entryIds = value
         return matching_entryIds
 
 

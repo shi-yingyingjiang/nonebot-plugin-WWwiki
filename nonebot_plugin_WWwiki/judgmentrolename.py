@@ -1,9 +1,10 @@
 # coding=utf-8
 from typing import Literal
+import random
 
 
 class Drifter:
-    def __init__(self, gender: Literal['男', '女'], attribute: str) -> None:
+    def __init__(self, gender: str, attribute: str) -> None:
         self.gender = gender
         self.attribute = attribute
 
@@ -13,12 +14,25 @@ class Drifter:
 
 
 def judgment_role_name(name: str):
-    if '漂泊者' in name:
+    namelist={
+        '光主': '漂泊者衍射',
+        '暗主': '漂泊者湮灭',
+        '风主': '漂泊者气动',
+        '电主': '漂泊者导电',
+        '雷主': '漂泊者导电',
+        '冰主': '漂泊者冷凝',
+        '火主': '漂泊者热熔',
+        '漂泊者': '漂泊者'
+    }
+    if any(elem in name for elem in namelist):
         enter = name
-        attributes = ['衍射', '湮灭']
+        for key,value in namelist.items():
+            enter = enter.replace(key,value)
+        attributes = ['衍射', '湮灭','气动','导电','冷凝','热熔']
+        thegender= random.choice(['男', '女'])
 
         # 提取性别和属性
-        gender = '男' if '男' in enter else '女' if '女' in enter else None
+        gender = '男' if '男' in enter else '女' if '女' in enter else thegender
         if gender is not None:
             attribute_in_enter = [attr for attr in attributes if attr in enter]
             if attribute_in_enter:
@@ -35,5 +49,3 @@ def judgment_role_name(name: str):
     return role_name
 
 
-if __name__ == '__main__':
-    print(judgment_role_name('安可'))
