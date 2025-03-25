@@ -83,78 +83,81 @@ async def yituliucards(args: Message = CommandArg()):
     if role_id is None:
         await yituliu_cards.finish(f'没有找到角色,错误参数：' + role_name)
     else:
-        rename = role_name+"角色攻略"
+        
         async with httpx.AsyncClient() as client:
             rerole_r = await client.post(relink, data=relist, headers=headers)
             rerole_list = json.loads(rerole_r.text)
             rerecord = rerole_list['data']['results']['records']
             # for record in rerecord:
-            target_record = next((r for r in rerecord if r.get('name') == rename), None)
-                # logger.info(rename == record['name'])
-            # if record.get('name') == rename:
-            if target_record:
-                entryid = target_record['content']['linkConfig']['entryId']
-                # entryid = record['content']['linkConfig']['entryId']
-                redata = {
-                    'id' : entryid
-                }
+            redata = None
 
-                redata_r = await client.post(EntryDetail, data=redata, headers=headers)
-                redata_data = json.loads(redata_r.text)
-                components = redata_data['data']['content']['modules'][0]['components']
-                style = components[1]['content']
-                material = components[2]['content']
-                mechanism = make_html(components[3]['tabs'])
-                equipments = make_html(components[4]['tabs'])
-                weapon_d = make_html(components[5]['tabs'])
-                team = make_team_html(components[6]['tabs'])
+            for record in rerecord:
+                if role_name in record.get('name', ''):
+                    entryid = record['content']['linkConfig']['entryId']
+                    redata = {
+                        'id' : entryid
+                    }
+                    break
 
-                information = components[0]['role']
-                roleimg = information['figures'][0]['url']
-                introduce = information['roleDescription']
-                enname = information['subtitle']
-                rolename = information['title']
-                ability = ''
-                for item in information['info']:
-                    if '伤害' in item['text']or '定位' in item['text']:
-                        ability += item['text'].split('：')[1] + ' '
-
-
-
-
-
-                # 解析HTML
-                soup = BeautifulSoup(weapon_d, 'html.parser')
-
-                # 去除所有a标签的href属性
-                for a_tag in soup.find_all('a'):
-                    del a_tag['href']
-
-                # 输出修改后的HTML
-                weapon = str(soup)
-
-
-
-
-
-
-                Data = {
-                    'roleimg': roleimg,
-                    'introduce': introduce,
-                    'enname': enname,
-                    'rolename': rolename,
-                    'ability': ability,
-                    'style': style,
-                    'material': material,
-                    'mechanism': mechanism,
-                    'equipment': equipments,
-                    'weapon': weapon,
-                    'team': team
-                }
-
-            else:
+            if redata is None:
                 await yituliu_cards.send(f'该角色暂无一图流,将发送养成推荐')
-                await recommendationcards(args)
+                return
+
+            redata_r = await client.post(EntryDetail, data=redata, headers=headers)
+            redata_data = json.loads(redata_r.text)
+            modules = redata_data['data']['content']['modules']
+            style = modules[0]['components'][1]['content']
+            material = modules[1]['components'][0]['content']
+            mechanism = make_html(modules[2]['components'][0]['tabs'])
+            equipments = make_html(modules[3]['components'][0]['tabs'])
+            weapon_d = make_html(modules[4]['components'][0]['tabs'])
+            team = make_team_html(modules[5]['components'][0]['tabs'])
+
+            information = modules[0]['components'][0]['role']
+            roleimg = information['figures'][0]['url']
+            introduce = information['roleDescription']
+            enname = information['subtitle']
+            rolename = information['title']
+            ability = ''
+            for item in information['info']:
+                if '伤害' in item['text']or '定位' in item['text']:
+                    ability += item['text'].split('：')[1] + ' '
+
+
+
+
+
+            # 解析HTML
+            soup = BeautifulSoup(weapon_d, 'html.parser')
+
+            # 去除所有a标签的href属性
+            for a_tag in soup.find_all('a'):
+                del a_tag['href']
+
+            # 输出修改后的HTML
+            weapon = str(soup)
+
+
+
+
+
+
+            Data = {
+                'roleimg': roleimg,
+                'introduce': introduce,
+                'enname': enname,
+                'rolename': rolename,
+                'ability': ability,
+                'style': style,
+                'material': material,
+                'mechanism': mechanism,
+                'equipment': equipments,
+                'weapon': weapon,
+                'team': team
+            }
+
+            # else:
+            #     await yituliu_cards.send(f'该角色暂无一图流,将发送养成推荐')
 
 
 
