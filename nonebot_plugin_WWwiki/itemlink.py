@@ -2,6 +2,7 @@
 import httpx
 import json
 from pypinyin import lazy_pinyin
+from nonebot import logger
 
 headers = {
     'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/125.0.0.0 Safari/537.36 Edg/125.0.0.0',
@@ -50,7 +51,20 @@ async def get_link(name, listdata):
             matching_entryIds = value
         return matching_entryIds
 
+async def get_yiutliulink(name, listdata):
+    async with httpx.AsyncClient() as client:
 
+        res = await client.post(rolelisturl, data=listdata, headers=headers)
+        role_list = json.loads(res.text)
+        records = role_list.get('data').get('results').get('records')
+        key_to_check = "name"
+        value_to_check = name
+        state,value = is_value_in_dicts_list(records, key_to_check, value_to_check)
+        if state:
+            matching_entryIds = value
+        else:
+            matching_entryIds = value
+        return matching_entryIds
 
 async def classify(thetitle, listdata):
     async with httpx.AsyncClient() as client:
