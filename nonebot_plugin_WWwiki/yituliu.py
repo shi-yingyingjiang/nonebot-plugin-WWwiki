@@ -6,9 +6,8 @@ import httpx
 from nonebot import logger
 from nonebot.params import CommandArg
 from .util import UniMessage, get_template,template_to_pic
-from .judgmentrolename import judgment_role_name
-from .itemlink import get_link,get_yiutliulink
-from .recommendation import recommendationcards
+from .judgmentrolename import yituliu_role_name
+from .itemlink import get_yiutliulink
 
 
 
@@ -78,7 +77,7 @@ EntryDetail = 'https://api.kurobbs.com/wiki/core/catalogue/item/getEntryDetail'
 
 @yituliu_cards.handle()
 async def yituliucards(args: Message = CommandArg()):
-    role_name = judgment_role_name(args.extract_plain_text())
+    role_name = yituliu_role_name(args.extract_plain_text())
     role_id = await get_yiutliulink(role_name, listdata)
     if role_id is None:
         await yituliu_cards.finish(f'没有找到角色,错误参数：' + role_name)

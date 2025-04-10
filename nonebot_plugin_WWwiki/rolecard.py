@@ -1,7 +1,6 @@
 # coding=utf-8
 import json
 import httpx
-from io import StringIO
 from pandas import read_html
 from nonebot import on_command
 from nonebot.adapters import Message
@@ -50,17 +49,13 @@ async def role_data(args: Message = CommandArg()):
             roledata_r = await client.post(roledataurl, data=roledata, headers=headers)
             data = json.loads(roledata_r.text)
             besicinfo = get_basic_information(data)
-            # model = type_validate_json(Model, roledata_r.text)
+            
             components=data['data']['content']['modules'][0]['components']
-            other_component = next((r for r in components if r.get('title') == '其他信息'),None)
-            other_component = next((r for r in components if r.get('title') == '角色统计'),None)
-
-            if other_component:
-                otherinfo_content=other_component['content']
-            if other_component:
-                character_statistics_content=other_component['tabs'][7]['content']
-            otherinfo = read_html(StringIO(otherinfo_content))
-            character_statistics = read_html(StringIO(character_statistics_content))
+            otherinfo_content = components[1]['content']
+            character_statistics_content = components[2]['content']
+           
+            otherinfo = read_html(otherinfo_content)
+            character_statistics = read_html(character_statistics_content)
             df = otherinfo[0]
             data_dict = df.set_index(df.columns[0])[df.columns[1]].to_dict()
             my_dict = data_dict
