@@ -396,7 +396,7 @@ async def get_html_content(data):
     html_template = '''
     <div class="block">
     <div class="img">
-        <img src="{img}" class="roleimg imgborder"></div>
+        <img src="{img}" class="roleimg-imgborder"></div>
     <div class="titlebody">
         <h1 class="title">{name}</h1>
         <h1 class="timeinterval">{timeinterval}</h1>
@@ -642,6 +642,7 @@ async def activity():
         "pool_content" : pool_content,
         "activity_content" : activity_content
     }
+
 
     img = await draw_main(
         Data,
