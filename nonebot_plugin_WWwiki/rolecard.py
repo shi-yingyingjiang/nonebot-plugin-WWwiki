@@ -51,8 +51,16 @@ async def role_data(args: Message = CommandArg()):
             besicinfo = get_basic_information(data)
             
             components=data['data']['content']['modules'][0]['components']
-            otherinfo_content = components[1]['content']
-            character_statistics_content = components[2]['content']
+            otherinfo_content_result = next((item for item in components if item["title"] == "其他信息"), None)
+            character_statistics_content_result = next((item for item in components if item["title"] == "角色统计"), None)
+
+            if otherinfo_content_result:
+                otherinfo_content = otherinfo_content_result['content']
+            
+            if character_statistics_content_result:
+                character_statistics_content = character_statistics_content_result['content']
+            # otherinfo_content = components[1]['content']
+            # character_statistics_content = components[2]['content']
            
             otherinfo = read_html(otherinfo_content)
             character_statistics = read_html(character_statistics_content)
