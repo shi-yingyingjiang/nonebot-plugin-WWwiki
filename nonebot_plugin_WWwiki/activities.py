@@ -625,7 +625,7 @@ async def pool(data):
 
     return html_content
 
-activities = on_command('鸣潮活动')
+activities = on_command('鸣潮活动一览')
 
 
 @activities.handle()

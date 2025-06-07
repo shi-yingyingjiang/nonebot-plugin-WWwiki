@@ -103,15 +103,8 @@ __plugin_meta__ = PluginMetadata(
                 'detail_des': '无'
             },
             {
-                'func': '查看卡池',
-                'trigger_method': '鸣潮卡池列表',
-                'trigger_condition': ' ',
-                'brief_des': '无',
-                'detail_des': '无'
-            },
-            {
                 'func': '查看活动',
-                'trigger_method': '鸣潮活动列表',
+                'trigger_method': '鸣潮活动一览',
                 'trigger_condition': ' ',
                 'brief_des': '无',
                 'detail_des': '无'
